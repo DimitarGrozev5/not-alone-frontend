@@ -18,23 +18,20 @@ const userSlice = createSlice({
     connections: [],
   },
   reducers: {
-    login(state, action) {
-      const { jwt, userData, connections } = action.payload;
-      state.isLoggedIn = jwt;
-      state.userData = userData;
-      state.connections = connections;
+    updateAccessToken(state, action) {
+      state.isLoggedIn = action.payload;
     },
+
     logout(state) {
       state.isLoggedIn = null;
       state.userData = {};
       state.connections = [];
     },
-    
+
     updateUserData(state, action) {
-      state.userData = action.payload;
-    },
-    updateConnections(state, action) {
-      state.connections = action.payload;
+      for (const key in action.payload) {
+        state[key] = action.payload[key];
+      }
     },
   },
 });

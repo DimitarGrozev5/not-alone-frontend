@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormData, InvalidForm } from "../../../data-types/FormDataTypes";
+import { FormData } from "../../../data-types/FormDataTypes";
 
 const useFormInput = (...formNames) => {
   const initFormData = formNames.reduce(

@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormCard from "../../components/UIComponents/FormCard";
 import FormInput from "../../components/UIComponents/FormInput/FormInput";
 import useFormInput from "../../components/UIComponents/FormInput/useFormInput";
+import useErrorMessage from "../../services/useErrorMessage";
+import useUserService from "../../services/useUserService";
 import {
   hasLengthOf,
   isEmail,
@@ -12,6 +15,10 @@ import {
 import style from "./Register.module.css";
 
 const Register = (props) => {
+  const navigate = useNavigate();
+  const userService = useUserService();
+  const errMsg = useErrorMessage();
+
   const [formWasTouched, setFormWasTouched] = useState(false);
 
   // Form data will be stored in this state
@@ -33,7 +40,10 @@ const Register = (props) => {
       return;
     }
 
-    console.log(formData);
+    userService
+      .register(formData)
+      .then(() => navigate("/", { replace: true }))
+      .catch((err) => errMsg.alert(err));
   };
 
   return (
@@ -45,7 +55,6 @@ const Register = (props) => {
           label="Имейл"
           type="text"
           placeholder="email@example.com"
-
           value={formData.email}
           onChange={setFormData("email")}
           validator={isEmail}
@@ -58,7 +67,6 @@ const Register = (props) => {
           label="Повторете Имейл"
           type="text"
           placeholder="email@example.com"
-
           value={formData.repeatEmail}
           onChange={setFormData("repeatEmail")}
           validator={valuesMatch(formData.email.value)}
@@ -71,7 +79,6 @@ const Register = (props) => {
           label="Име"
           type="text"
           placeholder="Име Фамилия"
-
           value={formData.name}
           onChange={setFormData("name")}
           validator={notEmpty}
@@ -84,7 +91,6 @@ const Register = (props) => {
           label="Телефон"
           type="text"
           placeholder="088 712 3123"
-
           value={formData.phone}
           onChange={setFormData("phone")}
           validator={validBGPhone}
@@ -96,7 +102,6 @@ const Register = (props) => {
           name="password"
           label="Парола"
           type="password"
-
           value={formData.password}
           onChange={setFormData("password")}
           validator={hasLengthOf(6)}
@@ -108,7 +113,6 @@ const Register = (props) => {
           name="repeatPassword"
           label="Повторете паролата"
           type="password"
-          
           value={formData.repeatPassword}
           onChange={setFormData("repeatPassword")}
           validator={valuesMatch(formData.password.value)}

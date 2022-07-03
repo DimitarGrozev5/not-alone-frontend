@@ -1,6 +1,6 @@
 import styles from "./FormInput.module.css";
 import { FormData, InvalidForm } from "../../../data-types/FormDataTypes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const FormInput = (props) => {
   const [inputWasTouched, setInputWasTouched] = useState(false);
@@ -8,10 +8,11 @@ const FormInput = (props) => {
   const wrapValue = (val) =>
     props.validator(val) ? FormData.of(val) : InvalidForm.of(val, props.errMsg);
 
+  // Run Validator on first render
+  const firstValue = useRef(wrapValue(props.value.value));
+  const firstChange = useRef(props.onChange);
   useEffect(() => {
-    // Run Validator on first render
-    const val = wrapValue(props.value.value);
-    props.onChange(val);
+    firstChange.current(firstValue.current);
   }, []);
 
   const onChangeHandler = (event) => {
