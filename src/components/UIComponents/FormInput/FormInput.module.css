@@ -9,5 +9,13 @@ label {
 input {
   font-size: 1.2rem;
   padding: 0.3rem;
-  margin-bottom: 0.5rem;
+}
+
+input.error {
+  border: 1px solid red;
+}
+
+p.error {
+  margin-top: 0px;
+  color: red;
 }

@@ -12,6 +12,8 @@ import {
 import style from "./Register.module.css";
 
 const Register = (props) => {
+  const [formWasTouched, setFormWasTouched] = useState(false);
+
   // Form data will be stored in this state
   const [formData, setFormData, formDataIsValid] = useFormInput(
     "email",
@@ -24,6 +26,8 @@ const Register = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+
+    setFormWasTouched(true);
 
     if (!formDataIsValid()) {
       return;
@@ -45,6 +49,7 @@ const Register = (props) => {
           onChange={setFormData("email")}
           validator={isEmail}
           errMsg="Моля въведете валиден Имейл!"
+          formWasTouched={formWasTouched}
         />
 
         <FormInput
@@ -54,8 +59,9 @@ const Register = (props) => {
           placeholder="email@example.com"
           value={formData.repeatEmail}
           onChange={setFormData("repeatEmail")}
-          validator={valuesMatch(formData.repeatEmail.value)}
+          validator={valuesMatch(formData.email.value)}
           errMsg="Имейлите на съвпадат!"
+          formWasTouched={formWasTouched}
         />
 
         <FormInput
@@ -67,6 +73,7 @@ const Register = (props) => {
           onChange={setFormData("name")}
           validator={notEmpty}
           errMsg="Моля въведете име или псевдоним!"
+          formWasTouched={formWasTouched}
         />
 
         <FormInput
@@ -78,6 +85,7 @@ const Register = (props) => {
           onChange={setFormData("phone")}
           validator={validBGPhone}
           errMsg="Моля въведете правилен телефон!"
+          formWasTouched={formWasTouched}
         />
 
         <FormInput
@@ -88,6 +96,7 @@ const Register = (props) => {
           onChange={setFormData("password")}
           validator={hasLengthOf(6)}
           errMsg="Паролата е твърде къса!"
+          formWasTouched={formWasTouched}
         />
 
         <FormInput
@@ -98,6 +107,7 @@ const Register = (props) => {
           onChange={setFormData("repeatPassword")}
           validator={valuesMatch(formData.password.value)}
           errMsg="Паролите не съвпадат!"
+          formWasTouched={formWasTouched}
         />
 
         <button type="submit">Регистрация</button>

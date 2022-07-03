@@ -13,7 +13,7 @@ const useFormInput = (...formNames) => {
     setFormData((fd) => ({ ...fd, [field]: value }));
 
   const isValid = () =>
-    Object.values(formData).reduce((p, c) => p && c instanceof FormData, true);
+    Object.values(formData).reduce((p, c) => p && c.isValid, true);
 
   return [formData, setFormDataHandler, isValid];
 };

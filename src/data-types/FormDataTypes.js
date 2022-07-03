@@ -2,7 +2,7 @@ export class FormData {
   constructor(value) {
     this.value = value;
   }
-  get valid() {
+  get isValid() {
     return true;
   }
 }
@@ -13,7 +13,7 @@ export class InvalidForm {
     this.value = value;
     this.errMsg = errMsg;
   }
-  get valid() {
+  get isValid() {
     return false;
   }
 }
