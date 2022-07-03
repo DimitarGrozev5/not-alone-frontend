@@ -1,9 +1,12 @@
 import { useDispatch } from "react-redux";
 import { userActions } from "../redux-store/userSlice";
+import { sanitizePhone } from "../utils/data-sanitizition";
+import { LoadStatus } from "../data-types/LoadStatus";
+import { useRef } from "react";
 
 const useUserService = () => {
   const dispatch = useDispatch();
-  return {
+  const methods = useRef({
     register: async ({ email, name, phone, password }) => {
       // TODO: Send request to api and get back a JWT
       // For the moment return a dummy value
@@ -46,12 +49,40 @@ const useUserService = () => {
           },
           {
             name: "Баче Кико",
-            phone: "088 123 1234",
+            phone: "088 123 1235",
           },
         ],
       };
     },
-  };
+    findUserByPhone: async (phoneFragment) => {
+      const pf = sanitizePhone(phoneFragment);
+
+      const DUMMY_PHONES = [
+        { id: 0, phone: "0881231234", name: "Пешо Някойси" },
+        { id: 1, phone: "0881234321", name: "Фончо Две" },
+        { id: 2, phone: "0883214321", name: "Фончо Ино" },
+      ];
+
+      const results = DUMMY_PHONES.filter((p) => p.phone.startsWith(pf)).slice(
+        0,
+        5
+      );
+
+      const wrapedResults = results.length
+        ? new LoadStatus.Loaded(results)
+        : new LoadStatus.Empty();
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() < 0.3) {
+            resolve(new LoadStatus.Error("Failed loading data!"));
+          }
+          resolve(wrapedResults);
+        }, Math.random() * 1000);
+      });
+    },
+  });
+  return methods.current;
 };
 
 export default useUserService;
