@@ -1,6 +1,6 @@
 export const isEmail = (value) => /\S+@\S+\.\S+/.test(value);
 
-export const valuesMatch = (val1) => (val2) => val1 === val2;
+export const valuesMatch = (val1) => (val2) => val1 === val2 && val1.length;
 
 export const notEmpty = (val) => val.length > 0;
 
