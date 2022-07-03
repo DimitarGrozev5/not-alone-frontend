@@ -29,7 +29,7 @@ function App() {
         .then((userData) => dispatch(userActions.updateUserData(userData)))
         .catch((err) => errMsg.alert(err));
     }
-  }, [isLoggedIn/* , userService, errMsg, dispatch */]);
+  }, [isLoggedIn, userService, errMsg, dispatch]);
 
   return (
     <Routes>

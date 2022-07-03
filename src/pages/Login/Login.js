@@ -1,10 +1,9 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import FormCard from "../../components/UIComponents/FormCard";
+import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import useErrorMessage from "../../services/useErrorMessage";
 import useUserService from "../../services/useUserService";
-import style from "./Login.module.css";
 
 const Login = (props) => {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Login = (props) => {
   return (
     <>
       <h1>Login to your account</h1>
-      <FormCard onSubmit={submitHandler}>
+      <FormCard onSubmit={submitHandler} >
         <label htmlFor="email">E-Mail:</label>
         <input
           ref={emailRef}

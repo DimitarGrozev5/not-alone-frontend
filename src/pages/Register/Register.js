@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FormCard from "../../components/UIComponents/FormCard";
+import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import FormInput from "../../components/UIComponents/FormInput/FormInput";
 import useFormInput from "../../components/UIComponents/FormInput/useFormInput";
 import useErrorMessage from "../../services/useErrorMessage";
