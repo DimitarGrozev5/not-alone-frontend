@@ -20,7 +20,6 @@ function App() {
   const errMsg = useMessages();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  console.log(isLoggedIn);
 
   // Check if access token is in local storage
   useEffect(() => {
@@ -30,6 +29,7 @@ function App() {
         .getUserData(token)
         .then((userData) => dispatch(userActions.updateUserData(userData)))
         .catch((err) => errMsg.alert(err));
+      
     }
   }, [isLoggedIn, userService, errMsg, dispatch]);
 
