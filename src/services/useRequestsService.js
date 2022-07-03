@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 
-const useRequestsService = () => {
+export const useRequestsService = () => {
   const dispatch = useDispatch();
   const methods = useRef({
     
