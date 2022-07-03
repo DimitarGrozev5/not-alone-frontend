@@ -10,14 +10,14 @@ import Register from "./pages/Register/Register";
 import { userActions } from "./redux-store/userSlice";
 import HomeHub from "./pages/HomeHub/HomeHub";
 import useUserService from "./services/useUserService";
-import useErrorMessage from "./services/useErrorMessage";
+import useMessages from "./services/useMessages";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
 
 function App() {
   const dispatch = useDispatch();
   const userService = useUserService();
-  const errMsg = useErrorMessage();
+  const errMsg = useMessages();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   console.log(isLoggedIn);

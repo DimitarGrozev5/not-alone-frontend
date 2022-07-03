@@ -75,11 +75,16 @@ const useUserService = () => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           if (Math.random() < 0.3) {
-            resolve(new LoadStatus.Error("Failed loading data!"));
+            resolve(new LoadStatus.Error("Не могат да се заредят подсказки"));
           }
           resolve(wrapedResults);
         }, Math.random() * 1000);
       });
+    },
+    requestConnection: async (userId) => {
+      return Math.random() < 0.2
+        ? new LoadStatus.Error("Няма човек с този телефон")
+        : new LoadStatus.Loaded("Заявката е изпратена");
     },
   });
   return methods.current;

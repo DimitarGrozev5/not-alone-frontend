@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import FormInput from "../../components/UIComponents/FormInput/FormInput";
 import useFormInput from "../../components/UIComponents/FormInput/useFormInput";
-import useErrorMessage from "../../services/useErrorMessage";
+import useMessages from "../../services/useMessages";
 import useUserService from "../../services/useUserService";
 import {
   hasLengthOf,
@@ -17,7 +17,7 @@ import style from "./Register.module.css";
 const Register = (props) => {
   const navigate = useNavigate();
   const userService = useUserService();
-  const errMsg = useErrorMessage();
+  const errMsg = useMessages();
 
   const [formWasTouched, setFormWasTouched] = useState(false);
 

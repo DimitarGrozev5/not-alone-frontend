@@ -2,13 +2,13 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FormCard from "../../components/UIComponents/FormCard/FormCard";
-import useErrorMessage from "../../services/useErrorMessage";
+import useMessages from "../../services/useMessages";
 import useUserService from "../../services/useUserService";
 
 const Login = (props) => {
   const navigate = useNavigate();
   const userService = useUserService();
-  const errMsg = useErrorMessage();
+  const errMsg = useMessages();
 
   const emailRef = useRef();
   const passwordRef = useRef();

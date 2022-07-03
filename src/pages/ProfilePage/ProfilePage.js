@@ -4,24 +4,27 @@ import { useSelector } from "react-redux";
 import useUserService from "../../services/useUserService";
 import styles from "./ProfilePage.module.css";
 import { LoadStatus } from "../../data-types/LoadStatus";
+import useMessages from "../../services/useMessages";
 
 const ProfilePage = (props) => {
+  // Get Services
   const userService = useUserService();
+  const messages = useMessages();
 
+  // Get data about the user from the store
   const user = useSelector((state) => state.user);
 
+  // Logout user
   const logoutHandler = () => userService.logout();
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-  };
-
+  // State that handles the search phone input
   const [searchPhoneText, setSearchPhoneText] = useState("");
   const searchHandler = (event) => {
     const phone = event.target.value;
     setSearchPhoneText(phone);
   };
 
+  // State and Effect that fetches phone suggestions everytime the search text changes
   const [suggetions, setSuggetions] = useState(new LoadStatus.Idle());
   useEffect(() => {
     if (!searchPhoneText.length) {
@@ -45,6 +48,22 @@ const ProfilePage = (props) => {
     };
   }, [searchPhoneText, userService]);
 
+  // Handle requests for connecting with other people
+  const submitHandler = (event) => {
+    event.preventDefault();
+    userService
+      .requestConnection(searchPhoneText)
+      .then((result) => {
+        if (result instanceof LoadStatus.Error) {
+          throw result;
+        }
+        messages.alert(result.result);
+      })
+      .catch((err) => {
+        messages.alert(err.message);
+      });
+  };
+
   return (
     <div>
       <div>Име: {user.userData.name}</div>
@@ -60,6 +79,7 @@ const ProfilePage = (props) => {
             </li>
           ))}
         </ul>
+
         <form onSubmit={submitHandler}>
           <label htmlFor="add-contact">Добави контакт:</label>
           <input
@@ -72,7 +92,11 @@ const ProfilePage = (props) => {
           {suggetions instanceof LoadStatus.Loaded && (
             <ul>
               {suggetions.result.map((s) => (
-                <li key={s.phone}>{s.phone}</li>
+                <li key={s.phone}>
+                  <button onClick={() => setSearchPhoneText(s.phone)}>
+                    {s.phone}
+                  </button>
+                </li>
               ))}
             </ul>
           )}
@@ -83,8 +107,13 @@ const ProfilePage = (props) => {
             <div>{suggetions.message}</div>
           )}
 
-          <button type="submit">Поискай да се свържеш</button>
+          <button type="submit">Изпрати покана</button>
         </form>
+      </div>
+      <div>
+        Изпратени покани:
+          
+        Тези хора искат да се свържат с теб:
       </div>
       <button onClick={logoutHandler}>Logout</button>
     </div>
