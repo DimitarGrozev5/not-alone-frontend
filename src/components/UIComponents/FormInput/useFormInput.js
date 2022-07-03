@@ -3,7 +3,7 @@ import { FormData } from "../../../data-types/FormDataTypes";
 
 const useFormInput = (...formNames) => {
   const initFormData = formNames.reduce(
-    (obj, name) => ({ ...obj, [name]: FormData.of("") }),
+    (obj, name) => ({ ...obj, [name]: new FormData("") }),
     {}
   );
 

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import MainCard from "../components/UIComponents/MainCard";
+import MainCard from "../../components/UIComponents/MainCard";
 import styles from "./PageTemplate.module.css";
 
 const PageTemplate = (props) => {

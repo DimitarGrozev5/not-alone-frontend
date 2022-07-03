@@ -6,7 +6,7 @@ const FormInput = (props) => {
   const [inputWasTouched, setInputWasTouched] = useState(false);
 
   const wrapValue = (val) =>
-    props.validator(val) ? FormData.of(val) : InvalidForm.of(val, props.errMsg);
+    props.validator(val) ? new FormData(val) : new InvalidForm(val, props.errMsg);
 
   // Run Validator on first render
   const firstValue = useRef(wrapValue(props.value.value));

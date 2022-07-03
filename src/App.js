@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
-import PageTemplate from "./pages/PageTemplate";
+import PageTemplate from "./pages/PageTemplate/PageTemplate";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -11,6 +11,8 @@ import { userActions } from "./redux-store/userSlice";
 import HomeHub from "./pages/HomeHub/HomeHub";
 import useUserService from "./services/useUserService";
 import useErrorMessage from "./services/useErrorMessage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,8 +45,14 @@ function App() {
       )}
       {isLoggedIn && (
         <Route path="/" element={<PageTemplate />}>
-          <Route index element={<HomeHub />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/" element={<LoggedInTemplate />}>
+            <Route index element={<Navigate to="/planned-trips" />} />
+            <Route path="/planned-trips" element={<HomeHub />} />
+            <Route path="/watching" element={<HomeHub />} />
+            <Route path="/ongoing-trip" element={<HomeHub />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
         </Route>
       )}
     </Routes>
