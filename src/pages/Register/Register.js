@@ -1,80 +1,103 @@
 import { useState } from "react";
 import FormCard from "../../components/UIComponents/FormCard";
+import FormInput from "../../components/UIComponents/FormInput/FormInput";
+import useFormInput from "../../components/UIComponents/FormInput/useFormInput";
+import {
+  hasLengthOf,
+  isEmail,
+  notEmpty,
+  validBGPhone,
+  valuesMatch,
+} from "../../utils/data-validation";
 import style from "./Register.module.css";
 
 const Register = (props) => {
-  const [formIsUntouched, setFormIsUntouched] = useState(true);
-  const formIsTouchedHandler = () => setFormIsUntouched(false);
-
   // Form data will be stored in this state
-  const [formData, setFormData] = useState({
-    email: "",
-    repeatEmail: "",
-    name: "",
-    phone: "",
-    password: "",
-    repeatPassword: "",
-  });
-  const userInputHandler = (target) => (event) =>
-    setFormData((prevState) => ({ ...prevState, [target]: event.target.value }));
+  const [formData, setFormData, formDataIsValid] = useFormInput(
+    "email",
+    "repeatEmail",
+    "name",
+    "phone",
+    "password",
+    "repeatPassword"
+  );
 
-  // Validate formData
-  
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    if (!formDataIsValid()) {
+      return;
+    }
+
+    console.log(formData);
+  };
 
   return (
     <>
       <h1>Register a new account</h1>
-      <FormCard onFocus={formIsTouchedHandler}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
+      <FormCard onSubmit={submitHandler}>
+        <FormInput
           name="email"
-          placeholder="email@example.com"
-          onInput={userInputHandler("email")}
-          value={formData.email}
-        />
-
-        <label htmlFor="email-repeat">Повторете Email:</label>
-        <input
-          type="email"
-          name="email-repeat"
-          placeholder="email@example.com"
-          onInput={userInputHandler("repeatEmail")}
-          value={formData.repeatEmail}
-        />
-
-        <label htmlFor="name">Име:</label>
-        <input
-          type="name"
-          name="name"
-          placeholder="Иван Иванов"
-          onInput={userInputHandler("name")}
-          value={formData.name}
-        />
-
-        <label htmlFor="phone">Телефонен номер:</label>
-        <input
+          label="Имейл"
           type="text"
+          placeholder="email@example.com"
+          value={formData.email}
+          onChange={setFormData("email")}
+          validator={isEmail}
+          errMsg="Моля въведете валиден Имейл!"
+        />
+
+        <FormInput
+          name="email-repeat"
+          label="Повторете Имейл"
+          type="text"
+          placeholder="email@example.com"
+          value={formData.repeatEmail}
+          onChange={setFormData("repeatEmail")}
+          validator={valuesMatch(formData.repeatEmail.value)}
+          errMsg="Имейлите на съвпадат!"
+        />
+
+        <FormInput
+          name="name"
+          label="Име"
+          type="text"
+          placeholder="Име Фамилия"
+          value={formData.name}
+          onChange={setFormData("name")}
+          validator={notEmpty}
+          errMsg="Моля въведете име или псевдоним!"
+        />
+
+        <FormInput
           name="phone"
-          placeholder="0887123123"
-          onInput={userInputHandler("phone")}
+          label="Телефон"
+          type="text"
+          placeholder="088 712 3123"
           value={formData.phone}
+          onChange={setFormData("phone")}
+          validator={validBGPhone}
+          errMsg="Моля въведете правилен телефон!"
         />
 
-        <label htmlFor="password">Парола:</label>
-        <input
-          type="password"
+        <FormInput
           name="password"
-          onInput={userInputHandler("password")}
+          label="Парола"
+          type="password"
           value={formData.password}
+          onChange={setFormData("password")}
+          validator={hasLengthOf(6)}
+          errMsg="Паролата е твърде къса!"
         />
 
-        <label htmlFor="password-repeat">Повторете паролата:</label>
-        <input
+        <FormInput
+          name="repeatPassword"
+          label="Повторете паролата"
           type="password"
-          name="password-repeat"
-          onInput={userInputHandler("repeatPassword")}
           value={formData.repeatPassword}
+          onChange={setFormData("repeatPassword")}
+          validator={valuesMatch(formData.password.value)}
+          errMsg="Паролите не съвпадат!"
         />
 
         <button type="submit">Регистрация</button>
