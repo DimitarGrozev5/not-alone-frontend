@@ -5,8 +5,6 @@ const requestsSlice = createSlice({
   initialState: {
     requestsForConnectionSend: [],
     requestsForConnectionReceived: [],
-    requestsForOverwatchSend: [],
-    requestsForOverwatchReceived: [],
   },
   reducers: {
     updateRequests(state, action) {

@@ -13,10 +13,13 @@ import useUserService from "./services/useUserService";
 import useMessages from "./services/useMessages";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
+import { useRequestsService } from "./services/useRequestsService";
+import { requestActions } from "./redux-store/requestsSlice";
 
 function App() {
   const dispatch = useDispatch();
   const userService = useUserService();
+  const requestsService = useRequestsService();
   const errMsg = useMessages();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -28,8 +31,11 @@ function App() {
       userService
         .getUserData(token)
         .then((userData) => dispatch(userActions.updateUserData(userData)))
-        .catch((err) => errMsg.alert(err));
-      
+        .catch((err) => errMsg.alert(err.message));
+      requestsService
+        .getConnectionRequests()
+        .then((requests) => dispatch(requestActions.updateRequests(requests)))
+        .catch((err) => errMsg.alert(err.message));
     }
   }, [isLoggedIn, userService, errMsg, dispatch]);
 

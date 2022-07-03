@@ -1,18 +1,38 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import useUserService from "../../services/useUserService";
 import styles from "./ProfilePage.module.css";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import useMessages from "../../services/useMessages";
+import { useRequestsService } from "../../services/useRequestsService";
+import { requestActions } from "../../redux-store/requestsSlice";
 
 const ProfilePage = (props) => {
+  const dispatch = useDispatch();
+
   // Get Services
   const userService = useUserService();
+  const requestsService = useRequestsService();
   const messages = useMessages();
 
   // Get data about the user from the store
   const user = useSelector((state) => state.user);
+  const outRequests = useSelector(
+    (state) => state.requests.requestsForConnectionSend
+  );
+  const inRequests = useSelector(
+    (state) => state.requests.requestsForConnectionReceived
+  );
+
+  const acceptRequestHandler = (id) => (event) => {
+    event.preventDefault();
+    requestsService
+      .acceptRequest(id)
+      .then(() => requestsService.getConnectionRequests())
+      .then((requests) => dispatch(requestActions.updateRequests(requests)))
+      .catch((err) => messages.alert(err.message));
+  };
 
   // Logout user
   const logoutHandler = () => userService.logout();
@@ -79,7 +99,6 @@ const ProfilePage = (props) => {
             </li>
           ))}
         </ul>
-
         <form onSubmit={submitHandler}>
           <label htmlFor="add-contact">Добави контакт:</label>
           <input
@@ -112,8 +131,28 @@ const ProfilePage = (props) => {
       </div>
       <div>
         Изпратени покани:
-          
+        {outRequests.length && (
+          <ul>
+            {outRequests.map((r) => (
+              <li key={r.phone}>
+                {r.name}, {r.phone}
+              </li>
+            ))}
+          </ul>
+        )}
+        {!outRequests.length && <p>Нямаш изпратени покани</p>}
         Тези хора искат да се свържат с теб:
+        {inRequests.length && (
+          <ul>
+            {inRequests.map((r) => (
+              <li key={r.id}>
+                {r.name}, {r.phone}
+                <button onClick={acceptRequestHandler(r.id)}>Приеми</button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {!inRequests.length && <p>Нямаш предложения</p>}
       </div>
       <button onClick={logoutHandler}>Logout</button>
     </div>
