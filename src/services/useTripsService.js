@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { stopTypes } from "../data-types/trip-data";
+import { requestStatus, stopTypes } from "../data-types/trip-data";
 
 export const useTripsService = () => {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ export const useTripsService = () => {
     getAllTrips: async () => {
       return [
         {
+          id: 0,
           name: "Амбарица 2022",
           stops: [
             { type: stopTypes.TEXT_DESCRIPTION, text: "Варна", duration: 0 },
@@ -41,7 +42,20 @@ export const useTripsService = () => {
             },
           ],
           watchers: [
-            
+            {
+              name: "Бай Иван",
+              phone: "0881231234",
+              status: requestStatus.ACCEPTED,
+            },
+            {
+              name: "Ганьо",
+              phone: "0881234321",
+              status: requestStatus.PENDING,
+            },
+            {
+              phone: "0883211234",
+              status: requestStatus.PENDING,
+            },
           ],
         },
       ];

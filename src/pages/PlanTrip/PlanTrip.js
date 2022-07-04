@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { stopTypes } from "../../data-types/trip-data";
+import { requestTypes, stopTypes } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
 import ProfileAddConnection from "../ProfilePage/ProfileAddConnection";
@@ -50,7 +50,9 @@ const PlanTrip = () => {
     }));
     const formatedWatcherRequests = watcherRequests.map((watcher) => ({
       watcherId: watcher.id,
-      requestType: watcher.name ? "request" : "request-and-connection",
+      requestType: watcher.name
+        ? requestTypes.OVERWATCH
+        : requestTypes.OVERWATCH_AND_CONNECTION,
     }));
 
     tripService
