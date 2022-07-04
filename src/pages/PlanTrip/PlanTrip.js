@@ -1,40 +1,15 @@
-import { useState } from "react";
-
+import { useManageStops } from "./hooks/useManageStops";
 import styles from "./PlanTrip.module.css";
 import TripStop from "./TripStop";
 
 const PlanTrip = () => {
-  const [stops, setStops] = useState([{ text: "", duration: 0 }]);
-
-  const onNameChangeHandler = (id) => (event) => {
-    setStops((stops) => {
-      const copy = [...stops];
-      copy[id].text = event.target.value;
-      return copy;
-    });
-  };
-  const onDurationChangeHandler = (id) => (dt) => {
-    setStops((stops) => {
-      const copy = [...stops];
-
-      copy[id].duration =
-        copy[id].duration + dt < 0 ? 0 : copy[id].duration + dt;
-      return copy;
-    });
-  };
-
-  const onRemoveHandler = (id) => () => {
-    setStops((stops) => {
-      const copy = [...stops];
-      copy.splice(id, 1);
-      return copy;
-    });
-  };
-
-  const addStopHandler = (event) => {
-    event.preventDefault();
-    setStops((stops) => [...stops, { text: "", duration: 0 }]);
-  };
+  const {
+    stops,
+    onNameChangeHandler,
+    onDurationChangeHandler,
+    onRemoveStopHandler,
+    addStopHandler,
+  } = useManageStops();
 
   return (
     <>
@@ -52,7 +27,7 @@ const PlanTrip = () => {
                 stop={stop}
                 onNameChange={onNameChangeHandler(index)}
                 onDurationChange={onDurationChangeHandler(index)}
-                onRemove={onRemoveHandler(index)}
+                onRemove={onRemoveStopHandler(index)}
               />
             </li>
           ))}
@@ -61,10 +36,8 @@ const PlanTrip = () => {
           <button onClick={addStopHandler}>Добави спирка</button>
         </div>
         <div>
-          <h2>Наблюдаващи</h2>
-          <ul>
-            
-          </ul>
+          <h2>Заявки за наблюдение</h2>
+          <ul></ul>
         </div>
       </div>
     </>
