@@ -30,9 +30,9 @@ const ProfilePage = (props) => {
   // Logout user
   const logoutHandler = () => userService.logout();
 
-  const requestConnectionHandler = (searchPhoneText, clearText) => {
+  const requestConnectionHandler = (searchPhoneUser, clearText) => {
     userService
-      .requestConnection(searchPhoneText)
+      .requestConnection(searchPhoneUser.phone) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Maybe it should be ID
       .then((result) => {
         if (result instanceof LoadStatus.Error) {
           throw result;

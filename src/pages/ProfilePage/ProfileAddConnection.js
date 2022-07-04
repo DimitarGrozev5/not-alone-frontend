@@ -17,6 +17,7 @@ const ProfileAddConnection = (props) => {
   };
 
   // State and Effect that fetches phone suggestions everytime the search text changes
+  const [selectedSuggetion, setSelectedSuggetion] = useState(null);
   const [suggetions, setSuggetions] = useState(new LoadStatus.Idle());
   useEffect(() => {
     if (!searchPhoneText.length) {
@@ -43,16 +44,17 @@ const ProfileAddConnection = (props) => {
   }, [searchPhoneText, userService]);
 
   // Select suggestion handler
-  const selectSuggetionHandler = (phone) => (event) => {
+  const selectSuggetionHandler = (suggetion) => (event) => {
     event.preventDefault();
-    setSearchPhoneText(phone);
+    setSearchPhoneText(suggetion.phone);
+    setSelectedSuggetion(suggetion);
     setSuggetions(new LoadStatus.Idle());
   };
 
   // Handle requests for connecting with other people
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSubmit(searchPhoneText, () => setSearchPhoneText(""));
+    props.onSubmit(selectedSuggetion, () => setSearchPhoneText(""));
   };
 
   return (
@@ -70,7 +72,7 @@ const ProfileAddConnection = (props) => {
           <ul>
             {suggetions.result.map((s) => (
               <li key={s.id}>
-                <button onClick={selectSuggetionHandler(s.phone)}>
+                <button onClick={selectSuggetionHandler(s)}>
                   {s.name} {s.phone}
                 </button>
               </li>
@@ -84,7 +86,7 @@ const ProfileAddConnection = (props) => {
           <div>{suggetions.message}</div>
         )}
 
-        <button type="submit">Изпрати покана</button>
+        <button type="submit">{props.caption || "Изпрати покана"}</button>
       </form>
     </div>
   );

@@ -70,23 +70,3 @@ function App() {
 }
 
 export default App;
-
-/* <Routes>
-      {isLogged && (
-        <Route path="/trainer" element={<PageTemplate />}>
-          <Route index element={<Navigate to="trainer" />} />
-          <Route path="login" element={<Navigate to="/" />} />
-          <Route path="trainer" element={<TrainerHub />}></Route>
-          <Route path="trainer/add-workout" element={<AddWorkout />} />
-          <Route path="trainer/:workout" element={<DoWorkout />} />
-          <Route path="*" element={<Navigate to="trainer" />} />
-        </Route>
-      )}
-      {!isLogged && (
-        <Route path="/trainer" element={<PageTemplate />}>
-          <Route index element={<Navigate to="login" />} />
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Route>
-      )}
-  </Routes> */
