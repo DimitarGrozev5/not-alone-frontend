@@ -8,7 +8,7 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import { userActions } from "./redux-store/userSlice";
-import HomeHub from "./pages/HomeHub/HomeHub";
+import PlannedTrips from "./pages/PlannedTrips/PlannedTrips";
 import useUserService from "./services/useUserService";
 import useMessages from "./services/useMessages";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
@@ -53,9 +53,9 @@ function App() {
         <Route path="/" element={<PageTemplate />}>
           <Route path="/" element={<LoggedInTemplate />}>
             <Route index element={<Navigate to="/planned-trips" />} />
-            <Route path="/planned-trips" element={<HomeHub />} />
-            <Route path="/watching" element={<HomeHub />} />
-            <Route path="/ongoing-trip" element={<HomeHub />} />
+            <Route path="/planned-trips" element={<PlannedTrips />} />
+            <Route path="/watching" element={<PlannedTrips />} />
+            <Route path="/ongoing-trip" element={<PlannedTrips />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
