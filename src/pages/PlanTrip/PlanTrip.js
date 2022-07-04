@@ -15,7 +15,9 @@ const PlanTrip = () => {
   } = useManageStops();
 
   const [watcherRequests, setWatcherRequests] = useState(new LoadStatus.Idle());
-  const addWatcherRequestHandler = (watcher, clearText) => {};
+  const addWatcherRequestHandler = (watcher, clearText) => {
+    
+  };
 
   return (
     <>
