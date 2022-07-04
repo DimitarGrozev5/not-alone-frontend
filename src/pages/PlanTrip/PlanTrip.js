@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { stopTypes } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
 import ProfileAddConnection from "../ProfilePage/ProfileAddConnection";
@@ -11,6 +12,11 @@ const PlanTrip = () => {
   const navigate = useNavigate();
   const tripService = useTripsService();
   const message = useMessages();
+
+  const [tripName, setTripName] = useState("");
+  const changeTripNameHandler = (event) => setTripName(event.target.value);
+  const [startStop, setStartStop] = useState("");
+  const changeStartStopHandler = (event) => setStartStop(event.target.value);
 
   const {
     stops,
@@ -40,7 +46,7 @@ const PlanTrip = () => {
 
     const formatedStops = stops.map((stop) => ({
       ...stop,
-      type: "text-descripton",
+      type: stopTypes.TEXT_DESCRIPTION,
     }));
     const formatedWatcherRequests = watcherRequests.map((watcher) => ({
       watcherId: watcher.id,
@@ -49,7 +55,11 @@ const PlanTrip = () => {
 
     tripService
       .postNewTrip({
-        stops: formatedStops,
+        name: tripName,
+        stops: [
+          { text: startStop, type: stopTypes.TEXT_DESCRIPTION, duration: 0 },
+          ...formatedStops,
+        ],
         watcherRequests: formatedWatcherRequests,
       })
       .then(() => {
@@ -63,10 +73,17 @@ const PlanTrip = () => {
     <>
       <h1>Планувай пътуване</h1>
       <div className={styles.plan}>
+        <label>Име на пътуването:</label>
+        <input type="text" value={tripName} onChange={changeTripNameHandler} />
         <h2>Спирки</h2>
         <div>
           <label>Начална точка</label>
-          <input type="text" placeholder="Напишете името на мястото" />
+          <input
+            type="text"
+            placeholder="Напишете името на мястото"
+            value={startStop}
+            onChange={changeStartStopHandler}
+          />
         </div>
         <ul>
           {stops.map((stop, index) => (
