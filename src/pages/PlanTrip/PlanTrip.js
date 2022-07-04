@@ -45,17 +45,26 @@ const PlanTrip = () => {
           <label>Начална точка</label>
           <input type="text" placeholder="Напишете името на мястото" />
         </div>
-        {stops.map((stop, index) => (
-          <TripStop
-            key={index}
-            stop={stop}
-            onNameChange={onNameChangeHandler(index)}
-            onDurationChange={onDurationChangeHandler(index)}
-            onRemove={onRemoveHandler(index)}
-          />
-        ))}
+        <ul>
+          {stops.map((stop, index) => (
+            <li key={index}>
+              <TripStop
+                stop={stop}
+                onNameChange={onNameChangeHandler(index)}
+                onDurationChange={onDurationChangeHandler(index)}
+                onRemove={onRemoveHandler(index)}
+              />
+            </li>
+          ))}
+        </ul>
         <div>
           <button onClick={addStopHandler}>Добави спирка</button>
+        </div>
+        <div>
+          <h2>Наблюдаващи</h2>
+          <ul>
+            
+          </ul>
         </div>
       </div>
     </>
