@@ -1,9 +1,16 @@
+import { Link } from "react-router-dom";
+
 import styles from "./PlannedTrips.module.css";
 
 const PlannedTrips = () => {
   return (
     <>
-      <div>home hub</div>
+      <div>List of planned trips</div>
+      <div className={styles.add}>
+        <Link className={styles.add} to="/plan-trip">
+          +
+        </Link>
+      </div>
     </>
   );
 };

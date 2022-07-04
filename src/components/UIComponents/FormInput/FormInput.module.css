@@ -1,21 +1,22 @@
-div {
+div.form-input {
   display: flex;
   flex-direction: column;
 }
-label {
+
+.form-input label {
   font-size: 1.2rem;
 }
 
-input {
+.form-input input {
   font-size: 1.2rem;
   padding: 0.3rem;
 }
 
-input.error {
+.form-input input.error {
   border: 1px solid red;
 }
 
-p.error {
+.form-input p.error {
   margin-top: 0px;
   color: red;
 }

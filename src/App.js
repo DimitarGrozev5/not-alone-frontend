@@ -15,6 +15,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
 import { useRequestsService } from "./services/useRequestsService";
 import { requestActions } from "./redux-store/requestsSlice";
+import PlanTrip from "./pages/PlanTrip/PlanTrip";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,16 +51,19 @@ function App() {
         </Route>
       )}
       {isLoggedIn && (
-        <Route path="/" element={<PageTemplate />}>
-          <Route path="/" element={<LoggedInTemplate />}>
-            <Route index element={<Navigate to="/planned-trips" />} />
-            <Route path="/planned-trips" element={<PlannedTrips />} />
-            <Route path="/watching" element={<PlannedTrips />} />
-            <Route path="/ongoing-trip" element={<PlannedTrips />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="*" element={<Navigate to="/" />} />
+        <>
+          <Route path="/" element={<PageTemplate />}>
+            <Route path="/" element={<LoggedInTemplate />}>
+              <Route index element={<Navigate to="/planned-trips" />} />
+              <Route path="/planned-trips" element={<PlannedTrips />} />
+              <Route path="/watching" element={<PlannedTrips />} />
+              <Route path="/ongoing-trip" element={<PlannedTrips />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Route>
+            <Route path="/plan-trip" element={<PlanTrip />} />
           </Route>
-        </Route>
+        </>
       )}
     </Routes>
   );

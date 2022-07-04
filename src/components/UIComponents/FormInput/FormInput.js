@@ -31,7 +31,7 @@ const FormInput = (props) => {
     (!props.formWasTouched && !inputWasTouched) || props.value.isValid;
 
   return (
-    <div>
+    <div className={styles["form-input"]}>
       <label htmlFor={props.name}>{props.label}:</label>
       <input
         className={isValid ? "" : styles.error}

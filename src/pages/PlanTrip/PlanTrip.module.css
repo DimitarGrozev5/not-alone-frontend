@@ -1,5 +1,4 @@
-.outlet {
-  padding-bottom: 3rem;
+.plan > div {
   display: flex;
   flex-direction: column;
 }

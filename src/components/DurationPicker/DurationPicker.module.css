@@ -1,0 +1,12 @@
+.duration {
+  display: flex;
+  width: 100%;
+}
+
+.duration input {
+}
+
+.duration button {
+  width: 2rem;
+  height: 2rem;
+}
