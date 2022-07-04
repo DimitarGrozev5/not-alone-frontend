@@ -54,13 +54,13 @@ const useUserService = () => {
         ],
       };
     },
-    findUserByPhone: async (phoneFragment) => {
+    findUnknownUserByPhone: async (phoneFragment) => {
       const pf = sanitizePhone(phoneFragment);
 
       const DUMMY_PHONES = [
-        { id: 0, phone: "0881231234", name: "Пешо Някойси" },
-        { id: 1, phone: "0881234321", name: "Фончо Две" },
-        { id: 2, phone: "0883214321", name: "Фончо Ино" },
+        { id: 0, phone: "0881231234" },
+        { id: 1, phone: "0881234321" },
+        { id: 2, phone: "0883214321" },
       ];
 
       const results = DUMMY_PHONES.filter((p) => p.phone.startsWith(pf)).slice(
@@ -74,6 +74,43 @@ const useUserService = () => {
 
       return new Promise((resolve, reject) => {
         setTimeout(() => {
+          if (Math.random() < 0.1) {
+            resolve(new LoadStatus.Error("Не могат да се заредят подсказки"));
+          }
+          resolve(wrapedResults);
+        }, Math.random() * 1000);
+      });
+    },
+    findAllUsersByPhone: async (phoneFragment) => {
+      const pf = sanitizePhone(phoneFragment);
+
+      const DUMMY_PHONES = [
+        { id: 0, phone: "0881231234" },
+        { id: 1, phone: "0881234321" },
+        { id: 2, phone: "0883214321" },
+      ];
+
+      const DUMMY_FRIEND_PHONES = [
+        { id: 3, phone: "0881231234", name: "Пешо Някойси" },
+        { id: 4, phone: "0881234321", name: "Фончо Две" },
+        { id: 5, phone: "0883214321", name: "Фончо Ино" },
+      ];
+
+      const results = DUMMY_PHONES.filter((p) => p.phone.startsWith(pf)).slice(
+        0,
+        3
+      );
+      const resultsFirends = DUMMY_FRIEND_PHONES.filter((p) =>
+        p.phone.startsWith(pf)
+      ).slice(0, 5);
+
+      const wrapedResults =
+        results.length || resultsFirends.length
+          ? new LoadStatus.Loaded([...resultsFirends, ...results])
+          : new LoadStatus.Empty();
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
           if (Math.random() < 0.3) {
             resolve(new LoadStatus.Error("Не могат да се заредят подсказки"));
           }
@@ -82,7 +119,7 @@ const useUserService = () => {
       });
     },
     requestConnection: async (userId) => {
-      return Math.random() < 0.2
+      return Math.random() < 0.1
         ? new LoadStatus.Error("Няма човек с този телефон")
         : new LoadStatus.Loaded("Заявката е изпратена");
     },

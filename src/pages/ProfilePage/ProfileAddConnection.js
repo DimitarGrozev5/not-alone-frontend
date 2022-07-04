@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoadStatus } from "../../data-types/LoadStatus";
-import { requestActions } from "../../redux-store/requestsSlice";
-import useMessages from "../../services/useMessages";
-
-import { useRequestsService } from "../../services/useRequestsService";
 import useUserService from "../../services/useUserService";
 
 const ProfileAddConnection = (props) => {
@@ -12,8 +8,6 @@ const ProfileAddConnection = (props) => {
 
   // Get Services
   const userService = useUserService();
-  const requestsService = useRequestsService();
-  const messages = useMessages();
 
   // State that handles the search phone input
   const [searchPhoneText, setSearchPhoneText] = useState("");
@@ -30,8 +24,10 @@ const ProfileAddConnection = (props) => {
     }
     let active = true;
     const interval = setTimeout(() => {
-      userService
-        .findUserByPhone(searchPhoneText)
+      const service = props.all
+        ? "findAllUsersByPhone"
+        : "findUnknownUserByPhone";
+      userService[service](searchPhoneText)
         .then((results) => {
           if (active) {
             setSuggetions(results);
@@ -56,20 +52,7 @@ const ProfileAddConnection = (props) => {
   // Handle requests for connecting with other people
   const submitHandler = (event) => {
     event.preventDefault();
-    userService
-      .requestConnection(searchPhoneText)
-      .then((result) => {
-        if (result instanceof LoadStatus.Error) {
-          throw result;
-        }
-        messages.alert(result.result);
-        setSearchPhoneText("");
-        return requestsService.getConnectionRequests();
-      })
-      .then((requsets) => dispatch(requestActions.updateRequests(requsets)))
-      .catch((err) => {
-        messages.alert(err.message);
-      });
+    props.onSubmit(searchPhoneText, () => setSearchPhoneText(""));
   };
 
   return (
@@ -86,9 +69,9 @@ const ProfileAddConnection = (props) => {
         {suggetions instanceof LoadStatus.Loaded && (
           <ul>
             {suggetions.result.map((s) => (
-              <li key={s.phone}>
+              <li key={s.id}>
                 <button onClick={selectSuggetionHandler(s.phone)}>
-                  {s.phone}
+                  {s.name} {s.phone}
                 </button>
               </li>
             ))}
