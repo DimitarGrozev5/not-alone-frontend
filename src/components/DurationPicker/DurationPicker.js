@@ -2,6 +2,9 @@ import { deconstructDuration, TimeConst } from "../../utils/time";
 import styles from "./DurationPicker.module.css";
 
 const DurationPicker = (props) => {
+  const updateDuration = (dt) => (duration) =>
+    duration + dt < 0 ? 0 : duration + dt;
+
   const [, , minutes, hours, days] = deconstructDuration(props.duration);
 
   const changeHandler = (timeframe, baseMeasure) => (event) => {
@@ -10,12 +13,12 @@ const DurationPicker = (props) => {
     }
 
     const dt = (event.target.value - baseMeasure) * timeframe;
-    props.onChange((duration) => duration + dt);
+    props.onChange(updateDuration(dt));
   };
 
   const addOneHandler = (timeframe) => (event) => {
     event.preventDefault();
-    props.onChange((duration) => duration + timeframe);
+    props.onChange(updateDuration(timeframe));
   };
 
   return (
