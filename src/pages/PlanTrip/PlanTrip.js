@@ -1,9 +1,40 @@
 import { useState } from "react";
-import DurationPicker from "../../components/DurationPicker/DurationPicker";
+
 import styles from "./PlanTrip.module.css";
+import TripStop from "./TripStop";
 
 const PlanTrip = () => {
-  const [duration1, setDuration1] = useState(0);
+  const [stops, setStops] = useState([{ text: "", duration: 0 }]);
+
+  const onNameChangeHandler = (id) => (event) => {
+    setStops((stops) => {
+      const copy = [...stops];
+      copy[id].text = event.target.value;
+      return copy;
+    });
+  };
+  const onDurationChangeHandler = (id) => (dt) => {
+    setStops((stops) => {
+      const copy = [...stops];
+
+      copy[id].duration =
+        copy[id].duration + dt < 0 ? 0 : copy[id].duration + dt;
+      return copy;
+    });
+  };
+
+  const onRemoveHandler = (id) => () => {
+    setStops((stops) => {
+      const copy = [...stops];
+      copy.splice(id, 1);
+      return copy;
+    });
+  };
+
+  const addStopHandler = (event) => {
+    event.preventDefault();
+    setStops((stops) => [...stops, { text: "", duration: 0 }]);
+  };
 
   return (
     <>
@@ -14,14 +45,17 @@ const PlanTrip = () => {
           <label>Начална точка</label>
           <input type="text" placeholder="Напишете името на мястото" />
         </div>
+        {stops.map((stop, index) => (
+          <TripStop
+            key={index}
+            stop={stop}
+            onNameChange={onNameChangeHandler(index)}
+            onDurationChange={onDurationChangeHandler(index)}
+            onRemove={onRemoveHandler(index)}
+          />
+        ))}
         <div>
-          <label>Следваща спирка</label>
-          <input type="text" placeholder="Напишете името на мястото" />
-          <label>Колко време ще продължи пътуването</label>
-          <DurationPicker duration={duration1} onChange={setDuration1} />
-        </div>
-        <div>
-          <button>Добави спирка</button>
+          <button onClick={addStopHandler}>Добави спирка</button>
         </div>
       </div>
     </>
