@@ -114,6 +114,9 @@ export const useTripsService = () => {
         ],
       };
     },
+    deleteTrip: async (id) => {
+      return true;
+    },
   });
 
   return methods.current;

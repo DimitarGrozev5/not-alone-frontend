@@ -100,6 +100,21 @@ const PlanTrip = (props) => {
       .catch((err) => message.alert(err.message));
   };
 
+  const deleteHandler = (event) => {
+    event.preventDefault();
+    const result = message.confirm("Сигурен ли си?");
+    if (result) {
+      tripService
+        .deleteTrip(edit.id)
+        .then(() => {
+          console.log('done');
+          message.alert("Пътуването е изтрито!");
+          navigate("/", { replace: true });
+        })
+        .catch((err) => message.alert(err.message));
+    }
+  };
+
   useEffect(() => {
     if (editFlag) {
       setTripName(edit.tripName);
@@ -150,7 +165,9 @@ const PlanTrip = (props) => {
                   {w.name} {w.phone}
                   {w.status === requestStatus.ACCEPTED && " наблюдава"}
                   {w.status === requestStatus.PENDING && " не е отговорил"}
-                  <button onClick={removeWatcherHandler(index)}>X</button>
+                  {w.status !== requestStatus.ACCEPTED && (
+                    <button onClick={removeWatcherHandler(index)}>X</button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -161,7 +178,10 @@ const PlanTrip = (props) => {
             all
           />
         </div>
-        <button onClick={saveHandler}>Запази нов план</button>
+        <button onClick={saveHandler}>
+          {editFlag ? "Запази промените" : "Запази нов план"}
+        </button>
+        {editFlag && <button onClick={deleteHandler}>Изтрий пътуването</button>}
       </div>
     </>
   );
