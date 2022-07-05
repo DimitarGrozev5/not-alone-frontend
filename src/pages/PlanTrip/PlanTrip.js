@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { requestTypes, stopTypes } from "../../data-types/trip-data";
+import {
+  requestStatus,
+  requestTypes,
+  stopTypes,
+} from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
 import ProfileAddConnection from "../ProfilePage/ProfileAddConnection";
@@ -28,7 +32,7 @@ const PlanTrip = (props) => {
             stops: data.stops
               .slice(1)
               .map((stop) => ({ text: stop.text, duration: stop.duration })),
-            watcherRequests: [],
+            watcherRequests: data.watchers,
           };
           setEdit(editData);
         })
@@ -52,6 +56,7 @@ const PlanTrip = (props) => {
 
   const [watcherRequests, setWatcherRequests] = useState([]);
   const addWatcherRequestHandler = (watcher) => {
+    console.log(watcher);
     setWatcherRequests((w) => [...w, watcher]);
   };
   const removeWatcherHandler = (index) => (event) => {
@@ -96,10 +101,12 @@ const PlanTrip = (props) => {
   };
 
   useEffect(() => {
-    setTripName(edit.tripName);
-    setStartStop(edit.startStop);
-    setStops(edit.stops);
-    setWatcherRequests(edit.watcherRequests);
+    if (editFlag) {
+      setTripName(edit.tripName);
+      setStartStop(edit.startStop);
+      setStops(edit.stops);
+      setWatcherRequests(edit.watcherRequests);
+    }
   }, [edit, setStops]);
 
   return (
@@ -139,8 +146,10 @@ const PlanTrip = (props) => {
           {!!watcherRequests.length && (
             <ul>
               {watcherRequests.map((w, index) => (
-                <li key={w}>
-                  {w}
+                <li key={w.id}>
+                  {w.name} {w.phone}
+                  {w.status === requestStatus.ACCEPTED && " наблюдава"}
+                  {w.status === requestStatus.PENDING && " не е отговорил"}
                   <button onClick={removeWatcherHandler(index)}>X</button>
                 </li>
               ))}

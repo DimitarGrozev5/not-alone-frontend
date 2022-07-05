@@ -95,16 +95,19 @@ export const useTripsService = () => {
         ],
         watchers: [
           {
+            id: 0,
             name: "Бай Иван",
             phone: "0881231234",
             status: requestStatus.ACCEPTED,
           },
           {
+            id: 1,
             name: "Ганьо",
             phone: "0881234321",
             status: requestStatus.PENDING,
           },
           {
+            id: 2,
             phone: "0883211234",
             status: requestStatus.PENDING,
           },

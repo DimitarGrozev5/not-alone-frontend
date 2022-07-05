@@ -83,7 +83,9 @@ const ProfileAddConnection = (props) => {
           <div>{suggetions.message}</div>
         )}
 
-        <button type="submit">{props.caption || "Изпрати покана"}</button>
+        <button disabled={!selectedSuggetion} type="submit">
+          {props.caption || "Изпрати покана"}
+        </button>
       </form>
     </div>
   );
