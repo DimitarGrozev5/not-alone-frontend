@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useManageStops = () => {
+export const useManageStops = (editStops) => {
   const [stops, setStops] = useState([{ text: "", duration: 0 }]);
 
   const onNameChangeHandler = (id) => (event) => {
@@ -35,6 +35,7 @@ export const useManageStops = () => {
 
   return {
     stops,
+    setStops,
     onNameChangeHandler,
     onDurationChangeHandler,
     onRemoveStopHandler,

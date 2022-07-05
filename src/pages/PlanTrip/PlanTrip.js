@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { requestTypes, stopTypes } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
@@ -8,10 +8,33 @@ import { useManageStops } from "./hooks/useManageStops";
 import styles from "./PlanTrip.module.css";
 import TripStop from "./TripStop";
 
-const PlanTrip = () => {
+const PlanTrip = (props) => {
   const navigate = useNavigate();
   const tripService = useTripsService();
   const message = useMessages();
+  const params = useParams();
+
+  const [edit, setEdit] = useState({});
+  const editFlag = props.edit;
+  const tripId = params.tripId;
+  useEffect(() => {
+    if (editFlag) {
+      tripService
+        .getTripById(tripId)
+        .then((data) => {
+          const editData = {
+            tripName: data.name,
+            startStop: data.stops[0].text,
+            stops: data.stops
+              .slice(1)
+              .map((stop) => ({ text: stop.text, duration: stop.duration })),
+            watcherRequests: [],
+          };
+          setEdit(editData);
+        })
+        .catch((err) => message.alert(err.message));
+    }
+  }, [tripService, message, editFlag, tripId]);
 
   const [tripName, setTripName] = useState("");
   const changeTripNameHandler = (event) => setTripName(event.target.value);
@@ -20,6 +43,7 @@ const PlanTrip = () => {
 
   const {
     stops,
+    setStops,
     onNameChangeHandler,
     onDurationChangeHandler,
     onRemoveStopHandler,
@@ -70,6 +94,13 @@ const PlanTrip = () => {
       })
       .catch((err) => message.alert(err.message));
   };
+
+  useEffect(() => {
+    setTripName(edit.tripName);
+    setStartStop(edit.startStop);
+    setStops(edit.stops);
+    setWatcherRequests(edit.watcherRequests);
+  }, [edit, setStops]);
 
   return (
     <>

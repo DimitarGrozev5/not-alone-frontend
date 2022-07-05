@@ -38,7 +38,7 @@ function App() {
         .then((requests) => dispatch(requestActions.updateRequests(requests)))
         .catch((err) => errMsg.alert(err.message));
     }
-  }, [isLoggedIn, userService, errMsg, dispatch]);
+  }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
 
   return (
     <Routes>
@@ -62,6 +62,7 @@ function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </Route>
             <Route path="/plan-trip" element={<PlanTrip />} />
+            <Route path="/planned-trips/:tripId" element={<PlanTrip edit />} />
           </Route>
         </>
       )}

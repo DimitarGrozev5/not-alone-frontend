@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import useUserService from "../../services/useUserService";
 
 const ProfileAddConnection = (props) => {
-  const dispatch = useDispatch();
-
   // Get Services
   const userService = useUserService();
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import { requestStatus } from "../../data-types/trip-data";
-import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
 import { deconstructDuration } from "../../utils/time";
 
@@ -10,7 +9,6 @@ import styles from "./PlannedTrips.module.css";
 
 const PlannedTrips = () => {
   const tripsService = useTripsService();
-  const message = useMessages();
 
   const [trips, setTrips] = useState(new LoadStatus.Loading());
 
@@ -26,7 +24,7 @@ const PlannedTrips = () => {
       .catch((err) => {
         setTrips(new LoadStatus.Error(err.message));
       });
-  }, []);
+  }, [tripsService]);
 
   return (
     <>
