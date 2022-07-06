@@ -17,6 +17,7 @@ import { useRequestsService } from "./services/useRequestsService";
 import { requestActions } from "./redux-store/requestsSlice";
 import PlanTrip from "./pages/PlanTrip/PlanTrip";
 import Watching from "./pages/Watching/Watching";
+import WatchTrip from "./pages/WatchTrip/WatchTrip";
 
 function App() {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ function App() {
             </Route>
             <Route path="/plan-trip" element={<PlanTrip />} />
             <Route path="/planned-trips/:tripId" element={<PlanTrip edit />} />
+            <Route path="/watch/:tripId" element={<WatchTrip />} />
           </Route>
         </>
       )}
