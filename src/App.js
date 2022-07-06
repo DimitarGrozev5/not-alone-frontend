@@ -16,6 +16,7 @@ import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
 import { useRequestsService } from "./services/useRequestsService";
 import { requestActions } from "./redux-store/requestsSlice";
 import PlanTrip from "./pages/PlanTrip/PlanTrip";
+import Watching from "./pages/Watching/Watching";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function App() {
             <Route path="/" element={<LoggedInTemplate />}>
               <Route index element={<Navigate to="/planned-trips" />} />
               <Route path="/planned-trips" element={<PlannedTrips />} />
-              <Route path="/watching" element={<PlannedTrips />} />
+              <Route path="/watching" element={<Watching />} />
               <Route path="/ongoing-trip" element={<PlannedTrips />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="*" element={<Navigate to="/" />} />
