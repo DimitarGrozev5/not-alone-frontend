@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { LoadStatus } from "../../data-types/LoadStatus";
-import { tripStatus } from "../../data-types/trip-data";
+import { requestTypes, tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useWatchingService } from "../../services/useWatchingService";
 
@@ -10,11 +11,16 @@ import styles from "./Watching.module.css";
 const Watching = () => {
   const watchingService = useWatchingService();
   const messages = useMessages();
+  const navigate = useNavigate();
 
-  const [watched, setWatched] = useState(new LoadStatus.Loading());
-  const [requests, setRequests] = useState(new LoadStatus.Loading());
+  const [watched, setWatched] = useState(new LoadStatus.Idle());
+  const [requests, setRequests] = useState(new LoadStatus.Idle());
 
   useEffect(() => {
+    console.log("data load");
+    if (!watched.isIdle) {
+      return;
+    }
     watchingService
       .getAllWatchingAndRequests()
       .then((res) => {
@@ -34,7 +40,7 @@ const Watching = () => {
         messages.alert(err.message);
         setWatched(new LoadStatus.Error(err.message));
       });
-  }, [watchingService, messages]);
+  }, [watchingService, messages, watched]);
 
   const [showReqModal, setShowReqModal] = useState(false);
   const openRequestsHandler = (event) => {
@@ -46,11 +52,47 @@ const Watching = () => {
     setShowReqModal(false);
   };
 
+  const confirmRequest = (id) => () => {
+    watchingService
+      .confirmWatch(id)
+      .then(() => {
+        setWatched(new LoadStatus.Idle());
+        if (!requests.result.length) {
+          setShowReqModal(false);
+        }
+      })
+      .catch((err) => messages.alert(err.message));
+  };
+  const denyRequest = (id) => () => {
+    watchingService
+      .denyWatch(id)
+      .then(() => {
+        setWatched(new LoadStatus.Idle());
+        if (!requests.result.length) {
+          setShowReqModal(false);
+        }
+      })
+      .catch((err) => messages.alert(err.message));
+  };
+
   return (
     <>
       {showReqModal && (
         <Modal title="Нови молби" onClose={closeRequestsHandler}>
-          
+          <ul>
+            {requests.isLoaded &&
+              requests.result.map((req) => (
+                <li key={req.id}>
+                  {req.name} иска да{" "}
+                  {req.type === requestTypes.OVERWATCH
+                    ? "знаеш"
+                    : "се свържете и да знаеш"}
+                  , че отива на пътешествие
+                  <button onClick={confirmRequest(req.id)}>ОК</button>
+                  <button onClick={denyRequest(req.id)}>Откажи</button>
+                </li>
+              ))}
+          </ul>
         </Modal>
       )}
       <h1>Наблюдавани пътувания</h1>

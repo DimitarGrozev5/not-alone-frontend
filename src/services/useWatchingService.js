@@ -3,6 +3,8 @@ import { tripStatus, stopTypes, requestTypes } from "../data-types/trip-data";
 
 export const useWatchingService = () => {
   return useRef({
+    confirmWatch: async (id) => true,
+    denyWatch: async (id) => true,
     getAllWatchingAndRequests: async () => {
       return {
         watching: [
@@ -245,7 +247,7 @@ export const useWatchingService = () => {
             type: requestTypes.OVERWATCH,
           },
           {
-            id: 0,
+            id: 1,
             name: "Мюмюн",
             phone: "0881231234",
             type: requestTypes.OVERWATCH_AND_CONNECTION,
