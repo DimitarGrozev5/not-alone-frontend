@@ -93,26 +93,26 @@ const PlanTrip = (props) => {
         ],
         watcherRequests: formatedWatcherRequests,
       })
-      .then(() => {
-        message.alert("Пътуването е запазено");
-        navigate("/", { replace: true });
-      })
+      .then(() => message.alert("Пътуването е запазено"))
+      .then(() => navigate("/", { replace: true }))
       .catch((err) => message.alert(err.message));
   };
 
   const deleteHandler = (event) => {
     event.preventDefault();
-    const result = message.confirm("Сигурен ли си?");
-    if (result) {
-      tripService
-        .deleteTrip(edit.id)
-        .then(() => {
-          console.log('done');
-          message.alert("Пътуването е изтрито!");
-          navigate("/", { replace: true });
-        })
-        .catch((err) => message.alert(err.message));
-    }
+    message
+      .confirm("Сигурен ли си?")
+      .then((result) => {
+        if (result) {
+          return tripService.deleteTrip(edit.id);
+        }
+      })
+      .then(() => {
+        console.log("done");
+        return message.alert("Пътуването е изтрито!");
+      })
+      .then(() => navigate("/", { replace: true }))
+      .catch((err) => message.alert(err.message));
   };
 
   useEffect(() => {
