@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LoadStatus } from "../../data-types/LoadStatus";
+import { tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useWatchingService } from "../../services/useWatchingService";
 import styles from "./WatchTrip.module.css";
@@ -41,19 +42,48 @@ const WatchTrip = () => {
       {trip.isLoaded && (
         <>
           <h2>Име: {trip.result.name}</h2>
-          
+
           <h3>По молба от {trip.result.user.name}</h3>
 
           <ul>
             {trip.result.stops.map((stop, index) => (
               <li key={stop.id}>
                 {stop.text}
-                {index < nextStopIndex && " - минала"}
+                {index < nextStopIndex && " - стигната"}
               </li>
             ))}
           </ul>
 
+          {trip.result.tripStatus.status === tripStatus.PENDING && (
+            <div>{trip.result.user.name} все още не е тръгнал</div>
+          )}
 
+          {trip.result.tripStatus.status === tripStatus.PAUSED && (
+            <div>
+              {trip.result.user.name} почива преди да се насочи към следващата
+              спирка
+            </div>
+          )}
+
+          {trip.result.tripStatus.status === tripStatus.ONGOING && (
+            <>
+              <div>
+                {trip.result.user.name} се придвижва към следващата спирка
+              </div>
+              <div>
+                Очаква се да пристигне около{" "}
+                {new Date(trip.result.tripStatus.dueBy).toString()}
+              </div>
+            </>
+          )}
+
+          {trip.result.tripStatus.status === tripStatus.LATE && (
+            <div>{trip.result.user.name} закъснява</div>
+          )}
+
+          {trip.result.tripStatus.status === tripStatus.VERY_LATE && (
+            <div>{trip.result.user.name} закъснява много</div>
+          )}
         </>
       )}
     </>
