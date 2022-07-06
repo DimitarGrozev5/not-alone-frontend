@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { tripStatus, stopTypes } from "../data-types/trip-data";
+import { tripStatus, stopTypes, requestTypes } from "../data-types/trip-data";
 
 export const useWatchingService = () => {
   return useRef({
@@ -237,7 +237,20 @@ export const useWatchingService = () => {
             },
           },
         ],
-        requests: [],
+        requests: [
+          {
+            id: 0,
+            name: "Хасан",
+            phone: "0881231234",
+            type: requestTypes.OVERWATCH,
+          },
+          {
+            id: 0,
+            name: "Мюмюн",
+            phone: "0881231234",
+            type: requestTypes.OVERWATCH_AND_CONNECTION,
+          },
+        ],
       };
     },
   }).current;

@@ -22,6 +22,11 @@ const Watching = () => {
             ? new LoadStatus.Loaded(res.watching)
             : new LoadStatus.Empty()
         );
+        setRequests(
+          res.requests.length
+            ? new LoadStatus.Loaded(res.requests)
+            : new LoadStatus.Empty()
+        );
       })
       .catch((err) => {
         console.log(err.message);
@@ -82,6 +87,14 @@ const Watching = () => {
           ))}
         </ul>
       )}
+      <div className={styles.requests}>
+        {requests.isLoading && "Зареждане"}
+        {requests.isEmpty && "Няма нови молби"}
+        {requests.isError && "Има грешка при зареждането"}
+        {requests.isLoaded && (
+          <button>`Има {requests.result.length} нови молби`</button>
+        )}
+      </div>
     </>
   );
 };
