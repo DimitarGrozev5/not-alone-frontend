@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Modal from "../../components/UIComponents/Modal/Modal";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import { tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
@@ -47,6 +48,11 @@ const Watching = () => {
 
   return (
     <>
+      {showReqModal && (
+        <Modal title="Нови молби" onClose={closeRequestsHandler}>
+          
+        </Modal>
+      )}
       <h1>Наблюдавани пътувания</h1>
 
       {watched.isLoading && <h2>Наблюдаваните пътувания се зареждат</h2>}
@@ -103,7 +109,7 @@ const Watching = () => {
         {requests.isError && "Има грешка при зареждането"}
         {requests.isLoaded && (
           <button onClick={openRequestsHandler}>
-            `Има {requests.result.length} нови молби`
+            Има {requests.result.length} нови молби
           </button>
         )}
       </div>
