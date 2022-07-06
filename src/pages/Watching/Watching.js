@@ -17,28 +17,28 @@ const Watching = () => {
 
   useEffect(() => {
     console.log("data load");
-    if (!watched.isIdle) {
-      return;
+    if (watched.isIdle) {
+      watchingService
+        .getAllWatchingAndRequests()
+        .then((res) => {
+          setWatched(
+            res.watching.length
+              ? new LoadStatus.Loaded(res.watching)
+              : new LoadStatus.Empty()
+          );
+          setRequests(
+            res.requests.length
+              ? new LoadStatus.Loaded(res.requests)
+              : new LoadStatus.Empty()
+          );
+        })
+        .catch((err) => {
+          console.log(err.message);
+          messages.alert(err.message);
+          setWatched(new LoadStatus.Error(err.message));
+        });
+      setWatched(new LoadStatus.Loading());
     }
-    watchingService
-      .getAllWatchingAndRequests()
-      .then((res) => {
-        setWatched(
-          res.watching.length
-            ? new LoadStatus.Loaded(res.watching)
-            : new LoadStatus.Empty()
-        );
-        setRequests(
-          res.requests.length
-            ? new LoadStatus.Loaded(res.requests)
-            : new LoadStatus.Empty()
-        );
-      })
-      .catch((err) => {
-        console.log(err.message);
-        messages.alert(err.message);
-        setWatched(new LoadStatus.Error(err.message));
-      });
   }, [watchingService, messages, watched]);
 
   const [showReqModal, setShowReqModal] = useState(false);
