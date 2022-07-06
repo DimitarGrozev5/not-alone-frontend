@@ -35,6 +35,16 @@ const Watching = () => {
       });
   }, [watchingService, messages]);
 
+  const [showReqModal, setShowReqModal] = useState(false);
+  const openRequestsHandler = (event) => {
+    event.preventDefault();
+    setShowReqModal(true);
+  };
+  const closeRequestsHandler = (event) => {
+    event.preventDefault();
+    setShowReqModal(false);
+  };
+
   return (
     <>
       <h1>Наблюдавани пътувания</h1>
@@ -92,7 +102,9 @@ const Watching = () => {
         {requests.isEmpty && "Няма нови молби"}
         {requests.isError && "Има грешка при зареждането"}
         {requests.isLoaded && (
-          <button>`Има {requests.result.length} нови молби`</button>
+          <button onClick={openRequestsHandler}>
+            `Има {requests.result.length} нови молби`
+          </button>
         )}
       </div>
     </>
