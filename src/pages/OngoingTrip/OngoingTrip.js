@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { LoadStatus } from "../../data-types/LoadStatus";
-import { requestStatus } from "../../data-types/trip-data";
+import { requestStatus, tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
 import { exp } from "../../utils/helpers";
@@ -8,6 +9,7 @@ import { deconstructDuration } from "../../utils/time";
 import styles from "./OngoingTrip.module.css";
 
 const OngoingTrip = () => {
+  const user = useSelector((state) => state.user);
   const tripsService = useTripsService();
   const messages = useMessages();
 
@@ -27,6 +29,26 @@ const OngoingTrip = () => {
     trip.isLoaded && trip.result instanceof Array && trip.result;
 
   const activeTrip = trip.isLoaded && !listOfAllTrips && trip.result;
+
+  const nextStopIndex =
+    activeTrip &&
+    activeTrip.stops.findIndex(
+      (stop) => activeTrip.tripStatus.nextStop === stop.id
+    );
+
+  if (activeTrip && nextStopIndex < 0) {
+    messages
+      .alert("Грешка в данните")
+      .then(() => setTrip(new LoadStatus.Idle()));
+  }
+
+  const nextStop = activeTrip && activeTrip[nextStopIndex];
+
+  const stopsBeforeNext =
+    activeTrip && activeTrip.stops.filter((s, i) => i < nextStopIndex);
+
+  const stopsAfterNext =
+    activeTrip && activeTrip.stops.filter((s, i) => i >= nextStopIndex);
 
   const startTripHandler = (id) => () => {
     tripsService
@@ -85,7 +107,25 @@ const OngoingTrip = () => {
         </>
       )}
 
-      {activeTrip && <h2>{activeTrip.name}</h2>}
+      {activeTrip && (
+        <>
+          <h2>{activeTrip.name}</h2>
+          <ul>
+            {stopsBeforeNext.map((stop) => (
+              <li key={stop.id}>{stop.text}</li>
+            ))}
+
+            <li>
+              {activeTrip.tripStatus.status !== tripStatus.PAUSED &&
+                `${user.userData.name} се придвижва`}
+            </li>
+
+            {stopsAfterNext.map((stop) => (
+              <li key={stop.id}>{stop.text}</li>
+            ))}
+          </ul>
+        </>
+      )}
     </>
   );
 };
