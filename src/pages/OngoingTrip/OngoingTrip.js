@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Modal from "../../components/UIComponents/Modal/Modal";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import { requestStatus, tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
@@ -50,15 +51,60 @@ const OngoingTrip = () => {
   const stopsAfterNext =
     activeTrip && activeTrip.stops.filter((s, i) => i >= nextStopIndex);
 
+  const [startModalData, setStartModalData] = useState(null);
+  const openStartModalHandler = (id) => () => {
+    const trip = listOfAllTrips.find((t) => t.id === id);
+    const nextArrival = new Date(
+      +new Date() + trip.stops[1].duration
+    ).toString();
+    setStartModalData({
+      id: trip.id,
+      name: trip.name,
+      start: trip.stops[0].text,
+      next: trip.stops[1].text,
+      nextTravelTime: trip.stops[1].duration,
+      nextArrival,
+    });
+  };
+
+  useEffect(() => {
+    const i = setTimeout(() => {
+      setStartModalData(
+        (data) =>
+          data && {
+            ...data,
+            nextArrival: new Date(+new Date() + data.nextTravelTime).toString(),
+          }
+      );
+    }, 1000);
+    return () => clearTimeout(i);
+  }, [startModalData]);
+
   const startTripHandler = (id) => () => {
     tripsService
       .startTrip(id)
       .catch((err) => messages.alert(err.message))
-      .finally(() => setTrip(new LoadStatus.Idle()));
+      .finally(() => {
+        setTrip(new LoadStatus.Idle());
+        setStartModalData(null);
+      });
   };
 
   return (
     <>
+      {startModalData && (
+        <Modal
+          onClose={setStartModalData.bind(null, null)}
+          title="Започни пътуването"
+        >
+          <h2>{startModalData.name}</h2>
+          <div>Тръгваш от {startModalData.start}</div>
+          <div>Следваща спирка {startModalData.next}</div>
+          <div>Очаква се да пристигнеш до {startModalData.nextArrival}</div>
+          <button onClick={startTripHandler(startModalData.id)}>Старт</button>
+        </Modal>
+      )}
+
       <h1>Активно пътуване</h1>
 
       {trip.isLoading && <div>Зареждане...</div>}
@@ -99,7 +145,9 @@ const OngoingTrip = () => {
                       : `1 човек ще те следи`}
                     {!watching && "Все още никой не те следи"}
                   </h3>
-                  <button onClick={startTripHandler(trip.id)}>Старт</button>
+                  <button onClick={openStartModalHandler(trip.id)}>
+                    Старт
+                  </button>
                 </li>
               );
             })}
