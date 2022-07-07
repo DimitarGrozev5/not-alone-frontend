@@ -191,6 +191,12 @@ const OngoingTrip = () => {
                   </div>
                 </>
               )}
+
+              {activeTrip.tripStatus.status === tripStatus.LATE && (
+                <>
+                  <div>Закъсняваш</div>
+                </>
+              )}
             </li>
 
             {stopsAfterNext.map((stop) => (
