@@ -82,7 +82,7 @@ const WatchTrip = () => {
           )}
 
           {trip.result.tripStatus.status === tripStatus.VERY_LATE && (
-            <div>{trip.result.user.name} закъснява много</div>
+            <div>{trip.result.user.name} закъснява много. Пробвай да се свържеш с него.</div>
           )}
         </>
       )}
