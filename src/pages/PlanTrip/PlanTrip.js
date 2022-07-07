@@ -104,7 +104,7 @@ const PlanTrip = (props) => {
       .confirm("Сигурен ли си?")
       .then((result) => {
         if (result) {
-          return tripService.deleteTrip(edit.id);
+          return tripService.updateTrip(edit.id);
         }
       })
       .then(() => {
