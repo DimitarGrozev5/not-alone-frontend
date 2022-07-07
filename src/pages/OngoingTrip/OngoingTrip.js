@@ -84,6 +84,8 @@ const OngoingTrip = () => {
           </ul>
         </>
       )}
+
+      {activeTrip && <h2>{activeTrip.name}</h2>}
     </>
   );
 };

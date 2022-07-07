@@ -74,7 +74,10 @@ export const useTripsService = () => {
     },
     getActiveTrip: async () => {
       // If there is no active trip, return all trips
-      return DUMMY_TRIPS;
+      // return DUMMY_TRIPS;
+
+      // If there is an active trip, return it
+      return { id: 0, name: "Амбарица 2022" };
     },
     startTrip: async (id) => {
       return true;
