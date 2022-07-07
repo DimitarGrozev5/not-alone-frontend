@@ -90,6 +90,8 @@ const OngoingTrip = () => {
       });
   };
 
+  const setStatusHandler = (status) => () => {};
+
   return (
     <>
       {startModalData && (
@@ -164,8 +166,31 @@ const OngoingTrip = () => {
             ))}
 
             <li>
-              {activeTrip.tripStatus.status !== tripStatus.PAUSED &&
-                `${user.userData.name} се придвижва`}
+              {activeTrip.tripStatus.status === tripStatus.ONGOING && (
+                <>
+                  <div>Пътуване</div>
+                  <div>
+                    Очаква се да пристигнеш до{" "}
+                    {new Date(activeTrip.tripStatus.dueBy).toString()}
+                  </div>
+                  <div>
+                    <button onClick={setStatusHandler(tripStatus.PAUSED)}>
+                      Пауза
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {activeTrip.tripStatus.status === tripStatus.PAUSED && (
+                <>
+                  <div>Пътуването е в пауза</div>
+                  <div>
+                    <button onClick={setStatusHandler(tripStatus.ONGOING)}>
+                      Продължи
+                    </button>
+                  </div>
+                </>
+              )}
             </li>
 
             {stopsAfterNext.map((stop) => (

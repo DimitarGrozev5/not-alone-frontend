@@ -264,7 +264,7 @@ export const useTripsService = () => {
       // return DUMMY_TRIPS;
 
       // If there is an active trip, return it
-      return DUMMY_ONGOING[0];
+      return DUMMY_ONGOING[3];
     },
     startTrip: async (id) => {
       return true;
