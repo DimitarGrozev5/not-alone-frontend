@@ -259,6 +259,9 @@ export const useTripsService = () => {
     updateTrip: async (id) => {
       return true;
     },
+    deleteTrip: async (id) => {
+      return true;
+    },
     getActiveTrip: async () => {
       // If there is no active trip, return all trips
       // return DUMMY_TRIPS;
@@ -267,6 +270,9 @@ export const useTripsService = () => {
       return DUMMY_ONGOING[1];
     },
     startTrip: async (id) => {
+      return true;
+    },
+    pauseTrip: async (id) => {
       return true;
     },
   });
