@@ -9,10 +9,6 @@ const useUserService = () => {
   const dispatch = useDispatch();
   const methods = useRef({
     register: async ({ email, name, phone, password }) => {
-      // TODO: Send request to api and get back a JWT
-      // For the moment return a dummy value
-      const token = "adsadadasdsadsadsadsadasdsadad";
-
       const response = await fetch(baseUrl + "users/register", {
         method: "POST",
         headers: {
@@ -27,22 +23,63 @@ const useUserService = () => {
         throw new Error(responseData.message);
       }
 
-      // Save token to local storage
-      localStorage.setItem("jwt", token);
+      // {
+      //   userId,
+      //   email,
+      //   token,
+      // }
 
-      dispatch(userActions.updateAccessToken(token));
+      // Save token to local storage
+      localStorage.setItem("jwt", responseData.token);
+
+      dispatch(userActions.updateAccessToken(responseData.token));
     },
     login: async ({ email, password }) => {
-      // TODO: Send request to api and get back a JWT
-      // For the moment return a dummy value
-      const token = "adsadadasdsadsadsadsadasdsadad";
+      const response = await fetch(baseUrl + "users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      // {
+      //   userId,
+      //   email,
+      //   token,
+      // }
 
       // Save token to local storage
-      localStorage.setItem("jwt", token);
+      localStorage.setItem("jwt", responseData.token);
 
-      dispatch(userActions.updateAccessToken(token));
+      dispatch(userActions.updateAccessToken(responseData.token));
     },
     logout: async () => {
+      // Get token
+      const token = localStorage.getItem("jwt");
+      console.log(token);
+
+      // Send Logout request
+      const response = await fetch(baseUrl + "users/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        throw new Error(responseData.message);
+      }
+
+      // Remove token from local storage and Redux
       localStorage.removeItem("jwt");
       dispatch(userActions.logout());
     },

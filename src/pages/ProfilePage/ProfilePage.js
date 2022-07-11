@@ -10,6 +10,9 @@ import ProfileAddConnection from "./ProfileAddConnection";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
 import { LoadStatus } from "../../data-types/LoadStatus";
+import { useState } from "react";
+import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 
 const ProfilePage = (props) => {
   // Get Services
@@ -17,6 +20,10 @@ const ProfilePage = (props) => {
   const requestsService = useRequestsService();
   const messages = useMessages();
   const dispatch = useDispatch();
+
+  // Setup loading and error state
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(undefined);
 
   // Get data about the user from the store
   const user = useSelector((state) => state.user);
@@ -28,7 +35,13 @@ const ProfilePage = (props) => {
   );
 
   // Logout user
-  const logoutHandler = () => userService.logout();
+  const logoutHandler = () => {
+    setIsLoading(true);
+    userService.logout().catch((err) => {
+      setIsLoading(false);
+      setError(err.message);
+    });
+  };
 
   const requestConnectionHandler = (searchPhoneUser, clearText) => {
     requestsService
@@ -49,6 +62,10 @@ const ProfilePage = (props) => {
 
   return (
     <div className={styles.profile}>
+      {isLoading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
+      )}
       <ProfileOverview
         userData={user.userData}
         connections={user.connections}
