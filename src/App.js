@@ -36,10 +36,10 @@ function App() {
         .getUserData(token)
         .then((userData) => dispatch(userActions.updateUserData(userData)))
         .catch((err) => errMsg.alert(err.message));
-      requestsService
-        .getConnectionRequests()
-        .then((requests) => dispatch(requestActions.updateRequests(requests)))
-        .catch((err) => errMsg.alert(err.message));
+      // requestsService
+      //   .getConnectionRequests()
+      //   .then((requests) => dispatch(requestActions.updateRequests(requests)))
+      //   .catch((err) => errMsg.alert(err.message));
     }
   }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
 

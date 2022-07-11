@@ -10,7 +10,7 @@ import ProfileAddConnection from "./ProfileAddConnection";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
 import { LoadStatus } from "../../data-types/LoadStatus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 
@@ -25,14 +25,16 @@ const ProfilePage = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(undefined);
 
-  // Get data about the user from the store
-  const user = useSelector((state) => state.user);
-  const outRequests = useSelector(
-    (state) => state.requests.requestsForConnectionSend
-  );
-  const inRequests = useSelector(
-    (state) => state.requests.requestsForConnectionReceived
-  );
+  // Get data about the user on first load
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    userService
+      .getUserData()
+      .then((data) => setUser(data))
+      .catch((err) => setError(err.message));
+  }, [userService]);
 
   // Logout user
   const logoutHandler = () => {
@@ -66,16 +68,20 @@ const ProfilePage = (props) => {
       {error && (
         <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
       )}
-      <ProfileOverview
-        userData={user.userData}
-        connections={user.connections}
-      />
-      <ProfileAddConnection onSubmit={requestConnectionHandler} />
-      <div>
-        <ProfileOutRequests outRequests={outRequests} />
-        <ProfileInRequests inRequests={inRequests} />
-      </div>
-      <button onClick={logoutHandler}>Logout</button>
+      {user && (
+        <>
+          <ProfileOverview
+            userData={user.userData}
+            connections={user.connections}
+          />
+          <ProfileAddConnection onSubmit={requestConnectionHandler} />
+          <div>
+            {/* <ProfileOutRequests outRequests={user.outRequests} />
+            <ProfileInRequests inRequests={user.inRequests} /> */}
+          </div>
+          <button onClick={logoutHandler}>Logout</button>
+        </>
+      )}
     </div>
   );
 };
