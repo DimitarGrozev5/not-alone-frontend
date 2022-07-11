@@ -3,6 +3,7 @@ import { userActions } from "../redux-store/userSlice";
 import { sanitizePhone } from "../utils/data-sanitizition";
 import { LoadStatus } from "../data-types/LoadStatus";
 import { useRef } from "react";
+import { baseUrl } from "../constants/baseUrl";
 
 const useUserService = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,20 @@ const useUserService = () => {
       // TODO: Send request to api and get back a JWT
       // For the moment return a dummy value
       const token = "adsadadasdsadsadsadsadasdsadad";
+
+      const response = await fetch(baseUrl + "users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, phone, password }),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
 
       // Save token to local storage
       localStorage.setItem("jwt", token);

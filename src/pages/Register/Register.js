@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import FormInput from "../../components/UIComponents/FormInput/FormInput";
 import useFormInput from "../../components/UIComponents/FormInput/useFormInput";
+import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 import useMessages from "../../services/useMessages";
 import useUserService from "../../services/useUserService";
 import {
@@ -15,12 +17,17 @@ import {
 import style from "./Register.module.css";
 
 const Register = (props) => {
+  // Get services and hooks
   const navigate = useNavigate();
   const userService = useUserService();
-  const errMsg = useMessages();
+  const messages = useMessages();
 
+  // Setup load status
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(undefined);
+
+  // Setup form state
   const [formWasTouched, setFormWasTouched] = useState(false);
-
   // Form data will be stored in this state
   const [formData, setFormData, formDataIsValid] = useFormInput(
     "email",
@@ -37,17 +44,36 @@ const Register = (props) => {
     setFormWasTouched(true);
 
     if (!formDataIsValid()) {
-      return;
+      // return;
     }
 
+    setIsLoading(true);
+
+    const data = {
+      email: formData.email.value,
+      name: formData.name.value,
+      phone: formData.phone.value,
+      password: formData.password.value,
+    };
+
     userService
-      .register(formData)
-      .then(() => navigate("/", { replace: true }))
-      .catch((err) => errMsg.alert(err));
+      .register(data)
+      .then(() => {
+        messages.alert("Създаден е нов потребител");
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.message);
+      });
   };
 
   return (
     <>
+      {isLoading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
+      )}
       <h1>Register a new account</h1>
       <FormCard onSubmit={submitHandler}>
         <FormInput
