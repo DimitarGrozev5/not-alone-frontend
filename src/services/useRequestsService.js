@@ -18,6 +18,11 @@ export const useRequestsService = () => {
     acceptRequest: async (id) => {
       return true;
     },
+    requestConnection: async (userId) => {
+      return Math.random() < 0.1
+        ? "Няма човек с този телефон"
+        : "Заявката е изпратена";
+    },
   });
 
   return methods.current;

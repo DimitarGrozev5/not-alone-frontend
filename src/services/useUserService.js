@@ -118,11 +118,6 @@ const useUserService = () => {
         }, Math.random() * 1000);
       });
     },
-    requestConnection: async (userId) => {
-      return Math.random() < 0.1
-        ? new LoadStatus.Error("Няма човек с този телефон")
-        : new LoadStatus.Loaded("Заявката е изпратена");
-    },
   });
   return methods.current;
 };
