@@ -68,7 +68,7 @@ const ProfilePage = (props) => {
       {error && (
         <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
       )}
-      {user && (
+      {user && false && (
         <>
           <ProfileOverview
             userData={user.userData}
@@ -76,8 +76,8 @@ const ProfilePage = (props) => {
           />
           <ProfileAddConnection onSubmit={requestConnectionHandler} />
           <div>
-            {/* <ProfileOutRequests outRequests={user.outRequests} />
-            <ProfileInRequests inRequests={user.inRequests} /> */}
+            <ProfileOutRequests outRequests={user.outRequests} />
+            <ProfileInRequests inRequests={user.inRequests} />
           </div>
           <button onClick={logoutHandler}>Logout</button>
         </>

@@ -30,7 +30,7 @@ const useUserService = () => {
       // }
 
       // Save token to local storage
-      localStorage.setItem("jwt", responseData.token);
+      localStorage.setItem("jwt", JSON.stringify(responseData));
 
       dispatch(userActions.updateAccessToken(responseData.token));
     },
@@ -56,14 +56,13 @@ const useUserService = () => {
       // }
 
       // Save token to local storage
-      localStorage.setItem("jwt", responseData.token);
+      localStorage.setItem("jwt", JSON.stringify(responseData));
 
       dispatch(userActions.updateAccessToken(responseData.token));
     },
     logout: async () => {
       // Get token
-      const token = localStorage.getItem("jwt");
-      console.log(token);
+      const userData = JSON.parse(localStorage.getItem("jwt"));
 
       // Send Logout request
       const response = await fetch(baseUrl + "users/logout", {
@@ -71,7 +70,7 @@ const useUserService = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token: userData.token }),
       });
 
       if (!response.ok) {
@@ -84,11 +83,31 @@ const useUserService = () => {
       dispatch(userActions.logout());
     },
 
-    getUserData: async (jwt) => {
+    getUserData: async () => {
+      // Get token
+      const userData = JSON.parse(localStorage.getItem("jwt"));
+
+      // Send Logout request
+      const response = await fetch(baseUrl + "users/" + userData.userId, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + userData.token,
+        },
+      });
+      
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      console.log(responseData);
+
       // TODO: Send request to fetch user data
       // For the moment return dummy value
       return {
-        isLoggedIn: jwt,
+        isLoggedIn: userData,
         userData: {
           email: "test@example.com",
           name: "Иван Иванов",

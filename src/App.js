@@ -30,12 +30,21 @@ function App() {
 
   // Check if access token is in local storage
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      userService
-        .getUserData(token)
-        .then((userData) => dispatch(userActions.updateUserData(userData)))
-        .catch((err) => errMsg.alert(err.message));
+    let userData = null;
+    try {
+      userData = JSON.parse(localStorage.getItem("jwt"));
+    } catch (err) {
+      localStorage.removeItem("jwt");
+    }
+    // Get token
+    if (userData) {
+      dispatch(userActions.updateAccessToken(userData.token));
+      // userService
+      //   .getUserData(userData.token)
+      //   .then((userData) =>
+      //     dispatch(userActions.updateAccessToken(userData.token))
+      //   )
+      //   .catch((err) => errMsg.alert(err.message));
       // requestsService
       //   .getConnectionRequests()
       //   .then((requests) => dispatch(requestActions.updateRequests(requests)))
