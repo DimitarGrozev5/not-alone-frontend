@@ -103,91 +103,58 @@ const useUserService = () => {
       }
 
       return responseData;
-
-      // TODO: Send request to fetch user data
-      // For the moment return dummy value
-      return {
-        isLoggedIn: userData,
-        userData: {
-          email: "test@example.com",
-          name: "Иван Иванов",
-          phone: "088 123 1234",
-        },
-        connections: [
-          {
-            name: "Петър Петров",
-            phone: "088 123 1234",
-          },
-          {
-            name: "Баче Кико",
-            phone: "088 123 1235",
-          },
-        ],
-      };
     },
-    findUnknownUserByPhone: async (phoneFragment) => {
-      const pf = sanitizePhone(phoneFragment);
+    findUnknownUsers: async (query) => {
+      // Get token
+      const userData = JSON.parse(localStorage.getItem("jwt"));
 
-      const DUMMY_PHONES = [
-        { id: 0, phone: "0881231234" },
-        { id: 1, phone: "0881234321" },
-        { id: 2, phone: "0883214321" },
-      ];
+      // const pf = sanitizePhone(query);
 
-      const results = DUMMY_PHONES.filter((p) => p.phone.startsWith(pf)).slice(
-        0,
-        5
+      // Send Logout request
+      const response = await fetch(
+        baseUrl + "users?query=" + encodeURIComponent(query),
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + userData.token,
+          },
+        }
       );
 
-      const wrapedResults = results.length
-        ? new LoadStatus.Loaded(results)
-        : new LoadStatus.Empty();
+      const responseData = await response.json();
 
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() < 0.1) {
-            resolve(new LoadStatus.Error("Не могат да се заредят подсказки"));
-          }
-          resolve(wrapedResults);
-        }, Math.random() * 1000);
-      });
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      return responseData.notConnected;
     },
-    findAllUsersByPhone: async (phoneFragment) => {
-      const pf = sanitizePhone(phoneFragment);
+    findAllUsers: async (query) => {
+      // Get token
+      const userData = JSON.parse(localStorage.getItem("jwt"));
 
-      const DUMMY_PHONES = [
-        { id: 0, phone: "0881231234" },
-        { id: 1, phone: "0881234321" },
-        { id: 2, phone: "0883214321" },
-      ];
+      // const pf = sanitizePhone(query);
 
-      const DUMMY_FRIEND_PHONES = [
-        { id: 3, phone: "0881231234", name: "Пешо Някойси" },
-        { id: 4, phone: "0881234321", name: "Фончо Две" },
-        { id: 5, phone: "0883214321", name: "Фончо Ино" },
-      ];
-
-      const results = DUMMY_PHONES.filter((p) => p.phone.startsWith(pf)).slice(
-        0,
-        3
+      // Send Logout request
+      const response = await fetch(
+        baseUrl + "users?query=" + encodeURIComponent(query),
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + userData.token,
+          },
+        }
       );
-      const resultsFirends = DUMMY_FRIEND_PHONES.filter((p) =>
-        p.phone.startsWith(pf)
-      ).slice(0, 5);
 
-      const wrapedResults =
-        results.length || resultsFirends.length
-          ? new LoadStatus.Loaded([...resultsFirends, ...results])
-          : new LoadStatus.Empty();
+      const responseData = await response.json();
 
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() < 0.3) {
-            resolve(new LoadStatus.Error("Не могат да се заредят подсказки"));
-          }
-          resolve(wrapedResults);
-        }, Math.random() * 1000);
-      });
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      return responseData;
     },
   });
   return methods.current;
