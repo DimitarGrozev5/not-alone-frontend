@@ -1,6 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+/*
+* TODO
+* The page should be made to reload after a request for connection is send
+*/
 
-import { requestActions } from "../../redux-store/requestsSlice";
 import useMessages from "../../services/useMessages";
 import { useRequestsService } from "../../services/useRequestsService";
 import useUserService from "../../services/useUserService";
