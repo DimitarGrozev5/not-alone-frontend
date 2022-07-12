@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
+import { baseUrl } from "../constants/baseUrl";
 
 export const useRequestsService = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,29 @@ export const useRequestsService = () => {
     acceptRequest: async (id) => {
       return true;
     },
-    requestConnection: async (userId) => {
-      return {};
+    requestConnection: async (toId) => {
+      // Get token
+      const userData = JSON.parse(localStorage.getItem("jwt"));
+
+      // Send Request for connection
+      const response = await fetch(baseUrl + "requests/connection", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + userData.token,
+        },
+        body: JSON.stringify({
+          from: userData.userId,
+          to: toId,
+        }),
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        throw new Error(responseData.message);
+      }
+
+      return true;
     },
   });
 

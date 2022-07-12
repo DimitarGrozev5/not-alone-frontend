@@ -21,7 +21,6 @@ const ProfilePage = (props) => {
   const userService = useUserService();
   const requestsService = useRequestsService();
   const messages = useMessages();
-  const dispatch = useDispatch();
 
   // Setup loading and error state
   const [isLoading, setIsLoading] = useState(false);
@@ -71,10 +70,7 @@ const ProfilePage = (props) => {
       .then((requests) => {
         messages.alert("Request is send");
         setNewUser(null);
-        setUser((u) => ({
-          ...u,
-          ...requests,
-        }));
+        setUser(null);
       })
       .catch((err) => {
         setError(err.message);
@@ -117,11 +113,11 @@ const ProfilePage = (props) => {
           </DataCard>
 
           <DataCard>
-            <ProfileOutRequests outRequests={user.inConReq} />
+            <ProfileOutRequests outRequests={user.outConReq} />
           </DataCard>
 
           <DataCard>
-            <ProfileInRequests inRequests={user.outConReq} />
+            <ProfileInRequests inRequests={user.inConReq} />
           </DataCard>
 
           <button onClick={logoutHandler}>Излизане от профила</button>
