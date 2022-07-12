@@ -6,7 +6,7 @@ const ProfileOutRequests = (props) => {
         <ul>
           {props.outRequests.map((r) => (
             <li key={r.phone}>
-              {r.name}, {r.phone}
+              {r.phone}
             </li>
           ))}
         </ul>
