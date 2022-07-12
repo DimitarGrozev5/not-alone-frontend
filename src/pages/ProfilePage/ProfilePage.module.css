@@ -1,0 +1,19 @@
+.profile {
+  /* border: 1px solid black; */
+}
+
+.data-point {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: rgb(1, 82, 1);
+}
+
+.data-point span {
+  font-weight: bold;
+  color: rgb(1, 66, 1);
+}
+
+.empty {
+  font-style: italic;
+  color: rgb(105, 129, 105)
+}
