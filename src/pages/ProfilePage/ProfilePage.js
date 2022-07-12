@@ -66,8 +66,6 @@ const ProfilePage = (props) => {
 
     setIsLoading(true);
 
-    console.log(newUser);
-
     requestsService
       .requestConnection(newUser.id)
       .then((requests) => {

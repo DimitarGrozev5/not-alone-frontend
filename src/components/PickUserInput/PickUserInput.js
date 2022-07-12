@@ -1,6 +1,13 @@
+/*
+* TODO:
+* I have to make the suggetions to dissapear when the input loses focus
+* And also to force the input to search agian when it gains focus
+*
+* I have to implement a way to clear the input text from the parent
+*/
+
 import { useEffect, useState } from "react";
 
-import { LoadStatus } from "../../data-types/LoadStatus";
 import useUserService from "../../services/useUserService";
 import LoadingSpinner from "../UIComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./PickUserInput.module.css";
@@ -63,7 +70,7 @@ const PickUserInput = (props) => {
     event.preventDefault();
     setSearchText(suggetion.phone);
     setSuggetions(null);
-    props.onChange(suggetion);
+    props.onChange({ ...suggetion });
   };
 
   const editSelectedHandler = (event) => {
