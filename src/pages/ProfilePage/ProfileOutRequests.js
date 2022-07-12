@@ -2,7 +2,7 @@ const ProfileOutRequests = (props) => {
   return (
     <>
       Изпратени покани:
-      {props.outRequests.length && (
+      {!!props.outRequests.length && (
         <ul>
           {props.outRequests.map((r) => (
             <li key={r.phone}>
@@ -11,7 +11,7 @@ const ProfileOutRequests = (props) => {
           ))}
         </ul>
       )}
-      {!props.outRequests.length && <p>Нямаш изпратени покани</p>}
+      {!props.outRequests.length && <p>Нямате изпратени покани</p>}
     </>
   );
 };

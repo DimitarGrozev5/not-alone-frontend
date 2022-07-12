@@ -95,14 +95,14 @@ const useUserService = () => {
           Authorization: "Bearer " + userData.token,
         },
       });
-      
+
       const responseData = await response.json();
 
       if (!response.ok) {
         throw new Error(responseData.message);
       }
 
-      console.log(responseData);
+      return responseData;
 
       // TODO: Send request to fetch user data
       // For the moment return dummy value

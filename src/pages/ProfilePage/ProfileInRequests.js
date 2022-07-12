@@ -22,8 +22,8 @@ const ProfileInRequests = (props) => {
 
   return (
     <>
-      Тези хора искат да се свържат с теб:
-      {props.inRequests.length && (
+      Тези хора искат да се свържат с Вас:
+      {!!props.inRequests.length && (
         <ul>
           {props.inRequests.map((r) => (
             <li key={r.id}>
@@ -33,7 +33,7 @@ const ProfileInRequests = (props) => {
           ))}
         </ul>
       )}
-      {!props.inRequests.length && <p>Нямаш предложения</p>}
+      {!props.inRequests.length && <p>Нямате нови предложения</p>}
     </>
   );
 };

@@ -32,7 +32,10 @@ const ProfilePage = (props) => {
     setIsLoading(true);
     userService
       .getUserData()
-      .then((data) => setUser(data))
+      .then((data) => {
+        setIsLoading(false);
+        setUser(data);
+      })
       .catch((err) => setError(err.message));
   }, [userService]);
 
@@ -68,7 +71,7 @@ const ProfilePage = (props) => {
       {error && (
         <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
       )}
-      {user && false && (
+      {user && (
         <>
           <ProfileOverview
             userData={user.userData}
@@ -76,10 +79,10 @@ const ProfilePage = (props) => {
           />
           <ProfileAddConnection onSubmit={requestConnectionHandler} />
           <div>
-            <ProfileOutRequests outRequests={user.outRequests} />
-            <ProfileInRequests inRequests={user.inRequests} />
+            <ProfileOutRequests outRequests={user.inConReq} />
+            <ProfileInRequests inRequests={user.outConReq} />
           </div>
-          <button onClick={logoutHandler}>Logout</button>
+          <button onClick={logoutHandler}>Излизане от профила</button>
         </>
       )}
     </div>
