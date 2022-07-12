@@ -6,15 +6,15 @@ import { useRequestsService } from "../../services/useRequestsService";
 import useUserService from "../../services/useUserService";
 import styles from "./ProfilePage.module.css";
 import ProfileOverview from "./ProfileOverview";
-import ProfileAddConnection from "./ProfileAddConnection";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
-import { LoadStatus } from "../../data-types/LoadStatus";
 import { useEffect, useState } from "react";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 import PickUserInput from "../../components/PickUserInput/PickUserInput";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
+import ConfirmModal from "../../components/UIComponents/ConfirmModal/ConfirmModal";
+import { useHState } from "../../hooks/useHState";
 
 const ProfilePage = (props) => {
   // Get Services
@@ -50,28 +50,51 @@ const ProfilePage = (props) => {
     });
   };
 
-  const requestConnectionHandler = (searchPhoneUser, clearText) => {
-    requestsService
-      .requestConnection(searchPhoneUser.phone) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Maybe it should be ID
-      .then((result) => {
-        if (result instanceof LoadStatus.Error) {
-          throw result;
-        }
-        messages.alert(result.result);
-        clearText();
-        return requestsService.getConnectionRequests();
-      })
-      .then((requsets) => dispatch(requestActions.updateRequests(requsets)))
-      .catch((err) => {
-        messages.alert(err.message);
-      });
-  };
-
   // Serach for user input
   const [newUser, setNewUser] = useState(null);
 
+  // Confirm modal state
+  const [showConfirmation, setShowConfirmationHandler] = useHState(false);
+
+  const requestConnectionHandler = (confirmed) => async (event) => {
+    if (!confirmed) {
+      setShowConfirmationHandler(true)();
+      return;
+    }
+
+    setShowConfirmationHandler(false)();
+
+    setIsLoading(true);
+
+    console.log(newUser);
+
+    requestsService
+      .requestConnection(newUser.id)
+      .then((requests) => {
+        messages.alert("Request is send");
+        setNewUser(null);
+        setUser((u) => ({
+          ...u,
+          ...requests,
+        }));
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <div className={styles.profile}>
+      {showConfirmation && (
+        <ConfirmModal
+          message="Да бъде ли изпратена покана? Другият потребител ще види името и имейла Ви."
+          onConfirm={requestConnectionHandler(true)}
+          onCancel={setShowConfirmationHandler(false)}
+        />
+      )}
       <h1>Профил</h1>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && (
@@ -85,12 +108,20 @@ const ProfilePage = (props) => {
               connections={user.connections}
             />
             <PickUserInput value={newUser} onChange={setNewUser} />
-            {!!newUser && <button>Свържете се</button>}
+            {!!newUser && (
+              <button
+                className={styles.button}
+                onClick={requestConnectionHandler(false)}
+              >
+                Свържете се
+              </button>
+            )}
           </DataCard>
-          {/* <ProfileAddConnection onSubmit={requestConnectionHandler} /> */}
+
           <DataCard>
             <ProfileOutRequests outRequests={user.inConReq} />
           </DataCard>
+
           <DataCard>
             <ProfileInRequests inRequests={user.outConReq} />
           </DataCard>
