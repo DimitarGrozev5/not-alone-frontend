@@ -13,6 +13,7 @@ export const tripStatus = {
 export const requestTypes = {
   OVERWATCH: "OVERWATCH",
   OVERWATCH_AND_CONNECTION: "OVERWATCH_AND_CONNECTION",
+  CONNECTION: "CONNECTION",
 };
 
 export const requestStatus = {
