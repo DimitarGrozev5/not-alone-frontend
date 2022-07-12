@@ -13,6 +13,8 @@ import { LoadStatus } from "../../data-types/LoadStatus";
 import { useEffect, useState } from "react";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
+import PickUserInput from "../../components/PickUserInput/PickUserInput";
+import DataCard from "../../components/UIComponents/DataCard/DataCard";
 
 const ProfilePage = (props) => {
   // Get Services
@@ -65,23 +67,34 @@ const ProfilePage = (props) => {
       });
   };
 
+  // Serach for user input
+  const [newUser, setNewUser] = useState(null);
+
   return (
     <div className={styles.profile}>
+      <h1>Профил</h1>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
       )}
       {user && (
         <>
-          <ProfileOverview
-            userData={user.userData}
-            connections={user.connections}
-          />
-          <ProfileAddConnection onSubmit={requestConnectionHandler} />
-          <div>
+          <DataCard>
+            <ProfileOverview
+              userData={user.userData}
+              connections={user.connections}
+            />
+            <PickUserInput value={newUser} onChange={setNewUser} />
+            {!!newUser && <button>Свържете се</button>}
+          </DataCard>
+          {/* <ProfileAddConnection onSubmit={requestConnectionHandler} /> */}
+          <DataCard>
             <ProfileOutRequests outRequests={user.inConReq} />
+          </DataCard>
+          <DataCard>
             <ProfileInRequests inRequests={user.outConReq} />
-          </div>
+          </DataCard>
+
           <button onClick={logoutHandler}>Излизане от профила</button>
         </>
       )}

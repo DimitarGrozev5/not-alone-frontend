@@ -1,11 +1,19 @@
+import styles from "./ProfilePage.module.css";
+
 const ProfileOverview = (props) => {
   return (
     <>
-      <div>Име: {props.userData.name}</div>
-      <div>Имейл: {props.userData.email}</div>
-      <div>Телефон: {props.userData.phone}</div>
-      <div>
-        Контакти:
+      <div className={styles["data-point"]}>
+        <span>Име:</span> {props.userData.name}
+      </div>
+      <div className={styles["data-point"]}>
+        <span>Имейл:</span> {props.userData.email}
+      </div>
+      <div className={styles["data-point"]}>
+        <span>Телефон:</span> {props.userData.phone}
+      </div>
+      <div className={styles["data-point"]}>
+        <span>Контакти:</span>
         {!!props.connections.length && (
           <ul>
             {props.connections.map((c) => (
@@ -16,7 +24,7 @@ const ProfileOverview = (props) => {
             ))}
           </ul>
         )}
-        {!props.connections.length && <div>Все още нямате контакти</div>}
+        {!props.connections.length && <div className={styles.empty}>Все още нямате контакти</div>}
       </div>
     </>
   );
