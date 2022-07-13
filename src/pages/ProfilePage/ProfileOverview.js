@@ -18,12 +18,16 @@ const ProfileOverview = (props) => {
           <ul>
             {props.connections.map((c) => (
               <li key={c.id}>
-                <div>{c.name}: {c.phone}</div>
+                <div>
+                  {c.name}: {c.phone}
+                </div>
               </li>
             ))}
           </ul>
         )}
-        {!props.connections.length && <div className={styles.empty}>Все още нямате контакти</div>}
+        {!props.connections.length && (
+          <div className={styles.empty}>Все още нямате контакти</div>
+        )}
       </div>
     </>
   );

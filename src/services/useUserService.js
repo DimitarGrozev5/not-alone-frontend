@@ -119,7 +119,7 @@ const useUserService = () => {
 
       // Send Logout request
       const response = await fetch(
-        baseUrl + "users?query=" + encodeURIComponent(query),
+        `${baseUrl}users?query=${encodeURIComponent(query)}`,
         {
           method: "GET",
           headers: {

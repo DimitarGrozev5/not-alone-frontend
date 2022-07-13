@@ -1,0 +1,15 @@
+.button {
+  border: 1px solid var(--color-dark-1);
+  border-radius: 0.3rem;
+  color: var(--color-dark);
+  background-color: var(--color-light-3);
+
+  font-size: 1rem;
+
+  padding: 0.5rem;
+}
+
+.stretch {
+  padding: 0.8rem 0.5rem;
+  width: 100%;
+}

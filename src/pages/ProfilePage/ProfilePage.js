@@ -17,6 +17,7 @@ import PickUserInput from "../../components/PickUserInput/PickUserInput";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ConfirmModal from "../../components/UIComponents/ConfirmModal/ConfirmModal";
 import { useHState } from "../../hooks/useHState";
+import Button from "../../components/FormElements/Button/Button";
 
 const ProfilePage = (props) => {
   // Get Services
@@ -148,7 +149,7 @@ const ProfilePage = (props) => {
             />
           </DataCard>
 
-          <button onClick={logoutHandler}>Излизане от профила</button>
+          <Button onClick={logoutHandler} stretch>Излизане от профила</Button>
         </>
       )}
     </div>
