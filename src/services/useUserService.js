@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { userActions } from "../redux-store/userSlice";
-import { sanitizePhone } from "../utils/data-sanitizition";
-import { LoadStatus } from "../data-types/LoadStatus";
+import { sanitizePhone, sanitizeEmail } from "../utils/data-sanitizition";
 import { useRef } from "react";
 import { baseUrl } from "../constants/baseUrl";
 
@@ -9,12 +8,20 @@ const useUserService = () => {
   const dispatch = useDispatch();
   const methods = useRef({
     register: async ({ email, name, phone, password }) => {
+      const formatedPhone = sanitizePhone(phone);
+      const formatedEmail = sanitizeEmail(email);
+
       const response = await fetch(baseUrl + "users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name, phone, password }),
+        body: JSON.stringify({
+          email: formatedEmail,
+          name,
+          phone: formatedPhone,
+          password,
+        }),
       });
 
       const responseData = await response.json();

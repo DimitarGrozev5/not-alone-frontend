@@ -4,3 +4,5 @@ export const sanitizePhone = (phone) => {
 
   return noCountryCode;
 };
+
+export const sanitizeEmail = (email) => email.toLowerCase();
