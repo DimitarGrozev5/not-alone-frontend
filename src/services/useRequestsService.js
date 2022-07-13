@@ -18,6 +18,23 @@ export const useRequestsService = () => {
       };
     },
     acceptRequest: async (id) => {
+      // Get token
+      const userData = JSON.parse(localStorage.getItem("jwt"));
+
+      // Send Request for connection
+      const response = await fetch(baseUrl + `requests/${id}/accept`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + userData.token,
+        },
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        throw new Error(responseData.message);
+      }
+
       return true;
     },
     requestConnection: async (toId) => {

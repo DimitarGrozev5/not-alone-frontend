@@ -5,21 +5,6 @@ import useMessages from "../../services/useMessages";
 import { useRequestsService } from "../../services/useRequestsService";
 
 const ProfileInRequests = (props) => {
-  const dispatch = useDispatch();
-
-  // Get Services
-  const requestsService = useRequestsService();
-  const messages = useMessages();
-
-  const acceptRequestHandler = (id) => (event) => {
-    event.preventDefault();
-    requestsService
-      .acceptRequest(id)
-      .then(() => requestsService.getConnectionRequests())
-      .then((requests) => dispatch(requestActions.updateRequests(requests)))
-      .catch((err) => messages.alert(err.message));
-  };
-
   return (
     <>
       Тези хора искат да се свържат с Вас:
@@ -28,7 +13,7 @@ const ProfileInRequests = (props) => {
           {props.inRequests.map((r) => (
             <li key={r.id}>
               {r.name}, {r.phone}
-              <button onClick={acceptRequestHandler(r.id)}>Приеми</button>
+              <button onClick={props.onAccept(r.id)}>Приеми</button>
             </li>
           ))}
         </ul>

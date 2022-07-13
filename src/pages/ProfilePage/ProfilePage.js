@@ -1,7 +1,7 @@
 /*
-* TODO
-* The page should be made to reload after a request for connection is send
-*/
+ * TODO
+ * The page should be made to reload after a request for connection is send
+ */
 
 import useMessages from "../../services/useMessages";
 import { useRequestsService } from "../../services/useRequestsService";
@@ -32,6 +32,10 @@ const ProfilePage = (props) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    if (user) {
+      return () => {};
+    }
+    
     setIsLoading(true);
     userService
       .getUserData()
@@ -40,7 +44,7 @@ const ProfilePage = (props) => {
         setUser(data);
       })
       .catch((err) => setError(err.message));
-  }, [userService]);
+  }, [userService, user]);
 
   // Logout user
   const logoutHandler = () => {
@@ -69,8 +73,27 @@ const ProfilePage = (props) => {
 
     requestsService
       .requestConnection(newUser.id)
-      .then((requests) => {
+      .then(() => {
         messages.alert("Request is send");
+        setNewUser(null);
+        setUser(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const acceptRequestHandler = (id) => (event) => {
+    event.preventDefault();
+
+    setIsLoading(true);
+
+    requestsService
+      .acceptRequest(id)
+      .then(() => {
         setNewUser(null);
         setUser(null);
       })
@@ -119,7 +142,10 @@ const ProfilePage = (props) => {
           </DataCard>
 
           <DataCard>
-            <ProfileInRequests inRequests={user.inConReq} />
+            <ProfileInRequests
+              inRequests={user.inConReq}
+              onAccept={acceptRequestHandler}
+            />
           </DataCard>
 
           <button onClick={logoutHandler}>Излизане от профила</button>
