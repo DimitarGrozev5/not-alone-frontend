@@ -17,9 +17,8 @@ const ProfileOverview = (props) => {
         {!!props.connections.length && (
           <ul>
             {props.connections.map((c) => (
-              <li key={c.phone}>
-                <div>Име: {c.name}</div>
-                <div>Телефон: {c.phone}</div>
+              <li key={c.id}>
+                <div>{c.name}: {c.phone}</div>
               </li>
             ))}
           </ul>
