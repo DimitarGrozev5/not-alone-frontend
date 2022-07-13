@@ -39,16 +39,6 @@ function App() {
     // Get token
     if (userData) {
       dispatch(userActions.updateAccessToken(userData.token));
-      // userService
-      //   .getUserData(userData.token)
-      //   .then((userData) =>
-      //     dispatch(userActions.updateAccessToken(userData.token))
-      //   )
-      //   .catch((err) => errMsg.alert(err.message));
-      // requestsService
-      //   .getConnectionRequests()
-      //   .then((requests) => dispatch(requestActions.updateRequests(requests)))
-      //   .catch((err) => errMsg.alert(err.message));
     }
   }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
 
