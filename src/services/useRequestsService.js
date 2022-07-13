@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { baseUrl } from "../constants/baseUrl";
+import { requestTypes } from "../data-types/trip-data";
 
 export const useRequestsService = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export const useRequestsService = () => {
       const userData = JSON.parse(localStorage.getItem("jwt"));
 
       // Send Request for connection
-      const response = await fetch(baseUrl + "requests/connection", {
+      const response = await fetch(baseUrl + "requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,6 +34,7 @@ export const useRequestsService = () => {
         body: JSON.stringify({
           from: userData.userId,
           to: toId,
+          type: requestTypes.CONNECTION,
         }),
       });
 
