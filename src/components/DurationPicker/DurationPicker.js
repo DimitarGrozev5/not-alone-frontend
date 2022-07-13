@@ -20,36 +20,45 @@ const DurationPicker = (props) => {
 
   return (
     <div className={styles.duration}>
-      <input
-        type="number"
-        step={1}
-        min={0}
-        value={days}
-        onChange={changeHandler(TimeConst.DAY, days)}
-      />
-      <button onClick={addOneHandler(-TimeConst.DAY)}>-</button>
-      <span>Дни</span>
-      <button onClick={addOneHandler(TimeConst.DAY)}>+</button>
-      <input
-        type="number"
-        step={1}
-        min={0}
-        value={hours}
-        onChange={changeHandler(TimeConst.HOUR, hours)}
-      />
-      <button onClick={addOneHandler(-TimeConst.HOUR)}>-</button>
-      <span>Часа</span>
-      <button onClick={addOneHandler(TimeConst.HOUR)}>+</button>
-      <input
-        type="number"
-        step={1}
-        min={0}
-        value={minutes}
-        onChange={changeHandler(TimeConst.MINUTE, minutes)}
-      />
-      <button onClick={addOneHandler(-TimeConst.MINUTE)}>-</button>
-      <span>Минути</span>
-      <button onClick={addOneHandler(TimeConst.MINUTE)}>+</button>
+      <label>Продължителност на пътуване:</label>
+      <div>
+        <button onClick={addOneHandler(-TimeConst.DAY)}>-</button>
+        <input
+          type="number"
+          step={1}
+          min={0}
+          // value={days}
+          // onChange={changeHandler(TimeConst.DAY, days)}
+        />
+        <button onClick={addOneHandler(TimeConst.DAY)}>+</button>
+        <span>Дни</span>
+      </div>
+
+      <div>
+        <button onClick={addOneHandler(-TimeConst.HOUR)}>-</button>
+        <input
+          type="number"
+          step={1}
+          min={0}
+          value={hours}
+          onChange={changeHandler(TimeConst.HOUR, hours)}
+        />
+        <button onClick={addOneHandler(TimeConst.HOUR)}>+</button>
+        <span>Часа</span>
+      </div>
+
+      <div>
+        <button onClick={addOneHandler(-TimeConst.MINUTE)}>-</button>
+        <input
+          type="number"
+          step={1}
+          min={0}
+          value={minutes}
+          onChange={changeHandler(TimeConst.MINUTE, minutes)}
+        />
+        <button onClick={addOneHandler(TimeConst.MINUTE)}>+</button>
+        <span>Минути</span>
+      </div>
     </div>
   );
 };

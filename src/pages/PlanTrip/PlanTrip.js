@@ -15,6 +15,7 @@ import { useManageTrip } from "./hooks/useManageTrip";
 import styles from "./PlanTrip.module.css";
 import TripInput from "./TripInput/TripInput";
 import TripStop from "./TripStop";
+import TripStopsPlanner from "./TripStopsPlanner/TripStopsPlanner";
 
 const PlanTrip = (props) => {
   const { trip, actions } = useManageTrip();
@@ -33,7 +34,11 @@ const PlanTrip = (props) => {
           />
         </DataCard>
         <DataCard>
-          <h2>Спирки</h2>
+          <TripStopsPlanner
+            mode={"create"}
+            stops={trip.stops}
+            stopActions={actions.stops}
+          />
         </DataCard>
         <DataCard>
           <h2>Заявки за наблюдение</h2>
