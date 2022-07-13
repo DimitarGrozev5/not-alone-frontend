@@ -56,7 +56,7 @@ const ProfileAddConnection = (props) => {
 
   return (
     <div>
-      <form onSubmit={submitHandler} autoComplete="off">
+      <div onSubmit={submitHandler} autoComplete="off">
         <label htmlFor="add-contact">Добави контакт:</label>
         <input
           type="text"
@@ -86,7 +86,7 @@ const ProfileAddConnection = (props) => {
         <button disabled={!selectedSuggetion} type="submit">
           {props.caption || "Изпрати покана"}
         </button>
-      </form>
+      </div>
     </div>
   );
 };
