@@ -161,7 +161,7 @@ const useUserService = () => {
         throw new Error(responseData.message);
       }
 
-      return responseData;
+      return [...responseData.connected, ...responseData.notConnected];
     },
   });
   return methods.current;
