@@ -52,18 +52,12 @@ const tripReducer = (state, action) =>
 export const useManageTrip = () => {
   // Setup reducer and initial state
   const [trip, dispatch] = useReducer(tripReducer, {
-    name: "start",
+    name: "",
     stops: [
       {
         id: nanoid(),
         type: txtStop,
-        data: { stopName: "first" },
-        duration: 0,
-      },
-      {
-        id: nanoid(),
-        type: txtStop,
-        data: { stopName: "second" },
+        data: { stopName: "" },
         duration: 0,
       },
     ],
