@@ -1,10 +1,8 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
 import { baseUrl } from "../constants/baseUrl";
 import { requestTypes } from "../data-types/trip-data";
 
 export const useRequestsService = () => {
-  const dispatch = useDispatch();
   const methods = useRef({
     getConnectionRequests: async () => {
       return {
