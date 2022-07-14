@@ -23,9 +23,11 @@ const TripWatchers = (props) => {
 
   return (
     <div className={styles.container}>
-      <Button className={styles["edit-button"]} onClick={toggleViewMode}>
-        {viewMode ? "Edit" : "OK"}
-      </Button>
+      {props.mode === "edit" && (
+        <Button className={styles["edit-button"]} onClick={toggleViewMode}>
+          {viewMode ? "Edit" : "OK"}
+        </Button>
+      )}
       {showAddNew && (
         <>
           <h2>Нови покани:</h2>
