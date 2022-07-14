@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Button from "../../components/FormElements/Button/Button";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
+import { useHttpClient } from "../../hooks/useHttpClient";
 import { useManageTrip } from "./hooks/useManageTrip";
 import styles from "./PlanTrip.module.css";
 import { validateTrip } from "./planTripHelpers";
@@ -12,21 +14,22 @@ import TripWatchers from "./TripWatchers/TripWatchers";
 const PlanTrip = (props) => {
   const { trip, actions } = useManageTrip();
 
+  const { isLoading, error, sendRequest, clearError, setError } =
+    useHttpClient();
+
   useEffect(() => {
     // Load data from server if the component is not in create mode
   }, [props.mode]);
 
-  const [error, setError] = useState(null);
-
-  const saveData = (event) => {
+  const saveData = async (event) => {
     event.preventDefault();
     //// Data validation
-    try {
-      validateTrip(trip);
-    } catch (err) {
-      setError(err.message);
-      return;
-    }
+    // try {
+    //   validateTrip(trip);
+    // } catch (err) {
+    //   setError(err.message);
+    //   return;
+    // }
 
     // Prepare data for API
     const prepTrip = {
@@ -41,12 +44,17 @@ const PlanTrip = (props) => {
       watchers: trip.watchers.new.map((w) => ({ ...w.data })),
     };
 
-    console.log(prepTrip);
+    try {
+      const response = await sendRequest("trips", prepTrip, { auth: true });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
-      {/* {isLoading && <LoadingSpinner asOverlay />} */}
+      {isLoading && <LoadingSpinner asOverlay />}
       {error && (
         <ErrorModal error={error} onClose={setError.bind(null, null)} />
       )}
