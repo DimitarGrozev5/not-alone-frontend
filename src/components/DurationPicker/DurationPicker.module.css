@@ -1,3 +1,9 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .label {
   font-size: 1rem;
   color: var(--color-dark-1);
@@ -15,8 +21,13 @@
 
   border-style: inset;
   border: 1px solid rgb(118, 118, 118);
-  border-radius: 1px;
+  border-radius: 2px;
   background-color: field;
+}
+.duration.view-mode {
+  border-style: inherit;
+  border: 1px solid var(--color-dark-1);
+  background-color: var(--color-light-2);
 }
 
 .picker {
@@ -24,10 +35,10 @@
   flex-direction: column;
 
   text-align: center;
-  max-width: 33%;
+  width: 33%;
 }
 
-.picker input {
+.input {
   font-size: 1.1rem;
   text-align: center;
   padding: 0.6rem;

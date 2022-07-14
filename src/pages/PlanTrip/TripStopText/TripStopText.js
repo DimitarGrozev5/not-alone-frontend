@@ -15,6 +15,7 @@ const TripStopText = (props) => {
       />
       <DurationPicker
         mode={props.mode}
+        label="Продължителност на пътуването:"
         duration={props.duration}
         onChange={props.onDurationChange}
       />

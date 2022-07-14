@@ -1,64 +1,98 @@
+import { useEffect, useRef, useState } from "react";
+import { useEState } from "../../hooks/useEState";
 import { deconstructDuration, TimeConst } from "../../utils/time";
+import Button from "../FormElements/Button/Button";
 import styles from "./DurationPicker.module.css";
 
 const DurationPicker = (props) => {
-  const [, , minutes, hours, days] = deconstructDuration(props.duration);
-
-  const changeHandler = (timeframe, baseMeasure) => (event) => {
-    if (/0[1-9]+/.test(event.target.value)) {
-      event.target.value = event.target.value.substr(1);
-    }
-
-    const dt = (event.target.value - baseMeasure) * timeframe;
-    props.onChange(dt);
+  const [viewMode, setViewMode] = useState(props.mode !== "create");
+  const toggleViewModeHandler = (event) => {
+    event.preventDefault();
+    setViewMode((m) => !m);
   };
 
-  const addOneHandler = (dt) => (event) => {
-    event.preventDefault();
-    props.onChange(dt);
+  const [, , minutes, hours, days] = deconstructDuration(props.duration);
+
+  const [d, setD] = useEState(days);
+  const [h, setH] = useEState(hours);
+  const [m, setM] = useEState(minutes);
+
+  useEffect(() => {
+    setM(minutes);
+    setH(hours);
+    setD(days);
+  }, [minutes, hours, days]);
+
+  const changeHandler = (timeframe, baseMeasure) => (event) => {
+    const t = props.duration + (event.target.value - baseMeasure) * timeframe;
+    if (t < 0) {
+      setM(0);
+      setH(0);
+      setD(0);
+    }
+    props.onChange(t);
   };
 
   return (
     <>
-      <label className={styles.label}>Продължителност на пътуване:</label>
-      <div className={styles.duration}>
+      <div className={styles.header}>
+        <label className={styles.label}>{props.label}</label>
+        {props.mode === "edit" && (
+          <Button onClick={toggleViewModeHandler}>
+            {viewMode ? "Edit" : "OK"}
+          </Button>
+        )}
+      </div>
+      <div className={`${styles.duration} ${viewMode && styles["view-mode"]}`}>
         <div className={styles.picker}>
-          <button onClick={addOneHandler(-TimeConst.DAY)}>-</button>
-          <input
-            type="number"
-            step={1}
-            min={0}
-            value={days}
-            onChange={changeHandler(TimeConst.DAY, days)}
-          />
+          {viewMode ? (
+            <div className={styles.input}>{d}</div>
+          ) : (
+            <input
+              className={styles.input}
+              type="number"
+              step={1}
+              min={0}
+              value={d}
+              onChange={setD}
+              onBlur={changeHandler(TimeConst.DAY, days)}
+            />
+          )}
           <span>Дни</span>
-          <button onClick={addOneHandler(TimeConst.DAY)}>+</button>
         </div>
 
         <div className={styles.picker}>
-          <button onClick={addOneHandler(-TimeConst.HOUR)}>-</button>
-          <input
-            type="number"
-            step={1}
-            min={0}
-            value={hours}
-            onChange={changeHandler(TimeConst.HOUR, hours)}
-          />
+          {viewMode ? (
+            <div className={styles.input}>{d}</div>
+          ) : (
+            <input
+              className={styles.input}
+              type="number"
+              step={1}
+              min={0}
+              value={h}
+              onChange={setH}
+              onBlur={changeHandler(TimeConst.HOUR, hours)}
+            />
+          )}
           <span>Часа</span>
-          <button onClick={addOneHandler(TimeConst.HOUR)}>+</button>
         </div>
 
         <div className={styles.picker}>
-          <button onClick={addOneHandler(-TimeConst.MINUTE)}>-</button>
-          <input
-            type="number"
-            step={1}
-            min={0}
-            value={minutes}
-            onChange={changeHandler(TimeConst.MINUTE, minutes)}
-          />
+          {viewMode ? (
+            <div className={styles.input}>{d}</div>
+          ) : (
+            <input
+              className={styles.input}
+              type="number"
+              step={1}
+              min={0}
+              value={m}
+              onChange={setM}
+              onBlur={changeHandler(TimeConst.MINUTE, minutes)}
+            />
+          )}
           <span>Минути</span>
-          <button onClick={addOneHandler(TimeConst.MINUTE)}>+</button>
         </div>
       </div>
     </>

@@ -38,8 +38,9 @@ const tripReducer = (state, action) =>
         break;
 
       case "CHANGE_STOP_DURATION":
-        draft.stops.find((s) => s.id === action.payload.id).data.duration =
-          action.payload.value;
+        const t = action.payload.value;
+        draft.stops.find((s) => s.id === action.payload.id).duration =
+          t < 0 ? 0 : t;
         break;
 
       default:
@@ -51,12 +52,18 @@ const tripReducer = (state, action) =>
 export const useManageTrip = () => {
   // Setup reducer and initial state
   const [trip, dispatch] = useReducer(tripReducer, {
-    name: "",
+    name: "start",
     stops: [
       {
         id: nanoid(),
         type: txtStop,
-        data: { stopName: "" },
+        data: { stopName: "first" },
+        duration: 0,
+      },
+      {
+        id: nanoid(),
+        type: txtStop,
+        data: { stopName: "second" },
         duration: 0,
       },
     ],
