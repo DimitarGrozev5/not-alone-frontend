@@ -61,7 +61,22 @@ export const useManageTrip = () => {
         duration: 0,
       },
     ],
-    watchers: [],
+    watchers: {
+      confirmed: [
+        { id: nanoid(), name: "Пешо1", phone: "0885131547" },
+        { id: nanoid(), name: "Пешо2", phone: "0885131548" },
+        { id: nanoid(), name: "Пешо3", phone: "0885131549" },
+      ],
+      pending: [
+        { id: nanoid(), name: "Стамат", phone: "0885131541" },
+        { id: nanoid(), name: "Генади", phone: "0885131542" },
+        { id: nanoid(), phone: "0885131543" },
+      ],
+      new: [
+        { id: nanoid(), name: "Стамат1", phone: "0885131544" },
+        { id: nanoid(), phone: "0885131545" },
+      ],
+    },
   });
 
   // Action creators
@@ -79,6 +94,7 @@ export const useManageTrip = () => {
       changeDuration: (id) => (value) =>
         dispatch({ type: "CHANGE_STOP_DURATION", payload: { id, value } }),
     },
+    watchers: {},
   }).current;
 
   return { trip, actions };

@@ -16,6 +16,7 @@ import styles from "./PlanTrip.module.css";
 import TripInput from "./TripInput/TripInput";
 import TripStop from "./TripStop";
 import TripStopsPlanner from "./TripStopsPlanner/TripStopsPlanner";
+import TripWatchers from "./TripWatchers/TripWatchers";
 
 const PlanTrip = (props) => {
   const { trip, actions } = useManageTrip();
@@ -35,13 +36,18 @@ const PlanTrip = (props) => {
         </DataCard>
         <DataCard>
           <TripStopsPlanner
-            mode={"create"}
+            mode={props.mode}
             stops={trip.stops}
             stopActions={actions.stops}
           />
         </DataCard>
         <DataCard>
           <h2>Заявки за наблюдение</h2>
+          <TripWatchers
+            mode={"edit"}
+            watchers={trip.watchers}
+            watcherActions={actions.watchers}
+          />
         </DataCard>
         {/* <Button stretch onClick={() => {}}>
           {editFlag ? "Запази промените" : "Запази нов план"}

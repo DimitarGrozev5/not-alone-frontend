@@ -1,10 +1,10 @@
 /*
-* TODO:
-* I have to make the suggetions to dissapear when the input loses focus
-* And also to force the input to search agian when it gains focus
-*
-* I have to implement a way to clear the input text from the parent
-*/
+ * TODO:
+ * I have to make the suggetions to dissapear when the input loses focus
+ * And also to force the input to search agian when it gains focus
+ *
+ * I have to implement a way to clear the input text from the parent
+ */
 
 import { useEffect, useState } from "react";
 
@@ -86,7 +86,7 @@ const PickUserInput = (props) => {
 
   return (
     <div className={styles["pick-user"]}>
-      <label htmlFor="add-contact">Добави контакт:</label>
+      <label htmlFor="add-contact">{props.title || "Добави контакт:"}</label>
       <div className={styles.input}>
         {!!props.value && (
           <span onClick={editSelectedHandler}>{props.value.phone}</span>
