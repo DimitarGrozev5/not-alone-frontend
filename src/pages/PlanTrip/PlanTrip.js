@@ -101,18 +101,25 @@ const PlanTrip = (props) => {
           <DataCard>
             <h2>Заявки за наблюдение</h2>
             <TripWatchers
-              mode={"create"}
+              mode={"edit"}
               watchers={trip.watchers}
               watcherActions={actions.watchers}
             />
           </DataCard>
           <Button stretch type="submit">
-            Submit
+            {props.mode === "create" && "Създаване на пътуване"}
+            {props.mode === "edit" && "Запазване на промените"}
           </Button>
-          {/* <Button stretch onClick={() => {}}>
-          {editFlag ? "Запази промените" : "Запази нов план"}
-        </Button> */}
-          {/* {editFlag && <button onClick={() => {}}>Изтрий пътуването</button>} */}
+          {props.mode === "edit" && (
+            <Button
+              stretch
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              Изтрий пътуването
+            </Button>
+          )}
         </div>
       </form>
     </>
