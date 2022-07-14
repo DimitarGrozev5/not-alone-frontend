@@ -24,12 +24,12 @@ const PlanTrip = (props) => {
   const saveData = async (event) => {
     event.preventDefault();
     //// Data validation
-    // try {
-    //   validateTrip(trip);
-    // } catch (err) {
-    //   setError(err.message);
-    //   return;
-    // }
+    try {
+      validateTrip(trip);
+    } catch (err) {
+      setError(err.message);
+      return;
+    }
 
     // Prepare data for API
     const prepTrip = {
