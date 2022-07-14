@@ -19,47 +19,49 @@ const DurationPicker = (props) => {
   };
 
   return (
-    <div className={styles.duration}>
-      <label>Продължителност на пътуване:</label>
-      <div>
-        <button onClick={addOneHandler(-TimeConst.DAY)}>-</button>
-        <input
-          type="number"
-          step={1}
-          min={0}
-          // value={days}
-          // onChange={changeHandler(TimeConst.DAY, days)}
-        />
-        <button onClick={addOneHandler(TimeConst.DAY)}>+</button>
-        <span>Дни</span>
-      </div>
+    <>
+      <label className={styles.label}>Продължителност на пътуване:</label>
+      <div className={styles.duration}>
+        <div className={styles.picker}>
+          <button onClick={addOneHandler(-TimeConst.DAY)}>-</button>
+          <input
+            type="number"
+            step={1}
+            min={0}
+            value={days}
+            onChange={changeHandler(TimeConst.DAY, days)}
+          />
+          <span>Дни</span>
+          <button onClick={addOneHandler(TimeConst.DAY)}>+</button>
+        </div>
 
-      <div>
-        <button onClick={addOneHandler(-TimeConst.HOUR)}>-</button>
-        <input
-          type="number"
-          step={1}
-          min={0}
-          value={hours}
-          onChange={changeHandler(TimeConst.HOUR, hours)}
-        />
-        <button onClick={addOneHandler(TimeConst.HOUR)}>+</button>
-        <span>Часа</span>
-      </div>
+        <div className={styles.picker}>
+          <button onClick={addOneHandler(-TimeConst.HOUR)}>-</button>
+          <input
+            type="number"
+            step={1}
+            min={0}
+            value={hours}
+            onChange={changeHandler(TimeConst.HOUR, hours)}
+          />
+          <span>Часа</span>
+          <button onClick={addOneHandler(TimeConst.HOUR)}>+</button>
+        </div>
 
-      <div>
-        <button onClick={addOneHandler(-TimeConst.MINUTE)}>-</button>
-        <input
-          type="number"
-          step={1}
-          min={0}
-          value={minutes}
-          onChange={changeHandler(TimeConst.MINUTE, minutes)}
-        />
-        <button onClick={addOneHandler(TimeConst.MINUTE)}>+</button>
-        <span>Минути</span>
+        <div className={styles.picker}>
+          <button onClick={addOneHandler(-TimeConst.MINUTE)}>-</button>
+          <input
+            type="number"
+            step={1}
+            min={0}
+            value={minutes}
+            onChange={changeHandler(TimeConst.MINUTE, minutes)}
+          />
+          <span>Минути</span>
+          <button onClick={addOneHandler(TimeConst.MINUTE)}>+</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

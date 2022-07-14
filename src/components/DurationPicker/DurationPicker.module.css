@@ -1,15 +1,47 @@
-.duration {
-  font-size: 1.1rem;
-}
-
-.duration label {
+.label {
   font-size: 1rem;
   color: var(--color-dark-1);
 }
 
-.duration input {
-  padding: 0.5rem;
+.duration {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 1.1rem;
+
+  max-width: 100%;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  border-style: inset;
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 1px;
+  background-color: field;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+
+  text-align: center;
+  max-width: 33%;
+}
+
+.picker input {
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 0.6rem;
+  padding-bottom: 0.2rem;
+
+  border: none;
+  background-color: inherit;
+}
+
+.picker span {
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
 }
 
 .duration button {
+  display: none;
 }
