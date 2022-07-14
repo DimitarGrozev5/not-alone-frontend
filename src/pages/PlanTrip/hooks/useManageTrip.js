@@ -88,10 +88,7 @@ export const useManageTrip = () => {
         { id: nanoid(), name: "Генади", phone: "0885131542" },
         { id: nanoid(), phone: "0885131543" },
       ],
-      new: [
-        // { id: nanoid(), name: "Стамат1", phone: "0885131544" },
-        // { id: nanoid(), phone: "0885131545" },
-      ],
+      new: [],
     },
   });
 
