@@ -44,7 +44,7 @@ const PlanTrip = (props) => {
         <DataCard>
           <h2>Заявки за наблюдение</h2>
           <TripWatchers
-            mode={"edit"}
+            mode={"create"}
             watchers={trip.watchers}
             watcherActions={actions.watchers}
           />

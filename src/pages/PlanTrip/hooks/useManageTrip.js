@@ -7,6 +7,7 @@ const txtStop = "StopTextDescription";
 // Reducer that uses immer produce to update the trip state
 const tripReducer = (state, action) =>
   produce(state, (draft) => {
+    let i;
     switch (action.type) {
       case "CHANGE_NAME":
         draft.name = action.payload;
@@ -28,7 +29,7 @@ const tripReducer = (state, action) =>
         break;
 
       case "DELETE_STOP":
-        const i = draft.stops.findIndex((s) => s.id === action.payload);
+        i = draft.stops.findIndex((s) => s.id === action.payload);
         draft.stops.splice(i, 1);
         break;
 
@@ -41,6 +42,21 @@ const tripReducer = (state, action) =>
         const t = action.payload.value;
         draft.stops.find((s) => s.id === action.payload.id).duration =
           t < 0 ? 0 : t;
+        break;
+
+      case "ADD_WATCHER":
+        // Add watcher only if it's not in the list
+        i = draft.watchers.new.find((w) => w.data.id === action.payload.id);
+        if (!i) {
+          draft.watchers.new.push({
+            id: nanoid(),
+            data: action.payload,
+          });
+        }
+        break;
+      case "REMOVE_WATCHER":
+        i = draft.stops.findIndex((s) => s.id === action.payload);
+        draft.stops.splice(i, 1);
         break;
 
       default:
@@ -73,8 +89,8 @@ export const useManageTrip = () => {
         { id: nanoid(), phone: "0885131543" },
       ],
       new: [
-        { id: nanoid(), name: "Стамат1", phone: "0885131544" },
-        { id: nanoid(), phone: "0885131545" },
+        // { id: nanoid(), name: "Стамат1", phone: "0885131544" },
+        // { id: nanoid(), phone: "0885131545" },
       ],
     },
   });
@@ -94,7 +110,12 @@ export const useManageTrip = () => {
       changeDuration: (id) => (value) =>
         dispatch({ type: "CHANGE_STOP_DURATION", payload: { id, value } }),
     },
-    watchers: {},
+    watchers: {
+      addNewWatcher: (value) =>
+        dispatch({ type: "ADD_WATCHER", payload: value }),
+      removeNewWatcher: (value) =>
+        dispatch({ type: "REMOVE_WATCHER", payload: value }),
+    },
   }).current;
 
   return { trip, actions };

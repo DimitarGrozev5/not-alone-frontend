@@ -7,6 +7,15 @@ const TripWatchers = (props) => {
   const w = props.watchers;
 
   const [newUser, setNewUser] = useState(null);
+  const addNewUserHandler = (event) => {
+    event.preventDefault();
+    if (!newUser) {
+      return;
+    }
+
+    props.watcherActions.addNewWatcher(newUser);
+    setNewUser(null);
+  };
 
   return (
     <>
@@ -14,7 +23,7 @@ const TripWatchers = (props) => {
       <ul>
         {w.new.map((c) => (
           <li key={c.id}>
-            {c.name} {c.phone}
+            {c.data.name} {c.data.phone}
           </li>
         ))}
       </ul>
@@ -24,7 +33,7 @@ const TripWatchers = (props) => {
         value={newUser}
         onChange={setNewUser}
       />
-      <Button>Добави</Button>
+      {newUser && <Button onClick={addNewUserHandler}>Добави</Button>}
       <hr />
       {props.mode !== "create" && <Confirmed watchers={w} />}
       {props.mode !== "create" && <Pending watchers={w} />}
