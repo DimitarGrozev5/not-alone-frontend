@@ -23,6 +23,13 @@ const PickUserInput = (props) => {
     setSearchText(query);
   };
 
+  const value = props.value;
+  useEffect(() => {
+    if (!value) {
+      setSearchText("");
+    }
+  }, [value]);
+
   // State and Effect that fetches phone suggestions everytime the search text changes
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(undefined);
