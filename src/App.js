@@ -14,7 +14,6 @@ import useMessages from "./services/useMessages";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
 import { useRequestsService } from "./services/useRequestsService";
-import { requestActions } from "./redux-store/requestsSlice";
 import PlanTrip from "./pages/PlanTrip/PlanTrip";
 import Watching from "./pages/Watching/Watching";
 import WatchTrip from "./pages/WatchTrip/WatchTrip";

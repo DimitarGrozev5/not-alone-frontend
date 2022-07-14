@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useEState } from "../../hooks/useEState";
 import { deconstructDuration, TimeConst } from "../../utils/time";
 import Button from "../FormElements/Button/Button";
@@ -21,7 +21,7 @@ const DurationPicker = (props) => {
     setM(minutes);
     setH(hours);
     setD(days);
-  }, [minutes, hours, days]);
+  }, [minutes, hours, days, setD, setH, setM]);
 
   const changeHandler = (timeframe, baseMeasure) => (event) => {
     const t = props.duration + (event.target.value - baseMeasure) * timeframe;

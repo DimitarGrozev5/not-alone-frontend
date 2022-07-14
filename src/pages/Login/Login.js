@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FormCard from "../../components/UIComponents/FormCard/FormCard";
-import useMessages from "../../services/useMessages";
 import useUserService from "../../services/useUserService";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
@@ -10,7 +9,6 @@ import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/Loading
 const Login = (props) => {
   const navigate = useNavigate();
   const userService = useUserService();
-  const errMsg = useMessages();
 
   // Setup load status
   const [isLoading, setIsLoading] = useState(false);

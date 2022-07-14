@@ -1,9 +1,3 @@
-import { useDispatch } from "react-redux";
-
-import { requestActions } from "../../redux-store/requestsSlice";
-import useMessages from "../../services/useMessages";
-import { useRequestsService } from "../../services/useRequestsService";
-
 const ProfileInRequests = (props) => {
   return (
     <>

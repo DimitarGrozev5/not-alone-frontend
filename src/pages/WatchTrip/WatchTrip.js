@@ -4,7 +4,7 @@ import { LoadStatus } from "../../data-types/LoadStatus";
 import { tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useWatchingService } from "../../services/useWatchingService";
-import styles from "./WatchTrip.module.css";
+// import styles from "./WatchTrip.module.css";
 
 const WatchTrip = () => {
   const watchingService = useWatchingService();
@@ -25,7 +25,7 @@ const WatchTrip = () => {
         });
       setTrip(new LoadStatus.Loading());
     }
-  }, [watchingService, trip, tripId]);
+  }, [watchingService, trip, tripId, messages]);
 
   const nextStopIndex = trip?.result?.tripStatus?.nextStop;
 
@@ -82,7 +82,10 @@ const WatchTrip = () => {
           )}
 
           {trip.result.tripStatus.status === tripStatus.VERY_LATE && (
-            <div>{trip.result.user.name} закъснява много. Пробвай да се свържеш с него.</div>
+            <div>
+              {trip.result.user.name} закъснява много. Пробвай да се свържеш с
+              него.
+            </div>
           )}
         </>
       )}

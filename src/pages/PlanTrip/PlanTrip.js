@@ -1,22 +1,11 @@
-import { useEffect, useState, useReducer, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Button from "../../components/FormElements/Button/Button";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
-import {
-  requestStatus,
-  requestTypes,
-  stopTypes,
-} from "../../data-types/trip-data";
-import useMessages from "../../services/useMessages";
-import { useTripsService } from "../../services/useTripsService";
-import ProfileAddConnection from "../ProfilePage/ProfileAddConnection";
-import { useManageStops } from "./hooks/useManageStops";
 import { useManageTrip } from "./hooks/useManageTrip";
 import styles from "./PlanTrip.module.css";
 import { validateTrip } from "./planTripHelpers";
 import TripInput from "./TripInput/TripInput";
-import TripStop from "./TripStop";
 import TripStopsPlanner from "./TripStopsPlanner/TripStopsPlanner";
 import TripWatchers from "./TripWatchers/TripWatchers";
 
@@ -35,7 +24,7 @@ const PlanTrip = (props) => {
     try {
       validateTrip(trip);
     } catch (err) {
-      setError(err);
+      setError(err.message);
       return;
     }
 

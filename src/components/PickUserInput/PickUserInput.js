@@ -70,7 +70,7 @@ const PickUserInput = (props) => {
       clearTimeout(interval);
       setIsLoading(false);
     };
-  }, [searchText, userService]);
+  }, [searchText, userService, props.searchInContacts]);
 
   // Select suggestion handler
   const selectSuggetionHandler = (suggetion) => (event) => {

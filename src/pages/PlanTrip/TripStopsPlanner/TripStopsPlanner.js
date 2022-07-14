@@ -1,12 +1,9 @@
-import { useState } from "react";
 import Button from "../../../components/FormElements/Button/Button";
 import TripInput from "../TripInput/TripInput";
 import TripStopText from "../TripStopText/TripStopText";
 import styles from "./TripStopsPlanner.module.css";
 
 const TripStopsPlanner = (props) => {
-  const [viewMode, setViewMode] = useState(props.mode !== "create");
-
   const addStopHandler = (event) => {
     event.preventDefault();
     props.stopActions.appendStop();

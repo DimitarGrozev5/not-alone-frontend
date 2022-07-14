@@ -14,7 +14,7 @@ import {
   validBGPhone,
   valuesMatch,
 } from "../../utils/data-validation";
-import style from "./Register.module.css";
+// import style from "./Register.module.css";
 
 const Register = (props) => {
   // Get services and hooks

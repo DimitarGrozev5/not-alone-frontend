@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { LoadStatus } from "../../data-types/LoadStatus";
 import { requestStatus, tripStatus } from "../../data-types/trip-data";
 import useMessages from "../../services/useMessages";
 import { useTripsService } from "../../services/useTripsService";
-import { exp } from "../../utils/helpers";
 import { deconstructDuration } from "../../utils/time";
-import styles from "./OngoingTrip.module.css";
+// import styles from "./OngoingTrip.module.css";
 
 const OngoingTrip = () => {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const tripsService = useTripsService();
   const messages = useMessages();
 
@@ -43,7 +42,7 @@ const OngoingTrip = () => {
       .then(() => setTrip(new LoadStatus.Idle()));
   }
 
-  const nextStop = activeTrip && activeTrip[nextStopIndex];
+  // const nextStop = activeTrip && activeTrip[nextStopIndex];
 
   const stopsBeforeNext =
     activeTrip && activeTrip.stops.filter((s, i) => i < nextStopIndex);
