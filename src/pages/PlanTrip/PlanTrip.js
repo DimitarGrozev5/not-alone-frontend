@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/FormElements/Button/Button";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
@@ -12,6 +13,8 @@ import TripStopsPlanner from "./TripStopsPlanner/TripStopsPlanner";
 import TripWatchers from "./TripWatchers/TripWatchers";
 
 const PlanTrip = (props) => {
+  const navigate = useNavigate();
+
   const { trip, actions } = useManageTrip();
 
   const { isLoading, error, sendRequest, clearError, setError } =
@@ -45,8 +48,10 @@ const PlanTrip = (props) => {
     };
 
     try {
-      const response = await sendRequest("trips", prepTrip, { auth: true });
-      console.log(response);
+      if (props.mode === "create") {
+        await sendRequest("trips", prepTrip, { auth: true });
+      }
+      navigate.to("/planned-trips");
     } catch (err) {
       console.log(err);
     }
