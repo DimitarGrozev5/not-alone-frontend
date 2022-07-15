@@ -12,6 +12,12 @@ const TripInput = (props) => {
     setViewMode((v) => !v);
   };
 
+  const blockEnterHandler = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       <label className={styles.label}>{props.label}</label>
@@ -20,6 +26,7 @@ const TripInput = (props) => {
           <span className={styles.name}>{props.value}</span>
         ) : (
           <input
+            onKeyDown={blockEnterHandler}
             className={styles.input}
             type={props.type}
             value={props.value}

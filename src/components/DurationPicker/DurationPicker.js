@@ -33,6 +33,13 @@ const DurationPicker = (props) => {
     props.onChange(t);
   };
 
+  const blockEnterHandler = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.target.blur();
+    }
+  };
+
   return (
     <>
       <div className={styles.header}>
@@ -55,6 +62,7 @@ const DurationPicker = (props) => {
               min={0}
               value={d}
               onChange={setD}
+              onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.DAY, days)}
             />
           )}
@@ -72,6 +80,7 @@ const DurationPicker = (props) => {
               min={0}
               value={h}
               onChange={setH}
+              onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.HOUR, hours)}
             />
           )}
@@ -89,6 +98,7 @@ const DurationPicker = (props) => {
               min={0}
               value={m}
               onChange={setM}
+              onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.MINUTE, minutes)}
             />
           )}
