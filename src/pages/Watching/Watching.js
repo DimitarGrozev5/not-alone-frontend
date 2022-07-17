@@ -1,82 +1,56 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Modal from "../../components/UIComponents/Modal/Modal";
-import { LoadStatus } from "../../data-types/LoadStatus";
-import { requestTypes, tripStatus } from "../../data-types/trip-data";
-import useMessages from "../../services/useMessages";
-import { useWatchingService } from "../../services/useWatchingService";
+
+import { useHttpClient } from "../../hooks/useHttpClient";
+import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 
 import styles from "./Watching.module.css";
 
 const Watching = () => {
-  const watchingService = useWatchingService();
-  const messages = useMessages();
+  const [watching, setWatching] = useState(null);
+  const [requests, setRequests] = useState(null);
 
-  const [watched, setWatched] = useState(new LoadStatus.Idle());
-  const [requests, setRequests] = useState(new LoadStatus.Idle());
+  const { isLoading, error, sendRequest, clearError, setError } =
+    useHttpClient();
 
   useEffect(() => {
-    console.log("data load");
-    if (watched.isIdle) {
-      watchingService
-        .getAllWatchingAndRequests()
-        .then((res) => {
-          setWatched(
-            res.watching.length
-              ? new LoadStatus.Loaded(res.watching)
-              : new LoadStatus.Empty()
-          );
-          setRequests(
-            res.requests.length
-              ? new LoadStatus.Loaded(res.requests)
-              : new LoadStatus.Empty()
-          );
-        })
-        .catch((err) => {
-          console.log(err.message);
-          messages.alert(err.message);
-          setWatched(new LoadStatus.Error(err.message));
-        });
-      setWatched(new LoadStatus.Loading());
-    }
-  }, [watchingService, messages, watched]);
+    const getData = async () => {
+      try {
+        const { watchingRes, requestsRes } = await sendRequest(
+          "trips/watching",
+          null,
+          { auth: true }
+        );
+        setWatching(watchingRes);
+        setRequests(requestsRes);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+  }, [sendRequest]);
 
-  const [showReqModal, setShowReqModal] = useState(false);
-  const openRequestsHandler = (event) => {
-    event.preventDefault();
-    setShowReqModal(true);
-  };
-  const closeRequestsHandler = (event) => {
-    event.preventDefault();
-    setShowReqModal(false);
-  };
-
-  const confirmRequest = (id) => () => {
-    watchingService
-      .confirmWatch(id)
-      .then(() => {
-        setWatched(new LoadStatus.Idle());
-        if (!requests.result.length) {
-          setShowReqModal(false);
-        }
-      })
-      .catch((err) => messages.alert(err.message));
-  };
-  const denyRequest = (id) => () => {
-    watchingService
-      .denyWatch(id)
-      .then(() => {
-        setWatched(new LoadStatus.Idle());
-        if (!requests.result.length) {
-          setShowReqModal(false);
-        }
-      })
-      .catch((err) => messages.alert(err.message));
-  };
+  const openRequestsHandler = () => {};
 
   return (
     <>
-      {showReqModal && (
+      {isLoading && <LoadingSpinner asOverlay />}
+      {error && <ErrorModal error={error} onClose={clearError} />}
+
+      {requests && (
+        <div className={styles.requests}>
+          {!requests.length && "Няма нови молби"}
+          {!!requests.length && (
+            <button onClick={openRequestsHandler}>
+              {requests.length === 1
+                ? "Има 1 нова заявка"
+                : `Има ${requests.length} нови заявки`}
+            </button>
+          )}
+        </div>
+      )}
+      {/* {showReqModal && (
         <Modal title="Нови молби" onClose={closeRequestsHandler}>
           <ul>
             {requests.isLoaded &&
@@ -146,16 +120,7 @@ const Watching = () => {
           ))}
         </ul>
       )}
-      <div className={styles.requests}>
-        {requests.isLoading && "Зареждане"}
-        {requests.isEmpty && "Няма нови молби"}
-        {requests.isError && "Има грешка при зареждането"}
-        {requests.isLoaded && (
-          <button onClick={openRequestsHandler}>
-            Има {requests.result.length} нови молби
-          </button>
-        )}
-      </div>
+       */}
     </>
   );
 };
