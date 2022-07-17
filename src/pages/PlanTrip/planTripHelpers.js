@@ -11,7 +11,7 @@ export const validateTrip = (trip) => {
 
   // Trip stops have name and non zero duration
   trip.stops.forEach(({ data, duration }, i) => {
-    if (!data.stopName.length) {
+    if (!data.placeName.length) {
       throw new Error("Спирките трябва да имат име!");
     }
     if (duration === 0 && i > 0) {

@@ -29,7 +29,7 @@ const PlannedTrips = () => {
       </div>
 
       {trips && !trips.length && <div>Все още няма създадени</div>}
-      {trips && trips.length && (
+      {trips && !!trips.length && (
         <ul>
           {trips.map((trip) => (
             <li key={trip._id}>

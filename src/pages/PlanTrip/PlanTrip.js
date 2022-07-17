@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/FormElements/Button/Button";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
@@ -14,6 +14,7 @@ import TripWatchers from "./TripWatchers/TripWatchers";
 
 const PlanTrip = (props) => {
   const navigate = useNavigate();
+  const params = useParams();
 
   const { trip, actions } = useManageTrip();
 
@@ -22,7 +23,25 @@ const PlanTrip = (props) => {
 
   useEffect(() => {
     // Load data from server if the component is not in create mode
-  }, [props.mode]);
+    if (props.mode !== "create") {
+      const getTripData = async () => {
+        // Get Trip Id
+        const tripId = params.tripId;
+
+        // Get Trip data from API
+        try {
+          const tripData = await sendRequest(`trips/${tripId}`, null, {
+            auth: true,
+          });
+          actions.initTrip(tripData.trip);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      getTripData();
+    }
+  }, [props.mode, params.tripId, sendRequest]);
 
   const saveData = async (event) => {
     event.preventDefault();
@@ -51,7 +70,7 @@ const PlanTrip = (props) => {
       if (props.mode === "create") {
         await sendRequest("trips", prepTrip, { auth: true });
       }
-      navigate.to("/planned-trips");
+      navigate("/planned-trips");
     } catch (err) {
       console.log(err);
     }
@@ -60,9 +79,7 @@ const PlanTrip = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal error={error} onClose={clearError} />
-      )}
+      {error && <ErrorModal error={error} onClose={clearError} />}
       <form onSubmit={saveData}>
         <h1>Планувай пътуване</h1>
         <div className={styles.plan}>

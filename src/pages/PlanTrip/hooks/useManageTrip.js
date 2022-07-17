@@ -9,12 +9,24 @@ const tripReducer = (state, action) =>
   produce(state, (draft) => {
     let i;
     switch (action.type) {
+      case "INIT":
+        const trip = action.payload;
+        draft.name = trip.name;
+        console.log(trip.stops);
+        draft.stops = trip.stops.map((stop) => ({
+          id: stop._id,
+          type: stop.stopModel,
+          data: stop.data,
+          duration: stop.duration,
+        }));
+        break;
+
       case "CHANGE_NAME":
         draft.name = action.payload;
         break;
 
       case "CHANGE_FIRST_STOP":
-        draft.stops[0].data.stopName = action.payload;
+        draft.stops[0].data.placeName = action.payload;
         break;
 
       case "APPEND_STOP":
@@ -22,7 +34,7 @@ const tripReducer = (state, action) =>
           id: nanoid(),
           type: txtStop,
           data: {
-            stopName: "",
+            placeName: "",
           },
           duration: 0,
         });
@@ -34,7 +46,7 @@ const tripReducer = (state, action) =>
         break;
 
       case "CHANGE_STOP_TEXT":
-        draft.stops.find((s) => s.id === action.payload.id).data.stopName =
+        draft.stops.find((s) => s.id === action.payload.id).data.placeName =
           action.payload.value;
         break;
 
@@ -73,7 +85,7 @@ export const useManageTrip = () => {
       {
         id: nanoid(),
         type: txtStop,
-        data: { stopName: "" },
+        data: { placeName: "" },
         duration: 0,
       },
     ],
@@ -94,6 +106,8 @@ export const useManageTrip = () => {
 
   // Action creators
   const actions = useRef({
+    initTrip: (trip) => dispatch({ type: "INIT", payload: trip }),
+
     changeName: (value) => dispatch({ type: "CHANGE_NAME", payload: value }),
     stops: {
       changeFirstStop: (value) =>

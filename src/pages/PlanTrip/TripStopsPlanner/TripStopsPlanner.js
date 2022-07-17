@@ -18,7 +18,7 @@ const TripStopsPlanner = (props) => {
             mode={props.mode}
             label="Начална спирка"
             type="text"
-            value={props.stops[0].data.stopName}
+            value={props.stops[0].data.placeName}
             onChange={props.stopActions.changeFirstStop}
           />
         </li>

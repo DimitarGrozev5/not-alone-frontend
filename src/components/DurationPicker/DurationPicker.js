@@ -71,7 +71,7 @@ const DurationPicker = (props) => {
 
         <div className={styles.picker}>
           {viewMode ? (
-            <div className={styles.input}>{d}</div>
+            <div className={styles.input}>{h}</div>
           ) : (
             <input
               className={styles.input}
@@ -89,7 +89,7 @@ const DurationPicker = (props) => {
 
         <div className={styles.picker}>
           {viewMode ? (
-            <div className={styles.input}>{d}</div>
+            <div className={styles.input}>{m}</div>
           ) : (
             <input
               className={styles.input}

@@ -10,7 +10,7 @@ const TripStopText = (props) => {
         mode={props.mode}
         label="Спирка:"
         type="text"
-        value={props.stopData.stopName}
+        value={props.stopData.placeName}
         onChange={props.onTextChange}
       />
       <DurationPicker
