@@ -23,15 +23,17 @@ const TripOverview = ({ tripData }) => {
         className={styles["trip-link"]}
       >
         <h2>{tripData.name}</h2>
-        <div>{tripData.stops.length - 1} {tripData.stops.length === 2 ? "спирка" : "спирки"}</div>
+        <div>
+          {tripData.stops.length - 1}{" "}
+          {tripData.stops.length === 2 ? "спирка" : "спирки"}
+        </div>
         <div>
           Общо {days} дни, {hours} часа и {minutes} минути предвидено пътуване
         </div>
         <h3>
-          {watching && watching > 1
-            ? `${watching} души ще те следят`
-            : `1 човек ще те следи`}
-          {!watching && "Все още никой не те следи"}
+          {watching && !watching.length && "Все още никой не те следи"}
+          {watching && watching.length === 1 && `1 човек ще те следи`}
+          {watching && watching.length > 1 && `${watching} души ще те следят`}
         </h3>
       </Link>
     </DataCard>
