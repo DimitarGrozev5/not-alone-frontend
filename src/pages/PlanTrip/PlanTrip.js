@@ -58,11 +58,7 @@ const PlanTrip = (props) => {
     const prepTrip = {
       name: trip.name,
 
-      stops: trip.stops.map((stop) => ({
-        type: stop.type,
-        data: stop.data,
-        duration: stop.duration,
-      })),
+      stops: trip.stops,
 
       watchers: trip.watchers.new.map((w) => ({ ...w.data })),
     };
