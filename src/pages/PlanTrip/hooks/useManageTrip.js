@@ -106,11 +106,7 @@ export const useManageTrip = () => {
     ],
     watchers: {
       confirmed: [],
-      pending: [
-        { id: nanoid(), name: "Стамат", phone: "0885131541" },
-        { id: nanoid(), name: "Генади", phone: "0885131542" },
-        { id: nanoid(), phone: "0885131543" },
-      ],
+      pending: [],
       new: [],
     },
   });
