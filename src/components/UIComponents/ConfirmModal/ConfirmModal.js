@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../../FormElements/Button/Button";
 
 import Modal from "../Modal/Modal";
 
@@ -7,8 +8,8 @@ const ConfirmModal = (props) => {
     <Modal onClose={props.onCancel} title="Потвърдете">
       <>
         <p>{props.message}</p>
-        <button onClick={props.onConfirm}>Да</button>
-        <button onClick={props.onCancel}>Не</button>
+        <Button onClick={props.onConfirm}>Да</Button>
+        <Button onClick={props.onCancel}>Не</Button>
       </>
     </Modal>
   );

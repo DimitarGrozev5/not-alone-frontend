@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/FormElements/Button/Button";
+import ConfirmModal from "../../components/UIComponents/ConfirmModal/ConfirmModal";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
@@ -20,6 +21,8 @@ const PlanTrip = (props) => {
 
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     // Load data from server if the component is not in create mode
@@ -41,7 +44,7 @@ const PlanTrip = (props) => {
 
       getTripData();
     }
-  }, [props.mode, params.tripId, sendRequest]);
+  }, [props.mode, params.tripId, sendRequest, actions]);
 
   const saveData = async (event) => {
     event.preventDefault();
@@ -78,10 +81,33 @@ const PlanTrip = (props) => {
     }
   };
 
+  const deleteHandler = (del) => async (event) => {
+    event.preventDefault();
+    if (del) {
+      try {
+        await sendRequest(`trips/${params.tripId}`, null, {
+          method: "DELETE",
+          auth: true,
+        });
+        navigate("/planned-trips")
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    setConfirmDelete(true);
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
+      {confirmDelete && (
+        <ConfirmModal
+          onCancel={setConfirmDelete.bind(null, false)}
+          onConfirm={deleteHandler(true)}
+          message="Сигурни ли сте, че желаете да изтриете пътуването? Действието не може да бъде отменено!"
+        />
+      )}
       <form onSubmit={saveData}>
         {props.mode === "create" && <h1>Планувай пътуване</h1>}
         {props.mode === "edit" && <h1>Прегледай пътуване</h1>}
@@ -115,12 +141,7 @@ const PlanTrip = (props) => {
             {props.mode === "edit" && "Запазване на промените"}
           </Button>
           {props.mode === "edit" && (
-            <Button
-              stretch
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <Button stretch onClick={deleteHandler(false)}>
               Изтрий пътуването
             </Button>
           )}
