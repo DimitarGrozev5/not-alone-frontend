@@ -47,7 +47,8 @@ const PlanTrip = (props) => {
     event.preventDefault();
     //// Data validation
     try {
-      validateTrip(trip);
+      const edit = props.mode === "edit";
+      validateTrip(trip, { edit });
     } catch (err) {
       setError(err.message);
       return;
@@ -69,6 +70,11 @@ const PlanTrip = (props) => {
     try {
       if (props.mode === "create") {
         await sendRequest("trips", prepTrip, { auth: true });
+      } else if (props.mode === "edit") {
+        await sendRequest(`trips/${params.tripId}`, prepTrip, {
+          method: "PATCH",
+          auth: true,
+        });
       }
       navigate("/planned-trips");
     } catch (err) {

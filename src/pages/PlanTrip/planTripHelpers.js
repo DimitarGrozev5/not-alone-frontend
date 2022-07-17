@@ -1,4 +1,4 @@
-export const validateTrip = (trip) => {
+export const validateTrip = (trip, { edit }) => {
   // Name is not empty
   if (!trip.name.length) {
     throw new Error("Пътуването трябва да има име!");
@@ -20,7 +20,7 @@ export const validateTrip = (trip) => {
   });
 
   // There is at least one watcher
-  if (trip.watchers.new.length === 0) {
+  if (trip.watchers.new.length === 0 && !edit) {
     throw new Error("Добавете поне един наблюдател!");
   }
 };
