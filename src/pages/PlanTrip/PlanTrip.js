@@ -89,9 +89,10 @@ const PlanTrip = (props) => {
           method: "DELETE",
           auth: true,
         });
-        navigate("/planned-trips")
+        navigate("/planned-trips");
       } catch (err) {
         console.log(err);
+        return setConfirmDelete(false);
       }
     }
     setConfirmDelete(true);
