@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { baseUrl } from "../constants/baseUrl";
+import { userActions } from "../redux-store/userSlice";
 
 export const useHttpClient = () => {
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.isLoggedIn);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -63,6 +65,12 @@ export const useHttpClient = () => {
         );
 
         if (!response.ok) {
+          // Auto logout if the status code is 401 - Unauthorized
+          if (response.status === 401) {
+            localStorage.removeItem("jwt");
+            dispatch(userActions.logout());
+          }
+
           throw new Error(responseData.message);
         }
 
@@ -74,7 +82,7 @@ export const useHttpClient = () => {
         throw err;
       }
     },
-    [token]
+    [token, dispatch]
   );
 
   useEffect(

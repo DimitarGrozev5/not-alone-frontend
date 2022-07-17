@@ -1,74 +1,41 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LoadStatus } from "../../data-types/LoadStatus";
-import { requestStatus } from "../../data-types/trip-data";
-import { useTripsService } from "../../services/useTripsService";
-import { deconstructDuration } from "../../utils/time";
+import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
+import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
+import { useHttpClient } from "../../hooks/useHttpClient";
 
 import styles from "./PlannedTrips.module.css";
+import TripOverview from "./TripOverview/TripOverview";
 
 const PlannedTrips = () => {
-  const tripsService = useTripsService();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const [trips, setTrips] = useState(new LoadStatus.Loading());
+  const [trips, setTrips] = useState(null);
 
   useEffect(() => {
-    tripsService
-      .getAllTrips()
-      .then((trips) => {
-        const t = trips.length
-          ? new LoadStatus.Loaded(trips)
-          : new LoadStatus.Empty();
-        setTrips(t);
+    sendRequest("trips", null, { auth: true })
+      .then(({ trips }) => {
+        setTrips(trips);
       })
-      .catch((err) => {
-        setTrips(new LoadStatus.Error(err.message));
-      });
-  }, [tripsService]);
+      .catch((err) => console.log(err));
+  }, [sendRequest]);
 
   return (
     <>
+      {isLoading && <LoadingSpinner asOverlay />}
+      {error && <ErrorModal error={error} onClose={clearError} />}
       <div>
         <h1>Планувани пътувания:</h1>
       </div>
-      {trips instanceof LoadStatus.Loading && <div>Зареждане...</div>}
-      {trips instanceof LoadStatus.Empty && <div>Няма пътувания все още</div>}
-      {trips instanceof LoadStatus.Error && (
-        <div>Грешка при зареждане на пътуванията</div>
-      )}
-      {trips instanceof LoadStatus.Loaded && (
+
+      {trips && !trips.length && <div>Все още няма създадени</div>}
+      {trips && trips.length && (
         <ul>
-          {trips.result.map((trip) => {
-            const tripTotalDuration = trip.stops.reduce(
-              (total, stop) => total + stop.duration,
-              0
-            );
-            const [, , minutes, hours, days] =
-              deconstructDuration(tripTotalDuration);
-
-            const watching = trip.watchers.filter(
-              (w) => w.status === requestStatus.ACCEPTED
-            ).length;
-
-            return (
-              <li key={trip.id}>
-                <Link to={`/planned-trips/${trip.id}`}>
-                  <h2>{trip.name}</h2>
-                  <div>{trip.stops.length - 1} спирки</div>
-                  <div>
-                    Общо {days} дни, {hours} часа и {minutes} минути предвидено
-                    пътуване
-                  </div>
-                  <h3>
-                    {watching && watching > 1
-                      ? `${watching} души ще те следят`
-                      : `1 човек ще те следи`}
-                    {!watching && "Все още никой не те следи"}
-                  </h3>
-                </Link>
-              </li>
-            );
-          })}
+          {trips.map((trip) => (
+            <li key={trip._id}>
+              <TripOverview tripData={trip} />
+            </li>
+          ))}
         </ul>
       )}
       <div className={styles.add}>

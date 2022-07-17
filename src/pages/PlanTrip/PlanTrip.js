@@ -61,7 +61,7 @@ const PlanTrip = (props) => {
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && (
-        <ErrorModal error={error} onClose={setError.bind(null, null)} />
+        <ErrorModal error={error} onClose={clearError} />
       )}
       <form onSubmit={saveData}>
         <h1>Планувай пътуване</h1>
