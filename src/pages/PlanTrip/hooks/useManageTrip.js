@@ -11,14 +11,29 @@ const tripReducer = (state, action) =>
     switch (action.type) {
       case "INIT":
         const trip = action.payload;
+
+        // Name
         draft.name = trip.name;
-        console.log(trip.stops);
+
+        // Stops
         draft.stops = trip.stops.map((stop) => ({
           id: stop._id,
           type: stop.stopModel,
           data: stop.data,
           duration: stop.duration,
         }));
+
+        // Confirmed watchers
+        draft.watchers.confirmed = trip.watchers.map((w) => ({
+          id: w._id,
+          ...w,
+        }));
+
+        // Unconfirmed watchers
+        draft.watchers.pending = trip.watcherRequests
+          .filter((w) => w.status === "PENDING")
+          .map((w) => ({ id: w.to._id, ...w.to }));
+
         break;
 
       case "CHANGE_NAME":
@@ -90,11 +105,7 @@ export const useManageTrip = () => {
       },
     ],
     watchers: {
-      confirmed: [
-        { id: nanoid(), name: "Пешо1", phone: "0885131547" },
-        { id: nanoid(), name: "Пешо2", phone: "0885131548" },
-        { id: nanoid(), name: "Пешо3", phone: "0885131549" },
-      ],
+      confirmed: [],
       pending: [
         { id: nanoid(), name: "Стамат", phone: "0885131541" },
         { id: nanoid(), name: "Генади", phone: "0885131542" },

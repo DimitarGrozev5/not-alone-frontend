@@ -74,6 +74,7 @@ function Confirmed({ watchers }) {
 }
 
 function Pending({ watchers }) {
+  console.log(watchers.pending);
   return (
     !!watchers.pending && (
       <>
