@@ -137,9 +137,15 @@ const PlanTrip = (props) => {
               watcherActions={actions.watchers}
             />
           </DataCard>
-          <Button stretch type="submit">
+
+          <Button
+            stretch
+            type="submit"
+            to={props.mode === "view" ? "/ongoing-trip" : undefined}
+          >
             {props.mode === "create" && "Създаване на пътуване"}
             {props.mode === "edit" && "Запазване на промените"}
+            {props.mode === "view" && "Назад"}
           </Button>
           {props.mode === "edit" && (
             <Button stretch onClick={deleteHandler(false)}>
