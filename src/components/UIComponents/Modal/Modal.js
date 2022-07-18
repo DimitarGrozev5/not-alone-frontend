@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom";
+import Button from "../../FormElements/Button/Button";
 import styles from "./Modal.module.css";
 
 const Overlay = (props) => {
@@ -10,11 +11,13 @@ const Modal = (props) => {
     <>
       <Overlay onClose={props.onClose} />
       <div className={styles.modal}>
-        <h1>
-          {props.title}
-          <button onClick={props.onClose}>X</button>
-        </h1>
-        {props.children}
+        <header>
+          <h1>{props.title}</h1>
+          <Button onClick={props.onClose} className={styles["close-button"]}>
+            X
+          </Button>
+        </header>
+        <section>{props.children}</section>
       </div>
     </>,
     document.getElementById("modal-root")

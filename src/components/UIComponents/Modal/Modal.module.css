@@ -13,18 +13,54 @@
 .modal {
   position: fixed;
   z-index: 100001;
-  left: 3rem;
-  right: 3rem;
+  left: 2rem;
+  right: 2rem;
   top: 15vh;
   min-height: 50vh;
   max-height: 75vh;
+  overflow: scroll;
 
-  padding: 1rem;
+  background-color: var(--color-light-1);
+  border-radius: 0.5rem;
+  filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.2));
 
-  background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal h1 {
-  margin: 0;
-  padding: 0;
+.modal > header {
+  border: 1px solid var(--color-dark-1);
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-color: var(--color-light-2);
+  color: var(--color-dark-1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal > header > h1 {
+  font-size: 1.1rem;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.close-button {
+  border: none;
+  border-radius: 0.5rem;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-left: 1px solid var(--color-dark-1);
+}
+
+.modal > section {
+  border: 1px solid var(--color-dark-1);
+  border-top: none;
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+
+  padding: 0.5rem;
+
+  flex-grow: 1;
 }

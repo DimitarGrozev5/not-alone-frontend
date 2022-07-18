@@ -6,10 +6,14 @@ import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 
 import styles from "./Watching.module.css";
+import Modal from "../../components/UIComponents/Modal/Modal";
+import { useTState } from "../../hooks/useTState";
 
 const Watching = () => {
   const [watching, setWatching] = useState(null);
   const [requests, setRequests] = useState(null);
+
+  const [requestsModal, toggleRequestsModal] = useTState(false);
 
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
@@ -31,18 +35,20 @@ const Watching = () => {
     getData();
   }, [sendRequest]);
 
-  const openRequestsHandler = () => {};
-
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
 
+      {requestsModal && (
+        <Modal title="Заявки" onClose={toggleRequestsModal}>requests</Modal>
+      )}
+
       {requests && (
         <div className={styles.requests}>
           {!requests.length && "Няма нови молби"}
           {!!requests.length && (
-            <button onClick={openRequestsHandler}>
+            <button onClick={toggleRequestsModal}>
               {requests.length === 1
                 ? "Има 1 нова заявка"
                 : `Има ${requests.length} нови заявки`}
