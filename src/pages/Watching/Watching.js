@@ -33,7 +33,9 @@ const Watching = () => {
         console.log(err);
       }
     };
-    getData();
+    if (!watching || !requests) {
+      getData();
+    }
   }, [sendRequest, watching, requests]);
 
   const answerRequest = (answer, reqId) => async (event) => {
