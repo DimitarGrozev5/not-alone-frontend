@@ -8,6 +8,7 @@ import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/Loading
 import styles from "./Watching.module.css";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { useTState } from "../../hooks/useTState";
+import RequestItem from "./RequestItem/RequestItem";
 
 const Watching = () => {
   const [watching, setWatching] = useState(null);
@@ -35,13 +36,24 @@ const Watching = () => {
     getData();
   }, [sendRequest]);
 
+  console.log(requests);
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
 
-      {requestsModal && (
-        <Modal title="Заявки" onClose={toggleRequestsModal}>requests</Modal>
+      {requestsModal && requests && (
+        <Modal title="Заявки" onClose={toggleRequestsModal}>
+          {!requests.length && "Няма нови молби"}
+          {!!requests.length && (
+            <ul>
+              {requests.map((req) => (
+                <RequestItem key={req._id} request={req} />
+              ))}
+            </ul>
+          )}
+        </Modal>
       )}
 
       {requests && (

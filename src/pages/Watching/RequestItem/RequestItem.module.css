@@ -1,0 +1,22 @@
+.request {
+  margin-bottom: 1rem;
+}
+
+.request__accent {
+  font-weight: bold;
+  color: var(--color-dark-1);
+}
+
+.request__controlls {
+  display: flex;
+  justify-content: right;
+}
+
+.request__controlls button {
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.request > hr {
+  margin-top: 0.5rem;
+}
