@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styles from "./Button.module.css";
 
 const Button = (props) => {
@@ -6,6 +8,15 @@ const Button = (props) => {
   props.className && classNames.push(props.className);
 
   const className = classNames.join(" ");
+
+  if (props.to) {
+    return (
+      <Link to={props.to} className={className}>
+        {props.children}
+      </Link>
+    );
+  }
+
   return (
     <button
       onClick={props.onClick}
