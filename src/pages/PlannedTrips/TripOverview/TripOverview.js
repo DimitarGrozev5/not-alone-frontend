@@ -33,7 +33,9 @@ const TripOverview = ({ tripData }) => {
         <h3>
           {watching && !watching.length && "Все още никой не те следи"}
           {watching && watching.length === 1 && `1 човек ще те следи`}
-          {watching && watching.length > 1 && `${watching} души ще те следят`}
+          {watching &&
+            watching.length > 1 &&
+            `${watching.length} души ще те следят`}
         </h3>
       </Link>
     </DataCard>
