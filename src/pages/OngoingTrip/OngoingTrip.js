@@ -6,13 +6,15 @@ import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/Loading
 import styles from "./OngoingTrip.module.css";
 import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import Button from "../../components/FormElements/Button/Button";
+import Modal from "../../components/UIComponents/Modal/Modal";
+import { useHState } from "../../hooks/useHState";
 
 const OngoingTrip = () => {
   const [allTrips, setAllTrips] = useState(null);
   const [activeTrip, setActiveTrip] = useState(null);
+  const [startTrip, startTripHandler] = useHState(false);
 
-  const { isLoading, error, sendRequest, clearError, setError } =
-    useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     if (!allTrips && !activeTrip) {
@@ -38,6 +40,22 @@ const OngoingTrip = () => {
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
+      {startTrip && (
+        <Modal title="Започване на пътуване" onClose={startTripHandler(null)}>
+          <div className={styles["start-trip"]}>
+            <h1>{startTrip.name}</h1>
+            <div className={styles["start-trip__checkbox"]}>
+              <input type={"checkbox"} />
+              <label>Съобщи, че тръгваш</label>
+            </div>
+            <div className={styles["start-trip__checkbox"]}>
+              <input type={"checkbox"} />
+              <label>Запазвай GPS данни за прогреса си</label>
+            </div>
+            <Button>Старт</Button>
+          </div>
+        </Modal>
+      )}
 
       {allTrips && !allTrips.length && <div>Все още нямате пътувания</div>}
       {allTrips && !!allTrips.length && (
@@ -61,7 +79,9 @@ const OngoingTrip = () => {
 
                     <div>
                       <Button to={`/ongoing-trip/${trip._id}`}>Преглед</Button>
-                      {!!trip.watchers.length && <Button>Старт</Button>}
+                      {!!trip.watchers.length && (
+                        <Button onClick={startTripHandler(trip)}>Старт</Button>
+                      )}
                     </div>
                   </>
                 )}
