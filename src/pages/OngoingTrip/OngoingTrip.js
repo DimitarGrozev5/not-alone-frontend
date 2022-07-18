@@ -36,6 +36,20 @@ const OngoingTrip = () => {
     }
   }, [allTrips, activeTrip, sendRequest]);
 
+  const sendStartTrip = async (event) => {
+    event.preventDefault();
+    try {
+      await sendRequest(`trips/${startTrip._id}/start`, null, {
+        method: "POST",
+        auth: true,
+      });
+      setAllTrips(null);
+      startTripHandler(null)();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
@@ -45,14 +59,14 @@ const OngoingTrip = () => {
           <div className={styles["start-trip"]}>
             <h1>{startTrip.name}</h1>
             <div className={styles["start-trip__checkbox"]}>
-              <input type={"checkbox"} />
-              <label>Съобщи, че тръгваш</label>
+              <input type={"checkbox"} id="anounce" />
+              <label htmlFor="anounce">Съобщи, че тръгваш</label>
             </div>
             <div className={styles["start-trip__checkbox"]}>
-              <input type={"checkbox"} />
-              <label>Запазвай GPS данни за прогреса си</label>
+              <input type={"checkbox"} id="gps" />
+              <label htmlFor="gps">Запазвай GPS данни за прогреса си</label>
             </div>
-            <Button>Старт</Button>
+            <Button onClick={sendStartTrip}>Старт</Button>
           </div>
         </Modal>
       )}
