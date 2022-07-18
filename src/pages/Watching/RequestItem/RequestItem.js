@@ -11,8 +11,8 @@ const RequestItem = (props) => {
         <span className={styles.request__accent}>{req.trip.name}</span>
       </div>
       <div className={styles.request__controlls}>
-        <Button>Ок</Button>
-        <Button>Отказ</Button>
+        <Button onClick={props.onAccept}>Ок</Button>
+        <Button onClick={props.onReject}>Отказ</Button>
       </div>
       <hr />
     </li>

@@ -34,9 +34,22 @@ const Watching = () => {
       }
     };
     getData();
-  }, [sendRequest]);
+  }, [sendRequest, watching, requests]);
 
-  console.log(requests);
+  const answerRequest = (answer, reqId) => async (event) => {
+    event.preventDefault();
+    try {
+      await sendRequest(`requests/${reqId}/${answer}`, null, {
+        method: "POST",
+        auth: true,
+      });
+
+      // Force reload
+      setRequests(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -49,7 +62,12 @@ const Watching = () => {
           {!!requests.length && (
             <ul>
               {requests.map((req) => (
-                <RequestItem key={req._id} request={req} />
+                <RequestItem
+                  key={req._id}
+                  request={req}
+                  onAccept={answerRequest("accept", req._id)}
+                  onReject={answerRequest("reject", req._id)}
+                />
               ))}
             </ul>
           )}
