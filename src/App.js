@@ -63,9 +63,19 @@ function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </Route>
             <Route path="/plan-trip" element={<PlanTrip mode="create" />} />
-            <Route path="/planned-trips/:tripId" element={<PlanTrip mode="edit" />} />
-            <Route path="/watching/:tripId" element={<PlanTrip mode="view" />} />
+            <Route
+              path="/planned-trips/:tripId"
+              element={<PlanTrip mode="edit" />}
+            />
+            <Route
+              path="/watching/:tripId"
+              element={<PlanTrip mode="view" />}
+            />
             <Route path="/watch/:tripId" element={<WatchTrip />} />
+            <Route
+              path="/ongoing-trip/:tripId"
+              element={<PlanTrip mode="view" />}
+            />
           </Route>
         </>
       )}
