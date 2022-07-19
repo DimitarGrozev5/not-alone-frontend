@@ -25,6 +25,7 @@ const OngoingTrip = () => {
             null,
             { auth: true }
           );
+          console.log(activeTrip);
           setAllTrips(allTrips);
           setActiveTrip(activeTrip);
         } catch (err) {
