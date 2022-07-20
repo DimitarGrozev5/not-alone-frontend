@@ -53,6 +53,19 @@ const OngoingTrip = () => {
   };
 
   const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
+  const pauseHandler = async (event) => {
+    event.preventDefault();
+    try {
+      await sendRequest(`trips/${startTrip._id}/pause`, null, {
+        method: "POST",
+        auth: true,
+      });
+      setAllTrips(null);
+      setActiveTrip(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -95,7 +108,7 @@ const OngoingTrip = () => {
                   <>
                     <div>Очаква се да пристигнете до {timeLeft}</div>
                     <div>
-                      <Button>Пауза</Button>
+                      <Button onClick={pauseHandler}>Пауза</Button>
                       <Button>Ще закъснея</Button>
                     </div>
                   </>

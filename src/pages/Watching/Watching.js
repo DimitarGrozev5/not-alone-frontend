@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { useHttpClient } from "../../hooks/useHttpClient";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
 
-import styles from "./Watching.module.css";
+// import styles from "./Watching.module.css";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { useTState } from "../../hooks/useTState";
 import RequestItem from "./RequestItem/RequestItem";
@@ -17,8 +16,7 @@ const Watching = () => {
 
   const [requestsModal, toggleRequestsModal] = useTState(false);
 
-  const { isLoading, error, sendRequest, clearError, setError } =
-    useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     const getData = async () => {
