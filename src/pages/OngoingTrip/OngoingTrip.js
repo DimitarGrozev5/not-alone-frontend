@@ -9,11 +9,16 @@ import Button from "../../components/FormElements/Button/Button";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { useHState } from "../../hooks/useHState";
 import { useTimeLeft } from "./hooks/useTimeLeft";
+import { useSState } from "../../hooks/useSState";
+import DurationPicker from "../../components/DurationPicker/DurationPicker";
 
 const OngoingTrip = () => {
   const [allTrips, setAllTrips] = useState(null);
   const [activeTrip, setActiveTrip] = useState(null);
+
   const [startTrip, startTripHandler] = useHState(false);
+  const [extendTime, setExtendTime, { passValueHandler: extendTimeHandler }] =
+    useSState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -53,31 +58,25 @@ const OngoingTrip = () => {
   };
 
   const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
-  const pauseHandler = async (event) => {
-    event.preventDefault();
-    try {
-      await sendRequest(`trips/${activeTrip._id}/pause`, null, {
-        method: "POST",
-        auth: true,
-      });
-      setAllTrips(null);
-      setActiveTrip(null);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const resumeHandler = async (event) => {
-    event.preventDefault();
-    try {
-      await sendRequest(`trips/${activeTrip._id}/start`, null, {
-        method: "POST",
-        auth: true,
-      });
-      setAllTrips(null);
-      setActiveTrip(null);
-    } catch (err) {
-      console.log(err);
-    }
+  const tripControlHandler =
+    (command, body = null) =>
+    async (event) => {
+      event.preventDefault();
+      try {
+        await sendRequest(`trips/${activeTrip._id}/${command}`, body, {
+          method: "POST",
+          auth: true,
+        });
+        setAllTrips(null);
+        setActiveTrip(null);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  const sendExtendTime = (event) => {
+    console.log(extendTime);
+    tripControlHandler("extend", { extendTime })(event);
+    setExtendTime(false);
   };
 
   return (
@@ -98,6 +97,16 @@ const OngoingTrip = () => {
             </div>
             <Button onClick={sendStartTrip}>Старт</Button>
           </div>
+        </Modal>
+      )}
+      {extendTime !== false && (
+        <Modal title="Удължаване на времето" onClose={extendTimeHandler(false)}>
+          <DurationPicker
+            duration={extendTime}
+            onChange={setExtendTime}
+            mode="create"
+          />
+          <Button onClick={sendExtendTime}>Удължи</Button>
         </Modal>
       )}
 
@@ -121,8 +130,12 @@ const OngoingTrip = () => {
                   <>
                     <div>Очаква се да пристигнете до {timeLeft}</div>
                     <div>
-                      <Button onClick={pauseHandler}>Пауза</Button>
-                      <Button>Ще закъснея</Button>
+                      <Button onClick={tripControlHandler("pause")}>
+                        Пауза
+                      </Button>
+                      <Button onClick={extendTimeHandler(0)}>
+                        Ще закъснея
+                      </Button>
                     </div>
                   </>
                 )}
@@ -130,7 +143,9 @@ const OngoingTrip = () => {
                   <>
                     <div>Пътуването е в почивка</div>
                     <div>
-                      <Button onClick={resumeHandler}>Продължи</Button>
+                      <Button onClick={tripControlHandler("resume")}>
+                        Продължи
+                      </Button>
                     </div>
                   </>
                 )}
