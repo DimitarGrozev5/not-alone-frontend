@@ -21,7 +21,7 @@ export const deconstructDuration = (duration) => {
 
 export const timeLeft = (target) => {
   const now = +new Date();
-  const dt = target - now;
+  const dt = target - now > 0 ? target - now : now - target;
   const [, , m, h, d] = deconstructDuration(dt);
 
   const result = [];

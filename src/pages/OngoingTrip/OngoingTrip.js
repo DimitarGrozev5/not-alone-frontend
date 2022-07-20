@@ -74,7 +74,6 @@ const OngoingTrip = () => {
       }
     };
   const sendExtendTime = (event) => {
-    console.log(extendTime);
     tripControlHandler("extend", { extendTime })(event);
     setExtendTime(false);
   };
@@ -149,6 +148,22 @@ const OngoingTrip = () => {
                     </div>
                   </>
                 )}
+                {(activeTrip.tripStatus.status === "LATE" ||
+                  activeTrip.tripStatus.status === "VERY_LATE") && (
+                  <>
+                    Закъснявате с {timeLeft}.
+                    {activeTrip.tripStatus.status === "VERY_LATE" &&
+                      " Тъй като закъснението е голямо, всички ваши данни са достъпни за наблюдателите Ви."}{" "}
+                    Може да{" "}
+                    <Button onClick={extendTimeHandler(0)}>
+                      удължите времето
+                    </Button>
+                    , ако всичко е наред.
+                  </>
+                )}
+                {activeTrip.tripStatus.status === "FINISHED" && (
+                  <>Стигнахте до крайната си дестинация</>
+                )}
               </li>
               {activeTrip.stops
                 .slice(activeTrip.tripStatus.nextStop)
@@ -159,6 +174,13 @@ const OngoingTrip = () => {
                 ))}
             </ul>
           </DataCard>
+          {activeTrip.tripStatus.status !== "FINISHED" && (
+            <DataCard>
+              <Button stretch onClick={tripControlHandler("next-stop")}>
+                Стигнах до следващата спирка
+              </Button>
+            </DataCard>
+          )}
         </>
       )}
 
