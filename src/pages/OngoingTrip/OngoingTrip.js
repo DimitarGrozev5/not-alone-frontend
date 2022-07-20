@@ -56,7 +56,20 @@ const OngoingTrip = () => {
   const pauseHandler = async (event) => {
     event.preventDefault();
     try {
-      await sendRequest(`trips/${startTrip._id}/pause`, null, {
+      await sendRequest(`trips/${activeTrip._id}/pause`, null, {
+        method: "POST",
+        auth: true,
+      });
+      setAllTrips(null);
+      setActiveTrip(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const resumeHandler = async (event) => {
+    event.preventDefault();
+    try {
+      await sendRequest(`trips/${activeTrip._id}/start`, null, {
         method: "POST",
         auth: true,
       });
@@ -110,6 +123,14 @@ const OngoingTrip = () => {
                     <div>
                       <Button onClick={pauseHandler}>Пауза</Button>
                       <Button>Ще закъснея</Button>
+                    </div>
+                  </>
+                )}
+                {activeTrip.tripStatus.status === "PAUSED" && (
+                  <>
+                    <div>Пътуването е в почивка</div>
+                    <div>
+                      <Button onClick={resumeHandler}>Продължи</Button>
                     </div>
                   </>
                 )}
