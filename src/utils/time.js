@@ -18,3 +18,16 @@ export const deconstructDuration = (duration) => {
 
   return [miliseconds, seconds, minutes, hours, days];
 };
+
+export const timeLeft = (target) => {
+  const now = +new Date();
+  const dt = target - now;
+  const [, , m, h, d] = deconstructDuration(dt);
+
+  const result = [];
+  d !== 0 && result.push(`${d} дни, `);
+  d !== h && d + h > 0 && result.push(`${h} часа и `);
+  result.push(`${m} минути`);
+
+  return result.join("");
+};

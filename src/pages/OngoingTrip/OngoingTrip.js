@@ -8,6 +8,7 @@ import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import Button from "../../components/FormElements/Button/Button";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { useHState } from "../../hooks/useHState";
+import { useTimeLeft } from "./hooks/useTimeLeft";
 
 const OngoingTrip = () => {
   const [allTrips, setAllTrips] = useState(null);
@@ -51,6 +52,8 @@ const OngoingTrip = () => {
     }
   };
 
+  const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
@@ -70,6 +73,44 @@ const OngoingTrip = () => {
             <Button onClick={sendStartTrip}>Старт</Button>
           </div>
         </Modal>
+      )}
+
+      {activeTrip && (
+        <>
+          <DataCard>
+            <h2>Активно пътуване</h2>
+          </DataCard>
+          <DataCard>
+            <h3>Прогрес</h3>
+            <ul className={styles.stops}>
+              {activeTrip.stops
+                .slice(0, activeTrip.tripStatus.nextStop)
+                .map((stop) => (
+                  <li key={stop._id} className={styles["past-stop"]}>
+                    {stop.data.placeName}
+                  </li>
+                ))}
+              <li className={styles["current-position"]}>
+                {activeTrip.tripStatus.status === "ONGOING" && (
+                  <>
+                    <div>Очаква се да пристигнете до {timeLeft}</div>
+                    <div>
+                      <Button>Пауза</Button>
+                      <Button>Ще закъснея</Button>
+                    </div>
+                  </>
+                )}
+              </li>
+              {activeTrip.stops
+                .slice(activeTrip.tripStatus.nextStop)
+                .map((stop) => (
+                  <li key={stop._id} className={styles["upcoming-stop"]}>
+                    {stop.data.placeName}
+                  </li>
+                ))}
+            </ul>
+          </DataCard>
+        </>
       )}
 
       {allTrips && !allTrips.length && <div>Все още нямате пътувания</div>}
