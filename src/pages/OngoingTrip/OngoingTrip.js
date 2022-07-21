@@ -12,6 +12,7 @@ import { useTimeLeft } from "./hooks/useTimeLeft";
 import { useSState } from "../../hooks/useSState";
 import DurationPicker from "../../components/DurationPicker/DurationPicker";
 import StartTripModal from "./StartTripModal/StartTripModal";
+import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 
 const OngoingTrip = () => {
   const [allTrips, setAllTrips] = useState(null);
@@ -209,39 +210,7 @@ const OngoingTrip = () => {
         </>
       )}
 
-      {allTrips && !allTrips.length && <div>Все още нямате пътувания</div>}
-      {allTrips && !!allTrips.length && (
-        <ul>
-          {allTrips.map((trip) => {
-            return (
-              <DataCard key={trip._id}>
-                <h2>{trip.name}</h2>
-                <div>
-                  {trip.stops.length - 1}{" "}
-                  {trip.stops.length === 2 ? "спирка" : "спирки"}
-                </div>
-                {trip.watchers && (
-                  <>
-                    <h3>
-                      {!trip.watchers.length && "Все още никой не те следи"}
-                      {trip.watchers.length === 1 && `1 човек ще те следи`}
-                      {trip.watchers.length > 1 &&
-                        `${trip.watchers.length} души ще те следят`}
-                    </h3>
-
-                    <div>
-                      <Button to={`/ongoing-trip/${trip._id}`}>Преглед</Button>
-                      {!!trip.watchers.length && (
-                        <Button onClick={startTripHandler(trip)}>Старт</Button>
-                      )}
-                    </div>
-                  </>
-                )}
-              </DataCard>
-            );
-          })}
-        </ul>
-      )}
+      <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
     </>
   );
 };
