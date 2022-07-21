@@ -1,0 +1,27 @@
+.start-trip {
+  color: var(--color-dark-1);
+}
+
+.start-trip__checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.start-trip__checkbox input[type="checkbox"] {
+  appearance: none;
+  background-color: var(--color-light-1);
+  border: 1px solid var(--color-dark-1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  padding: 9px;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+
+  margin-right: 0.5rem;
+}
+
+.start-trip__checkbox input[type="checkbox"]:checked {
+  background-color: var(--color-dark-1);
+}

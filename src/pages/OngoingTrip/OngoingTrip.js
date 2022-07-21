@@ -11,6 +11,7 @@ import { useHState } from "../../hooks/useHState";
 import { useTimeLeft } from "./hooks/useTimeLeft";
 import { useSState } from "../../hooks/useSState";
 import DurationPicker from "../../components/DurationPicker/DurationPicker";
+import StartTripModal from "./StartTripModal/StartTripModal";
 
 const OngoingTrip = () => {
   const [allTrips, setAllTrips] = useState(null);
@@ -102,20 +103,11 @@ const OngoingTrip = () => {
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
       {startTrip && (
-        <Modal title="Започване на пътуване" onClose={startTripHandler(null)}>
-          <div className={styles["start-trip"]}>
-            <h1>{startTrip.name}</h1>
-            <div className={styles["start-trip__checkbox"]}>
-              <input type={"checkbox"} id="anounce" />
-              <label htmlFor="anounce">Съобщи, че тръгваш</label>
-            </div>
-            <div className={styles["start-trip__checkbox"]}>
-              <input type={"checkbox"} id="gps" />
-              <label htmlFor="gps">Запазвай GPS данни за прогреса си</label>
-            </div>
-            <Button onClick={sendStartTrip}>Старт</Button>
-          </div>
-        </Modal>
+        <StartTripModal
+          tripName={startTrip.name}
+          onClose={startTripHandler(null)}
+          onStart={sendStartTrip}
+        />
       )}
       {extendTime !== false && (
         <Modal title="Удължаване на времето" onClose={extendTimeHandler(false)}>
