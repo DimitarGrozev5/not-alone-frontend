@@ -19,6 +19,8 @@ const OngoingTrip = () => {
   const [startTrip, startTripHandler] = useHState(false);
   const [extendTime, setExtendTime, { passValueHandler: extendTimeHandler }] =
     useSState(false);
+  const [deleteTrip, setDeleteTrip, { passValueHandler: closeDeleteHandler }] =
+    useSState(false);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -77,6 +79,23 @@ const OngoingTrip = () => {
     tripControlHandler("extend", { extendTime })(event);
     setExtendTime(false);
   };
+  const deleteTripHandler = (del) => async (event) => {
+    event.preventDefault();
+    if (del) {
+      try {
+        await sendRequest(`trips/${activeTrip._id}`, null, {
+          method: "DELETE",
+          auth: true,
+        });
+        setAllTrips(null);
+        setActiveTrip(null);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setDeleteTrip(true);
+    }
+  };
 
   return (
     <>
@@ -106,6 +125,13 @@ const OngoingTrip = () => {
             mode="create"
           />
           <Button onClick={sendExtendTime}>Удължи</Button>
+        </Modal>
+      )}
+      {deleteTrip && (
+        <Modal title="Внимание" onClose={closeDeleteHandler(false)}>
+          Пътуването е свършило и ще бъде изтрито!
+          <Button onClick={closeDeleteHandler(false)}>Не</Button>
+          <Button onClick={deleteTripHandler(true)}>Добре</Button>
         </Modal>
       )}
 
@@ -178,6 +204,13 @@ const OngoingTrip = () => {
             <DataCard>
               <Button stretch onClick={tripControlHandler("next-stop")}>
                 Стигнах до следващата спирка
+              </Button>
+            </DataCard>
+          )}
+          {activeTrip.tripStatus.status === "FINISHED" && (
+            <DataCard>
+              <Button stretch onClick={deleteTripHandler(false)}>
+                Приключване и изтриване на пътуването
               </Button>
             </DataCard>
           )}
