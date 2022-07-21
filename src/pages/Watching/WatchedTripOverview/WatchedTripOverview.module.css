@@ -1,0 +1,12 @@
+.overview {
+  text-decoration: none;
+  color: var(--color-dark-1);
+}
+
+.overview >p {
+  margin-bottom: 0.5rem;
+}
+
+span.accent {
+  font-weight: bold;
+}

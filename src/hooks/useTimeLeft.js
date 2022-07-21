@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { timeLeft } from "../../../utils/time";
+import { timeLeft } from "../utils/time";
 
 export const useTimeLeft = (targetTime) => {
   const [left, setLeft] = useState("");

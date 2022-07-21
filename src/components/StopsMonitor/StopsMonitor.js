@@ -1,6 +1,6 @@
-import styles from "./TripsMonitor.module.css";
+import styles from "./StopsMonitor.module.css";
 
-const TripsMonitor = (props) => {
+const StopsMonitor = (props) => {
   return (
     <ul className={styles.stops}>
       {props.stops.slice(0, props.nextStop).map((stop) => (
@@ -20,4 +20,4 @@ const TripsMonitor = (props) => {
   );
 };
 
-export default TripsMonitor;
+export default StopsMonitor;

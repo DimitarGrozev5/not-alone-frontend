@@ -1,8 +1,8 @@
 import styles from "./OngoingActive.module.css";
 import DataCard from "../../../components/UIComponents/DataCard/DataCard";
 import Button from "../../../components/FormElements/Button/Button";
-import { useTimeLeft } from "../hooks/useTimeLeft";
-import TripsMonitor from "../../../components/TripsMonitor/TripsMonitor";
+import { useTimeLeft } from "../../../hooks/useTimeLeft";
+import StopsMonitor from "../../../components/StopsMonitor/StopsMonitor";
 
 const OngoingActive = (props) => {
   const activeTrip = props.activeTrip;
@@ -15,7 +15,7 @@ const OngoingActive = (props) => {
       </DataCard>
       <DataCard>
         <h3>Прогрес</h3>
-        <TripsMonitor
+        <StopsMonitor
           stops={activeTrip.stops}
           nextStop={activeTrip.tripStatus.nextStop}
         >
@@ -52,7 +52,7 @@ const OngoingActive = (props) => {
           {activeTrip.tripStatus.status === "FINISHED" && (
             <>Стигнахте до крайната си дестинация</>
           )}
-        </TripsMonitor>
+        </StopsMonitor>
       </DataCard>
 
       {activeTrip.tripStatus.status !== "FINISHED" && (
