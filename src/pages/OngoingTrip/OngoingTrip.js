@@ -1,31 +1,40 @@
 import { useEffect, useState } from "react";
 
+// import styles from "./OngoingTrip.module.css";
 import { useHttpClient } from "../../hooks/useHttpClient";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
-import styles from "./OngoingTrip.module.css";
-import DataCard from "../../components/UIComponents/DataCard/DataCard";
 import Button from "../../components/FormElements/Button/Button";
 import Modal from "../../components/UIComponents/Modal/Modal";
 import { useHState } from "../../hooks/useHState";
-import { useTimeLeft } from "./hooks/useTimeLeft";
 import { useSState } from "../../hooks/useSState";
 import DurationPicker from "../../components/DurationPicker/DurationPicker";
 import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
+import OngoingActive from "./OngoingActive/OngoingActive";
 
 const OngoingTrip = () => {
+  // Data about trips
   const [allTrips, setAllTrips] = useState(null);
   const [activeTrip, setActiveTrip] = useState(null);
 
-  const [startTrip, startTripHandler] = useHState(false);
-  const [extendTime, setExtendTime, { passValueHandler: extendTimeHandler }] =
-    useSState(false);
-  const [deleteTrip, setDeleteTrip, { passValueHandler: closeDeleteHandler }] =
-    useSState(false);
+  // Modal visibility states
+  const [startTripModal, startTripHandler] = useHState(false);
+  const [
+    extendTimeModal,
+    setExtendTime,
+    { passValueHandler: extendTimeHandler },
+  ] = useSState(false);
+  const [
+    deleteTripModal,
+    setDeleteTrip,
+    { passValueHandler: closeDeleteHandler },
+  ] = useSState(false);
 
+  // Get HTTP Client
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+  // Load Data
   useEffect(() => {
     if (!allTrips && !activeTrip) {
       const getData = async () => {
@@ -47,10 +56,11 @@ const OngoingTrip = () => {
     }
   }, [allTrips, activeTrip, sendRequest]);
 
+  // Trip controllers
   const sendStartTrip = async (event) => {
     event.preventDefault();
     try {
-      await sendRequest(`trips/${startTrip._id}/start`, null, {
+      await sendRequest(`trips/${startTripModal._id}/start`, null, {
         method: "POST",
         auth: true,
       });
@@ -61,7 +71,6 @@ const OngoingTrip = () => {
     }
   };
 
-  const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
   const tripControlHandler =
     (command, body = null) =>
     async (event) => {
@@ -78,7 +87,7 @@ const OngoingTrip = () => {
       }
     };
   const sendExtendTime = (event) => {
-    tripControlHandler("extend", { extendTime })(event);
+    tripControlHandler("extend", { extendTime: extendTimeModal })(event);
     setExtendTime(false);
   };
   const deleteTripHandler = (del) => async (event) => {
@@ -101,26 +110,29 @@ const OngoingTrip = () => {
 
   return (
     <>
+      {/* Loading and error handling */}
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
-      {startTrip && (
+
+      {/* Modals control */}
+      {startTripModal && (
         <StartTripModal
-          tripName={startTrip.name}
+          tripName={startTripModal.name}
           onClose={startTripHandler(null)}
           onStart={sendStartTrip}
         />
       )}
-      {extendTime !== false && (
+      {extendTimeModal !== false && (
         <Modal title="Удължаване на времето" onClose={extendTimeHandler(false)}>
           <DurationPicker
-            duration={extendTime}
+            duration={extendTimeModal}
             onChange={setExtendTime}
             mode="create"
           />
           <Button onClick={sendExtendTime}>Удължи</Button>
         </Modal>
       )}
-      {deleteTrip && (
+      {deleteTripModal && (
         <Modal title="Внимание" onClose={closeDeleteHandler(false)}>
           Пътуването е свършило и ще бъде изтрито!
           <Button onClick={closeDeleteHandler(false)}>Не</Button>
@@ -129,88 +141,19 @@ const OngoingTrip = () => {
       )}
 
       {activeTrip && (
-        <>
-          <DataCard>
-            <h2>Активно пътуване</h2>
-          </DataCard>
-          <DataCard>
-            <h3>Прогрес</h3>
-            <ul className={styles.stops}>
-              {activeTrip.stops
-                .slice(0, activeTrip.tripStatus.nextStop)
-                .map((stop) => (
-                  <li key={stop._id} className={styles["past-stop"]}>
-                    {stop.data.placeName}
-                  </li>
-                ))}
-              <li className={styles["current-position"]}>
-                {activeTrip.tripStatus.status === "ONGOING" && (
-                  <>
-                    <div>Очаква се да пристигнете до {timeLeft}</div>
-                    <div>
-                      <Button onClick={tripControlHandler("pause")}>
-                        Пауза
-                      </Button>
-                      <Button onClick={extendTimeHandler(0)}>
-                        Ще закъснея
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {activeTrip.tripStatus.status === "PAUSED" && (
-                  <>
-                    <div>Пътуването е в почивка</div>
-                    <div>
-                      <Button onClick={tripControlHandler("resume")}>
-                        Продължи
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {(activeTrip.tripStatus.status === "LATE" ||
-                  activeTrip.tripStatus.status === "VERY_LATE") && (
-                  <>
-                    Закъснявате с {timeLeft}.
-                    {activeTrip.tripStatus.status === "VERY_LATE" &&
-                      " Тъй като закъснението е голямо, всички ваши данни са достъпни за наблюдателите Ви."}{" "}
-                    Може да{" "}
-                    <Button onClick={extendTimeHandler(0)}>
-                      удължите времето
-                    </Button>
-                    , ако всичко е наред.
-                  </>
-                )}
-                {activeTrip.tripStatus.status === "FINISHED" && (
-                  <>Стигнахте до крайната си дестинация</>
-                )}
-              </li>
-              {activeTrip.stops
-                .slice(activeTrip.tripStatus.nextStop)
-                .map((stop) => (
-                  <li key={stop._id} className={styles["upcoming-stop"]}>
-                    {stop.data.placeName}
-                  </li>
-                ))}
-            </ul>
-          </DataCard>
-          {activeTrip.tripStatus.status !== "FINISHED" && (
-            <DataCard>
-              <Button stretch onClick={tripControlHandler("next-stop")}>
-                Стигнах до следващата спирка
-              </Button>
-            </DataCard>
-          )}
-          {activeTrip.tripStatus.status === "FINISHED" && (
-            <DataCard>
-              <Button stretch onClick={deleteTripHandler(false)}>
-                Приключване и изтриване на пътуването
-              </Button>
-            </DataCard>
-          )}
-        </>
+        <OngoingActive
+          activeTrip={activeTrip}
+          onTripControl={tripControlHandler}
+          onDeleteTrip={deleteTripHandler}
+          onExtendTime={extendTimeHandler}
+        />
       )}
 
-      <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
+      {/* Display data */}
+      {allTrips && !allTrips.length && <div>Все още нямате пътувания</div>}
+      {allTrips && !!allTrips.length && (
+        <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
+      )}
     </>
   );
 };
