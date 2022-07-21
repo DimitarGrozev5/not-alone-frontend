@@ -1,0 +1,30 @@
+.stops > li {
+  position: relative;
+  padding: 0.3rem;
+  padding-left: 1rem;
+}
+
+.stops > li::before {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 0.3rem;
+
+  content: " ";
+  background-color: var(--color-dark-1);
+}
+
+/* li.past-stop::before {
+} */
+
+li.current-position::before {
+  left: 0.5rem;
+}
+
+li.upcoming-stop::before {
+  top: 0.75rem;
+  bottom: 0.75rem;
+
+  width: 0.7rem;
+}
