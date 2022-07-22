@@ -1,9 +1,13 @@
+body {
+  background-color: var(--color-light-1);
+}
+
 .container {
   position: fixed;
   top: 0px;
   bottom: 0.5rem;
-  left: 0.5rem;
-  right: 0.5rem;
+  left: 0rem;
+  right: 0rem;
 
   overflow: scroll;
 
@@ -13,4 +17,8 @@
 
 .header {
   text-align: center;
+  padding: 0.5rem;
+
+  color: var(--color-dark-5);
+  background-color: var(--color-light-3);
 }

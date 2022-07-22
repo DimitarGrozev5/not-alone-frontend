@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
+import Button from "../components/FormElements/Button/Button";
+import DataCard from "../components/UIComponents/DataCard/DataCard";
 
 const HomePage = (props) => {
   return (
-    <main>
-      <div>
-        <Link to="/login">Login</Link>
-      </div>
-      <div>
-        <Link to="/register">Register</Link>
-      </div>
-    </main>
+    <DataCard expand>
+      <Button to="/login">Login</Button>
+      <Button to="/register">Register</Button>
+    </DataCard>
   );
 };
 
