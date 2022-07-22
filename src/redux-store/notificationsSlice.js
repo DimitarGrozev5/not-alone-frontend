@@ -8,7 +8,19 @@ const notificationsSlice = createSlice({
   },
   reducers: {
     addNotification(state, action) {
-      state.notifications.push({ id: nanoid(), ...action.payload });
+      const n = action.payload;
+      switch (n.type) {
+        case "OVERWATCH_REQUEST":
+          if (
+            !state.notifications.find((no) => n.type === "OVERWATCH_REQUEST")
+          ) {
+            state.notifications.push({ id: nanoid(), ...action.payload });
+          }
+          break;
+
+        default:
+          break;
+      }
     },
     removeNotification(state, action) {
       state.notifications = state.notifications.filter(
