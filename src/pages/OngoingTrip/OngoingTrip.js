@@ -57,10 +57,13 @@ const OngoingTrip = () => {
   }, [allTrips, activeTrip, sendRequest]);
 
   // Trip controllers
+  const [notifyWatchers, , { toggleHandler: toggleNotify }] = useSState(false);
+
   const sendStartTrip = async (event) => {
     event.preventDefault();
+    const settings = { notifyWatchers };
     try {
-      await sendRequest(`trips/${startTripModal._id}/start`, null, {
+      await sendRequest(`trips/${startTripModal._id}/start`, settings, {
         method: "POST",
         auth: true,
       });
@@ -118,6 +121,8 @@ const OngoingTrip = () => {
       {startTripModal && (
         <StartTripModal
           tripName={startTripModal.name}
+          notify={notifyWatchers}
+          onNotifyChange={toggleNotify}
           onClose={startTripHandler(null)}
           onStart={sendStartTrip}
         />
