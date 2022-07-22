@@ -1,15 +1,20 @@
 div.form-input {
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.5rem;
 }
 
 .form-input label {
   font-size: 1.2rem;
+  color: var(--color-dark-5);
 }
 
 .form-input input {
   font-size: 1.2rem;
   padding: 0.3rem;
+  color: var(--color-dark-5);
+  border: 1px solid var(--color-dark-5);
+  background-color: var(--color-light-2);
 }
 
 .form-input input.error {

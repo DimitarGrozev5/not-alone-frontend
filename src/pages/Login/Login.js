@@ -5,6 +5,7 @@ import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import useUserService from "../../services/useUserService";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../components/UIComponents/LoadingSpinner/LoadingSpinner";
+import Button from "../../components/FormElements/Button/Button";
 
 const Login = (props) => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const Login = (props) => {
         />
         <label htmlFor="password">Password:</label>
         <input ref={passwordRef} type="password" name="password" />
-        <button type="submit">Log in</button>
+        <Button stretch>Вписване</Button>
       </FormCard>
     </>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/FormElements/Button/Button";
 import ErrorModal from "../../components/UIComponents/ErrorModal/ErrorModal";
 import FormCard from "../../components/UIComponents/FormCard/FormCard";
 import FormInput from "../../components/UIComponents/FormInput/FormInput";
@@ -44,7 +45,7 @@ const Register = (props) => {
     setFormWasTouched(true);
 
     if (!formDataIsValid()) {
-      // return;
+      return;
     }
 
     setIsLoading(true);
@@ -146,7 +147,7 @@ const Register = (props) => {
           formWasTouched={formWasTouched}
         />
 
-        <button type="submit">Регистрация</button>
+        <Button type="submit" stretch>Регистрация</Button>
       </FormCard>
     </>
   );

@@ -6,6 +6,7 @@ import { useHttpClient } from "../../hooks/useHttpClient";
 
 import styles from "./PlannedTrips.module.css";
 import TripOverview from "./TripOverview/TripOverview";
+import DataCard from "../../components/UIComponents/DataCard/DataCard";
 
 const PlannedTrips = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -24,9 +25,9 @@ const PlannedTrips = () => {
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
-      <div>
-        <h1>Планувани пътувания:</h1>
-      </div>
+      <DataCard>
+        <h1>Планувани пътувания</h1>
+      </DataCard>
 
       {trips && !trips.length && <div>Все още няма създадени</div>}
       {trips && !!trips.length && (
@@ -39,9 +40,7 @@ const PlannedTrips = () => {
         </ul>
       )}
       <div className={styles.add}>
-        <Link className={styles.add} to="/plan-trip">
-          +
-        </Link>
+        <Link className={styles.add} to="/plan-trip">+</Link>
       </div>
     </>
   );
