@@ -1,0 +1,38 @@
+.label {
+  color: var(--color-dark-5);
+}
+
+div.name {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  font-size: 1.1rem;
+}
+
+.edit {
+  position: absolute;
+  right: 0.3rem;
+  top: 0.3rem;
+}
+
+span.name {
+  flex-grow: 1;
+  color: var(--color-dark-5);
+}
+
+.desc {
+  flex-grow: 1;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  border: 1px solid var(--color-dark-5);
+  color: var(--color-dark-5);
+  background-color: var(--color-light-1);
+}
+
+.view {
+  background-color: var(--color-light-2);
+}
