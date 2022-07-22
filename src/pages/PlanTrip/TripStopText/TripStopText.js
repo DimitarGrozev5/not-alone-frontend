@@ -24,7 +24,7 @@ const TripStopText = (props) => {
       <TripStopDescription
         mode={props.mode}
         label="Описание на пътуването:"
-        value={props.stopData.description}
+        value={props.stopData.placeDescription}
         placeholder="Въведете опсиание къде ще ходите, какво ще правите и как ще стигнете там. Тази информация ще се покаже на наблюдателите Ви, само ако закъснеете много."
         onChange={props.onDescChange}
       />
