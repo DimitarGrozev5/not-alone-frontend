@@ -11,8 +11,9 @@ const notificationsSlice = createSlice({
       const n = action.payload;
       switch (n.type) {
         case "OVERWATCH_REQUEST":
+        case "CONNECTION_REQUEST":
           if (
-            !state.notifications.find((no) => n.type === "OVERWATCH_REQUEST")
+            !state.notifications.find((no) => no.type === n.type)
           ) {
             state.notifications.push({ id: nanoid(), ...action.payload });
           }

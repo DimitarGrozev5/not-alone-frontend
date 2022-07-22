@@ -30,6 +30,14 @@ const NotificationLink = (props) => {
         </Button>
       );
       break;
+      
+    case "CONNECTION_REQUEST":
+      content = (
+        <Button onClick={openNotificationHandler("/profile")}>
+          Има нови покани за приятелство
+        </Button>
+      );
+      break;
 
     default:
       break;

@@ -67,9 +67,9 @@ function App() {
         console.log(err);
       }
 
+      console.log(data.payload);
       switch (data.type) {
         case "NOTIFICATION":
-          console.log(data.payload);
           dispatch(notificationActions.addNotification(data.payload));
           break;
 
