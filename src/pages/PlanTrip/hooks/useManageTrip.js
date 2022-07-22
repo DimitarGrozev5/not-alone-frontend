@@ -75,7 +75,7 @@ const tripReducer = (state, action) =>
 
       case "CHANGE_STOP_DESCRIPTION":
         t = action.payload.value;
-        draft.stops.find((s) => s.id === action.payload.id).description =
+        draft.stops.find((s) => s.id === action.payload.id).data.placeDescription =
           t < 0 ? 0 : t;
         break;
 
