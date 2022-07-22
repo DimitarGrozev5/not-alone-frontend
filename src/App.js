@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -19,6 +19,7 @@ import Watching from "./pages/Watching/Watching";
 import WatchTrip from "./pages/WatchTrip/WatchTrip";
 import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
+import { notificationActions } from "./redux-store/notificationsSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,18 +69,14 @@ function App() {
 
       switch (data.type) {
         case "NOTIFICATION":
-          console.log("display notification");
           console.log(data.payload);
+          dispatch(notificationActions.addNotification(data.payload));
           break;
 
         default:
           break;
       }
     };
-
-    // setTimeout(() => {
-    //   ws.send("Test message")
-    // }, 3000);
 
     return () => ws.close();
   }, [isLoggedIn]);
