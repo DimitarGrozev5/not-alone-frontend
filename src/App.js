@@ -49,6 +49,7 @@ function App() {
   }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
 
   // Save the last route, whenever it changes
+  // TODO: Also save the hystory to Local storage
   const currentPath = useLocation().pathname;
   useEffect(() => {
     localStorage.setItem("last-route", currentPath);
