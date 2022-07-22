@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Routes,
@@ -26,7 +26,7 @@ import WatchTrip from "./pages/WatchTrip/WatchTrip";
 import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
 
 function App() {
-  const navigate = useNavigate();
+  const navigate = useRef(useNavigate()).current;
   const dispatch = useDispatch();
   const userService = useUserService();
   const requestsService = useRequestsService();

@@ -6,5 +6,10 @@
   
   padding: 0.5rem 1rem;
 
-  border: 1px solid black;
+  border: 1px solid var(--color-dark-5);
+  color: var(--color-dark-5);
+  background-color: var(--color-light-3);
+
+  /* A huge value makes the border radius 50% of the element height */
+  border-radius: 5000px;
 }
