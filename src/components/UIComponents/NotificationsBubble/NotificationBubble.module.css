@@ -18,6 +18,24 @@
   font-size: 1.1rem;
 }
 
+.bubble.alert {
+  color: rgb(173, 173, 0);
+  border-color: rgb(173, 173, 0);
+  background-color: var(--color-light-1);
+
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.bubble.high-alert {
+  color: red;
+  border-color: red;
+  background-color: rgb(255, 217, 217);
+
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .expanded {
   position: fixed;
   right: 0.5rem;
@@ -56,6 +74,16 @@
   border-top-right-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
   background-color: var(--color-light-5);
+}
+
+.expanded.alert h1 {
+  color: rgb(173, 173, 0);
+  font-weight: bold;
+}
+
+.expanded.high-alert h1 {
+  color: red;
+  font-weight: bold;
 }
 
 .expanded ul {

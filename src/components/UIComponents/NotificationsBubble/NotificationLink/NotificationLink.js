@@ -47,6 +47,15 @@ const NotificationLink = (props) => {
       );
       break;
 
+    case "USER_IS_LATE":
+    case "USER_IS_VERY_LATE":
+      content = (
+        <Button onClick={openNotificationHandler(`/watch/${n.targetId}`)}>
+          {n.userName} закъснява за следващата спирка
+        </Button>
+      );
+      break;
+
     default:
       break;
   }
