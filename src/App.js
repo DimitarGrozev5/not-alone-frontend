@@ -1,3 +1,17 @@
+/*
+TODO:
+Add a desctop layout
+Add a /redirect/:to route to handle page reloads
+Use window focus to decide when to record gps data
+Use battery api to send battery information to the backend
+Push notifications to remind user to open the app and save the gps location
+Use Web connection api to send information about user connectivity
+Use background sync
+Cash static assets
+Cash dynamic assets
+Add maping functionality
+*/
+
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
