@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 const notificationsSlice = createSlice({
   name: "requests",
   initialState: {
-    notifications: [{ id: nanoid(), type: "OVERWATCH_REQUEST" }],
+    notifications: [],
   },
   reducers: {
     addNotification(state, action) {

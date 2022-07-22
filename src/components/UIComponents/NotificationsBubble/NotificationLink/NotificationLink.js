@@ -1,3 +1,6 @@
+// TODO: If the target page is opened, navigate will not prompt a reload of the data
+// This means that the current page will not have the latest data
+
 // import styles from "./NotificationLink.module.css"
 
 import { useDispatch } from "react-redux";
@@ -14,8 +17,8 @@ const NotificationLink = (props) => {
   const openNotificationHandler = (target) => (event) => {
     event.preventDefault();
     dispatch(notificationActions.removeNotification(n.id));
+    navigate(target);
     props.onClick();
-    navigate("");
   };
 
   let content = "";
