@@ -1,18 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 
 const notificationsSlice = createSlice({
   name: "requests",
   initialState: {
-    notifications: [{
-      type: "OVERWATCH_REQUEST",
-    }],
+    notifications: [{ id: nanoid(), type: "OVERWATCH_REQUEST" }],
   },
   reducers: {
     addNotification(state, action) {
-      state.notifications.push(action.payload);
+      state.notifications.push({ id: nanoid(), ...action.payload });
     },
-    shiftNotification(state) {
-      state.notifications.shift();
+    removeNotification(state, action) {
+      state.notifications = state.notifications.filter(
+        (n) => n.id !== action.payload
+      );
     },
   },
 });
