@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const notificationsSlice = createSlice({
   name: "requests",
   initialState: {
-    notifications: [],
+    notifications: [{
+      type: "OVERWATCH_REQUEST",
+    }],
   },
   reducers: {
     addNotification(state, action) {
