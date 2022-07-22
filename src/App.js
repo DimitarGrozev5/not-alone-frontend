@@ -107,10 +107,10 @@ function App() {
               path="/planned-trips/:tripId"
               element={<PlanTrip mode="edit" />}
             />
-            <Route
+            {/* <Route
               path="/watching/:tripId"
               element={<PlanTrip mode="view" />}
-            />
+            /> */}
             <Route path="/watch/:tripId" element={<WatchTrip />} />
             <Route
               path="/ongoing-trip/:tripId"
