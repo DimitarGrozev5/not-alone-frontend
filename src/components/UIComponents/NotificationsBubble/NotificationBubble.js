@@ -7,9 +7,8 @@ import NotificationLink from "./NotificationLink/NotificationLink";
 
 const NotificationBubble = (props) => {
   const notifs = useSelector((state) => state.notif.notifications);
-  console.log(notifs);
 
-  const [expanded, setExpanded, { passValueHandler: setExpandedTo }] =
+  const [expanded, , { passValueHandler: setExpandedTo }] =
     useSState(false);
 
   return ReactDOM.createPortal(

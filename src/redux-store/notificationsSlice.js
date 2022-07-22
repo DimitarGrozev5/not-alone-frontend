@@ -12,11 +12,13 @@ const notificationsSlice = createSlice({
       switch (n.type) {
         case "OVERWATCH_REQUEST":
         case "CONNECTION_REQUEST":
-          if (
-            !state.notifications.find((no) => no.type === n.type)
-          ) {
+          if (!state.notifications.find((no) => no.type === n.type)) {
             state.notifications.push({ id: nanoid(), ...action.payload });
           }
+          break;
+
+        case "TRIP_STARTED":
+          state.notifications.push({ id: nanoid(), ...action.payload });
           break;
 
         default:

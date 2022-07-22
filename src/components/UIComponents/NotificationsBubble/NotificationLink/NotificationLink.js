@@ -30,11 +30,19 @@ const NotificationLink = (props) => {
         </Button>
       );
       break;
-      
+
     case "CONNECTION_REQUEST":
       content = (
         <Button onClick={openNotificationHandler("/profile")}>
           Има нови покани за приятелство
+        </Button>
+      );
+      break;
+
+    case "TRIP_STARTED":
+      content = (
+        <Button onClick={openNotificationHandler(`/watch/${n.targetId}`)}>
+          {n.userName} започна своето пътуване {n.targetName}
         </Button>
       );
       break;
