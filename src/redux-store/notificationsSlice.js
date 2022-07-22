@@ -5,6 +5,7 @@ const notificationsSlice = createSlice({
   name: "requests",
   initialState: {
     notifications: [],
+    alerts: [],
   },
   reducers: {
     addNotification(state, action) {
@@ -30,6 +31,8 @@ const notificationsSlice = createSlice({
         (n) => n.id !== action.payload
       );
     },
+    addAlert(state, action) {},
+    removeAlert(state, action) {},
   },
 });
 

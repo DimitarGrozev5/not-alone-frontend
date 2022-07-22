@@ -73,6 +73,10 @@ function App() {
           dispatch(notificationActions.addNotification(data.payload));
           break;
 
+        case "ALERT":
+          dispatch(notificationActions.addAlert(data.payload));
+          break;
+
         default:
           break;
       }
