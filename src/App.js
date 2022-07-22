@@ -45,10 +45,44 @@ function App() {
   // Save current route to LocalStorage and retreive it on first load
   usePersistRoute();
 
-  // Setup WebSocket connection
+  // Setup WebSocket connection for receiving notifications
   useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
 
-  }, []);
+    const ws = new WebSocket("ws://localhost:8999");
+
+    ws.onopen = function (event) {
+      // When the connection opens, send user credentials
+      ws.send(JSON.stringify({ token: isLoggedIn }));
+    };
+
+    ws.onmessage = function (event) {
+      let data = {};
+      try {
+        data = JSON.parse(event.data);
+      } catch (err) {
+        console.log(err);
+      }
+
+      switch (data.type) {
+        case "NOTIFICATION":
+          console.log("display notification");
+          console.log(data.payload);
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    // setTimeout(() => {
+    //   ws.send("Test message")
+    // }, 3000);
+
+    return () => ws.close();
+  }, [isLoggedIn]);
 
   return (
     <Routes>

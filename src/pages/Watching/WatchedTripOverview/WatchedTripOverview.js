@@ -17,7 +17,7 @@ const WatchedTripOverview = (props) => {
           <p>
             {w.tripStatus.status === "PENDING" && `${w.owner.name} все още не е тръгнал`}
 
-            {w.tripStatus.status !== "PENDING" && (
+            {w.tripStatus.status !== "PENDING" && w.tripStatus.status !== "FINISHED" && (
               <>
                 <span className={styles.accent}>Следваща спирка:</span>{" "}
                 {w.stops[w.tripStatus.nextStop].data.placeName}
