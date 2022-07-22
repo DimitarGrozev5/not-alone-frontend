@@ -25,6 +25,7 @@ const TripStopDescription = (props) => {
           className={classes.join(" ")}
           rows={6}
           disabled={viewMode}
+          placeholder={props.placeholder}
           value={props.value}
           onChange={changeHandler}
         />
