@@ -22,14 +22,16 @@
 
 .nav > ul > li > a {
   text-decoration: none;
-  color: black;
+  color: var(--color-dark-5);
 
-  border: 1px solid black;
-  background-color: white;
+  border: 1px solid var(--color-dark-5);
+  background-color: var(--color-light-3);
 
   padding: 1rem 2rem;
 }
 
 .nav > ul > li > a.active {
   box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.3);
+  color: var(--color-light-3);
+  background-color: var(--color-dark-2);
 }

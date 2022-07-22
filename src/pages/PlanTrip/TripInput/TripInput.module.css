@@ -20,4 +20,8 @@ span.name {
   flex-grow: 1;
   font-size: 1.1rem;
   padding: 0.5rem;
+
+  border: 1px solid var(--color-dark-5);
+  color: var(--color-dark-5);
+  background-color: var(--color-light-1);
 }

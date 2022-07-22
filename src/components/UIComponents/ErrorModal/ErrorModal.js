@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../../FormElements/Button/Button";
 
 import Modal from "../Modal/Modal";
 
@@ -10,7 +11,7 @@ const ErrorModal = (props) => {
     >
       <>
         <p>{props.error}</p>
-        <button onClick={props.onClose}>ОК</button>
+        <Button onClick={props.onClose}>ОК</Button>
       </>
     </Modal>
   );

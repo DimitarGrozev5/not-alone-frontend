@@ -10,22 +10,22 @@ const MainNav = (props) => {
       <ul>
         <li>
           <NavLink to="/planned-trips" className={isActiveSwitch}>
-            P
+            П
           </NavLink>
         </li>
         <li>
           <NavLink to="/watching" className={isActiveSwitch}>
-            W
+            Н
           </NavLink>
         </li>
         <li>
           <NavLink to="/ongoing-trip" className={isActiveSwitch}>
-            S
+            А
           </NavLink>
         </li>
         <li>
           <NavLink to="/profile" className={isActiveSwitch}>
-            P
+            П
           </NavLink>
         </li>
       </ul>
