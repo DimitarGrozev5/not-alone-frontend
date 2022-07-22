@@ -13,7 +13,7 @@ import Button from "../../components/FormElements/Button/Button";
 const WatchTrip = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const [showDesc, setShowDesc, { toggleHandler: toggleShowDesc }] =
+  const [showDesc, , { toggleHandler: toggleShowDesc }] =
     useSState(false);
 
   const [trip, setTrip] = useState(null);

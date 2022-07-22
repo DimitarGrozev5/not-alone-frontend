@@ -1,12 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
 import PageTemplate from "./pages/PageTemplate/PageTemplate";
@@ -24,9 +18,9 @@ import PlanTrip from "./pages/PlanTrip/PlanTrip";
 import Watching from "./pages/Watching/Watching";
 import WatchTrip from "./pages/WatchTrip/WatchTrip";
 import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
+import { usePersistRoute } from "./hooks/usePersistRoute";
 
 function App() {
-  const navigate = useRef(useNavigate()).current;
   const dispatch = useDispatch();
   const userService = useUserService();
   const requestsService = useRequestsService();
@@ -48,20 +42,13 @@ function App() {
     }
   }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
 
-  // Save the last route, whenever it changes
-  // TODO: Also save the hystory to Local storage
-  const currentPath = useLocation().pathname;
-  useEffect(() => {
-    localStorage.setItem("last-route", currentPath);
-  }, [currentPath, navigate]);
+  // Save current route to LocalStorage and retreive it on first load
+  usePersistRoute();
 
-  // Navigate to last route, taken from Local Storage
+  // Setup WebSocket connection
   useEffect(() => {
-    const lastRoute = localStorage.getItem("last-route");
-    if (lastRoute) {
-      navigate(lastRoute);
-    }
-  }, [navigate]);
+
+  }, []);
 
   return (
     <Routes>
