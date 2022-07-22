@@ -31,8 +31,12 @@ const notificationsSlice = createSlice({
         (n) => n.id !== action.payload
       );
     },
-    addAlert(state, action) {},
-    removeAlert(state, action) {},
+    addAlert(state, action) {
+      state.alerts.push({ id: nanoid(), ...action.payload });
+    },
+    removeAlert(state, action) {
+      state.alerts = state.alerts.filter((n) => n.id !== action.payload);
+    },
   },
 });
 
