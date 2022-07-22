@@ -11,7 +11,7 @@ export const useSState = (value) => {
       setState(val);
     },
     toggleHandler: (event) => {
-      if (event && event.preventDefault) {
+      if (event && event.preventDefault && event?.target.type !== "checkbox") {
         event.preventDefault();
       }
       setState((val) => !val);
