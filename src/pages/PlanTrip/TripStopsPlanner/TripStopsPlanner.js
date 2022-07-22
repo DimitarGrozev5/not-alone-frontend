@@ -29,7 +29,7 @@ const TripStopsPlanner = (props) => {
               onTextChange={props.stopActions.changeText(stop.id)}
 
               description={stop.description}
-              onDescChange={props.stopActions.changeDescription}
+              onDescChange={props.stopActions.changeDescription(stop.id)}
 
               duration={stop.duration}
               onDurationChange={props.stopActions.changeDuration(stop.id)}

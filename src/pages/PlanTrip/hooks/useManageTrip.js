@@ -8,6 +8,7 @@ const txtStop = "StopTextDescription";
 const tripReducer = (state, action) =>
   produce(state, (draft) => {
     let i;
+    let t;
     switch (action.type) {
       case "INIT":
         const trip = action.payload;
@@ -50,6 +51,7 @@ const tripReducer = (state, action) =>
           type: txtStop,
           data: {
             placeName: "",
+            placeDescription: "",
           },
           duration: 0,
         });
@@ -66,8 +68,14 @@ const tripReducer = (state, action) =>
         break;
 
       case "CHANGE_STOP_DURATION":
-        const t = action.payload.value;
+        t = action.payload.value;
         draft.stops.find((s) => s.id === action.payload.id).duration =
+          t < 0 ? 0 : t;
+        break;
+
+      case "CHANGE_STOP_DESCRIPTION":
+        t = action.payload.value;
+        draft.stops.find((s) => s.id === action.payload.id).description =
           t < 0 ? 0 : t;
         break;
 
@@ -100,7 +108,7 @@ export const useManageTrip = () => {
       {
         id: nanoid(),
         type: txtStop,
-        data: { placeName: "" },
+        data: { placeName: "", placeDescription: "" },
         duration: 0,
       },
     ],
@@ -127,6 +135,8 @@ export const useManageTrip = () => {
         dispatch({ type: "CHANGE_STOP_TEXT", payload: { id, value } }),
       changeDuration: (id) => (value) =>
         dispatch({ type: "CHANGE_STOP_DURATION", payload: { id, value } }),
+      changeDescription: (id) => (value) =>
+        dispatch({ type: "CHANGE_STOP_DESCRIPTION", payload: { id, value } }),
     },
     watchers: {
       addNewWatcher: (value) =>
