@@ -6,7 +6,7 @@ const PageTemplate = (props) => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Travel Safe</h1>
+        <h1>На път</h1>
       </header>
       <MainCard>
         <Outlet />

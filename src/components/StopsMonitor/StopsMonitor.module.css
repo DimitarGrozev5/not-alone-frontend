@@ -12,7 +12,7 @@
   width: 0.3rem;
 
   content: " ";
-  background-color: var(--color-dark-1);
+  background-color: var(--color-dark-5);
 }
 
 /* li.past-stop::before {

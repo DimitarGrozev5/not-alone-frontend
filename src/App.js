@@ -58,7 +58,6 @@ function App() {
   // Navigate to last route, taken from Local Storage
   useEffect(() => {
     const lastRoute = localStorage.getItem("last-route");
-    console.log(lastRoute);
     if (lastRoute) {
       navigate(lastRoute);
     }
