@@ -5,7 +5,14 @@ const StopsMonitor = (props) => {
     <ul className={styles.stops}>
       {props.stops.slice(0, props.nextStop).map((stop) => (
         <li key={stop._id} className={styles["past-stop"]}>
-          {stop.data.placeName}
+          {props.showDesc ? (
+            <>
+              <h3>{stop.data.placeName}</h3>
+              <span className={styles.desc}>{stop.data.placeDescription}</span>
+            </>
+          ) : (
+            stop.data.placeName
+          )}
         </li>
       ))}
 
@@ -13,7 +20,14 @@ const StopsMonitor = (props) => {
 
       {props.stops.slice(props.nextStop).map((stop) => (
         <li key={stop._id} className={styles["upcoming-stop"]}>
-          {stop.data.placeName}
+          {props.showDesc ? (
+            <>
+              <h3>{stop.data.placeName}</h3>
+              <span className={styles.desc}>{stop.data.placeDescription}</span>
+            </>
+          ) : (
+            stop.data.placeName
+          )}
         </li>
       ))}
     </ul>
