@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
 import "./App.css";
 import PageTemplate from "./pages/PageTemplate/PageTemplate";
@@ -20,6 +26,7 @@ import WatchTrip from "./pages/WatchTrip/WatchTrip";
 import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
 
 function App() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userService = useUserService();
   const requestsService = useRequestsService();
@@ -40,6 +47,21 @@ function App() {
       dispatch(userActions.updateAccessToken(userData.token));
     }
   }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
+
+  // Save the last route, whenever it changes
+  const currentPath = useLocation().pathname;
+  useEffect(() => {
+    localStorage.setItem("last-route", currentPath);
+  }, [currentPath, navigate]);
+
+  // Navigate to last route, taken from Local Storage
+  useEffect(() => {
+    const lastRoute = localStorage.getItem("last-route");
+    console.log(lastRoute);
+    if (lastRoute) {
+      navigate(lastRoute);
+    }
+  }, [navigate]);
 
   return (
     <Routes>
