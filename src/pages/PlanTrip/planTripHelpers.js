@@ -14,7 +14,7 @@ export const validateTrip = (trip, { edit }) => {
     if (!data.placeName.length) {
       throw new Error("Спирките трябва да имат име!");
     }
-    if (!data.placeDescription.length) {
+    if (!data.placeDescription.length && i > 0) {
       throw new Error("Спирките трябва да имат въведено описание!");
     }
     if (duration === 0 && i > 0) {
