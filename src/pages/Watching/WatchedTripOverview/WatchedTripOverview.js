@@ -15,7 +15,7 @@ const WatchedTripOverview = (props) => {
             {w.name}, {w.stops.length} спирки
           </h3>
           <p>
-            {w.tripStatus.status === "PENDING" && "Пътуването не е започнало"}
+            {w.tripStatus.status === "PENDING" && `${w.owner.name} все още не е тръгнал`}
 
             {w.tripStatus.status !== "PENDING" && (
               <>

@@ -50,6 +50,13 @@ const WatchTrip = () => {
               stops={trip.stops}
               nextStop={trip.tripStatus.nextStop}
             >
+              {trip.tripStatus.status === "PENDING" && (
+                <>
+                  <div>
+                    {trip.owner.name} все още не е тръгнал
+                  </div>
+                </>
+              )}
               {trip.tripStatus.status === "ONGOING" && (
                 <>
                   <div>
