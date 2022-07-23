@@ -36,7 +36,7 @@ const ProfilePage = (props) => {
     if (user) {
       return () => {};
     }
-    
+
     setIsLoading(true);
     userService
       .getUserData()
@@ -107,7 +107,12 @@ const ProfilePage = (props) => {
   };
 
   return (
-    <div className={styles.profile}>
+    <>
+      {isLoading && <LoadingSpinner asOverlay />}
+      {error && (
+        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
+      )}
+
       {showConfirmation && (
         <ConfirmModal
           message="Да бъде ли изпратена покана? Другият потребител ще види името и имейла Ви."
@@ -115,14 +120,14 @@ const ProfilePage = (props) => {
           onCancel={setShowConfirmationHandler(false)}
         />
       )}
-      <h1>Профил</h1>
-      {isLoading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
-      )}
+
+      <DataCard fullWidth>
+        <h1>Профил</h1>
+      </DataCard>
+
       {user && (
         <>
-          <DataCard>
+          <DataCard fullWidth>
             <ProfileOverview
               userData={user.userData}
               connections={user.connections}
@@ -138,21 +143,25 @@ const ProfilePage = (props) => {
             )}
           </DataCard>
 
-          <DataCard>
+          <DataCard fullWidth>
             <ProfileOutRequests outRequests={user.outConReq} />
           </DataCard>
 
-          <DataCard>
+          <DataCard fullWidth>
             <ProfileInRequests
               inRequests={user.inConReq}
               onAccept={acceptRequestHandler}
             />
           </DataCard>
 
-          <Button onClick={logoutHandler} stretch>Излизане от профила</Button>
+          <DataCard fullWidth>
+            <Button onClick={logoutHandler}>
+              Излизане от профила
+            </Button>
+          </DataCard>
         </>
       )}
-    </div>
+    </>
   );
 };
 
