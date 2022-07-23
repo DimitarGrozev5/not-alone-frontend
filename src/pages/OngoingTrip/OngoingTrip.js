@@ -13,6 +13,7 @@ import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
 import { useLoad } from "../../components/Reload/useLoad";
+import DataCard from "../../components/UIComponents/DataCard/DataCard";
 
 const OngoingTrip = () => {
   const load = useLoad();
@@ -159,7 +160,7 @@ const OngoingTrip = () => {
       )}
 
       {/* Display data */}
-      {allTrips && !allTrips.length && <div>Все още нямате пътувания</div>}
+      {allTrips && !allTrips.length && <DataCard fullWidth>Все още нямате пътувания</DataCard>}
       {allTrips && !!allTrips.length && (
         <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
       )}

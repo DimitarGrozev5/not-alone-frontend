@@ -1,15 +1,19 @@
+import DataCard from "../../../components/UIComponents/DataCard/DataCard";
 import OngoingTripDetails from "./OngoingTripDetails";
 
 const OngoingAllTrips = (props) => {
   const allTrips = props.trips;
   return (
-      <ul>
-        {allTrips.map((trip) => (
-          <li key={trip._id}>
-            <OngoingTripDetails onStartTrip={props.onStartTrip} trip={trip} />
-          </li>
-        ))}
-      </ul>
+    <>
+    <DataCard fullWidth><h2>Все още няма започнато пътуване</h2></DataCard>
+      {allTrips.map((trip) => (
+        <OngoingTripDetails
+          key={trip._id}
+          onStartTrip={props.onStartTrip}
+          trip={trip}
+        />
+      ))}
+    </>
   );
 };
 
