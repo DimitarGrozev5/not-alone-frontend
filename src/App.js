@@ -14,7 +14,7 @@ Add maping functionality
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import PageTemplate from "./pages/PageTemplate/PageTemplate";
@@ -35,12 +35,14 @@ import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
 import { notificationActions } from "./redux-store/notificationsSlice";
 import Reload from "./components/Reload/Reload";
+import { useLoad } from "./components/Reload/useLoad";
 
 function App() {
   const dispatch = useDispatch();
   const userService = useUserService();
   const requestsService = useRequestsService();
   const errMsg = useMessages();
+  const load = useLoad();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
@@ -62,6 +64,16 @@ function App() {
   usePersistRoute();
 
   // Setup WebSocket connection for receiving notifications
+  const [reloadPath, setReloadPath] = useState("");
+  const currentPath = useLocation().pathname;
+  useEffect(() => {
+    if (reloadPath === currentPath) {
+      setReloadPath("");
+      load(reloadPath);
+    } else {
+      setReloadPath("");
+    }
+  }, [currentPath, load, reloadPath]);
   useEffect(() => {
     if (!isLoggedIn) {
       return;
@@ -91,13 +103,24 @@ function App() {
           dispatch(notificationActions.addAlert(data.payload));
           break;
 
+        case "UPDATE":
+          switch (data.payload.type) {
+            case "WATCHED_TRIP_UPDATE":
+              setReloadPath(`/watch/${data.payload.targetId}`);
+              break;
+
+            default:
+              break;
+          }
+          break;
+
         default:
           break;
       }
     };
 
     return () => ws.close();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, dispatch]);
 
   return (
     <Routes>
