@@ -82,7 +82,6 @@ function App() {
         console.log(err);
       }
 
-      console.log(data.payload);
       switch (data.type) {
         case "NOTIFICATION":
           dispatch(notificationActions.addNotification(data.payload));
@@ -119,23 +118,24 @@ function App() {
               <Route path="/watching" element={<Watching />} />
               <Route path="/ongoing-trip" element={<OngoingTrip />} />
               <Route path="/profile" element={<ProfilePage />} />
-            </Route>
-            <Route path="/plan-trip" element={<PlanTrip mode="create" />} />
-            <Route
-              path="/planned-trips/:tripId"
-              element={<PlanTrip mode="edit" />}
-            />
-            {/* <Route
+
+              <Route path="/plan-trip" element={<PlanTrip mode="create" />} />
+              <Route
+                path="/planned-trips/:tripId"
+                element={<PlanTrip mode="edit" />}
+              />
+              {/* <Route
               path="/watching/:tripId"
               element={<PlanTrip mode="view" />}
             /> */}
-            <Route path="/watch/:tripId" element={<WatchTrip />} />
-            <Route
-              path="/ongoing-trip/:tripId"
-              element={<PlanTrip mode="view" />}
-            />
-            <Route path="/reload" element={<Reload />} />
-            <Route path="*" element={<Navigate to="/" />} />
+              <Route path="/watch/:tripId" element={<WatchTrip />} />
+              <Route
+                path="/ongoing-trip/:tripId"
+                element={<PlanTrip mode="view" />}
+              />
+              <Route path="/reload" element={<Reload />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Route>
           </Route>
         </>
       )}

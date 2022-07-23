@@ -1,15 +1,21 @@
 // TODO: It would be nice if the target page of the notification is the same as the current page, to directly reload it
 
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import { useSState } from "../../../hooks/useSState";
+import { notificationActions } from "../../../redux-store/notificationsSlice";
+import { useLoad } from "../../Reload/useLoad";
 import styles from "./NotificationBubble.module.css";
 import NotificationLink from "./NotificationLink/NotificationLink";
 
 const NotificationBubble = (props) => {
   const notifs = useSelector((state) => state.notif.notifications);
   const alerts = useSelector((state) => state.notif.alerts);
+
+  const dispatch = useDispatch();
 
   const bubbleStyles = [styles.bubble];
   const expandedStyles = [styles.expanded];
@@ -22,6 +28,19 @@ const NotificationBubble = (props) => {
   }
 
   const [expanded, , { passValueHandler: setExpandedTo }] = useSState(false);
+
+  // Reload page if it matches some of the targetPages of the alerts and notifs
+  const currentPath = useLocation().pathname;
+  const load = useLoad();
+  useEffect(() => {
+    const n = notifs.find((n) => n.targetPage === currentPath);
+    const a = alerts.find((a) => a.targetPage === currentPath);
+    if (n || a) {
+      n && dispatch(notificationActions.removeNotification(n.id));
+      a && dispatch(notificationActions.removeAlert(a.id));
+      load(currentPath);
+    }
+  }, [notifs, alerts, currentPath, dispatch, load]);
 
   return ReactDOM.createPortal(
     <>
@@ -38,7 +57,10 @@ const NotificationBubble = (props) => {
           {!!expanded && (
             <div className={expandedStyles.join(" ")}>
               <h1>Внимание</h1>
-              <button onClick={setExpandedTo(false)} className={bubbleStyles.join(" ")}>
+              <button
+                onClick={setExpandedTo(false)}
+                className={bubbleStyles.join(" ")}
+              >
                 X
               </button>
               <ul>

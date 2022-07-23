@@ -15,6 +15,7 @@ const NotificationLink = (props) => {
   const openNotificationHandler = (target) => (event) => {
     event.preventDefault();
     dispatch(notificationActions.removeNotification(n.id));
+    dispatch(notificationActions.removeAlert(n.id));
     load(target);
     props.onClick();
   };
