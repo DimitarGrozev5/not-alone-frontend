@@ -1,3 +1,5 @@
+// TODO: It would be nice if the target page of the notification is the same as the current page, to directly reload it
+
 import ReactDOM from "react-dom";
 import { useSelector } from "react-redux";
 

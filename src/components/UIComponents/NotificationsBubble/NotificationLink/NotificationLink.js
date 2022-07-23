@@ -1,10 +1,6 @@
-// TODO: If the target page is opened, navigate will not prompt a reload of the data
-// This means that the current page will not have the latest data
-
 // import styles from "./NotificationLink.module.css"
 
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { notificationActions } from "../../../../redux-store/notificationsSlice";
 import Button from "../../../FormElements/Button/Button";
 import { useLoad } from "../../../Reload/useLoad";
@@ -24,26 +20,30 @@ const NotificationLink = (props) => {
   };
 
   let content = "";
+  let targetPage = "";
   switch (n.type) {
     case "OVERWATCH_REQUEST":
+      targetPage = "/watching";
       content = (
-        <Button onClick={openNotificationHandler("/watching")}>
+        <Button onClick={openNotificationHandler(targetPage)}>
           Има нови покани за наблюдаване
         </Button>
       );
       break;
 
     case "CONNECTION_REQUEST":
+      targetPage = "/profile";
       content = (
-        <Button onClick={openNotificationHandler("/profile")}>
+        <Button onClick={openNotificationHandler(targetPage)}>
           Има нови покани за приятелство
         </Button>
       );
       break;
 
     case "TRIP_STARTED":
+      targetPage = `/watch/${n.targetId}`;
       content = (
-        <Button onClick={openNotificationHandler(`/watch/${n.targetId}`)}>
+        <Button onClick={openNotificationHandler(targetPage)}>
           {n.userName} започна своето пътуване {n.targetName}
         </Button>
       );
@@ -51,8 +51,9 @@ const NotificationLink = (props) => {
 
     case "USER_IS_LATE":
     case "USER_IS_VERY_LATE":
+      targetPage = `/watch/${n.targetId}`;
       content = (
-        <Button onClick={openNotificationHandler(`/watch/${n.targetId}`)}>
+        <Button onClick={openNotificationHandler(targetPage)}>
           {n.userName} закъснява за следващата спирка
         </Button>
       );
