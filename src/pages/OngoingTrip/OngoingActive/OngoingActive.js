@@ -10,7 +10,7 @@ const OngoingActive = (props) => {
   const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
   return (
     <>
-      <DataCard>
+      <DataCard fullWidth>
         <h2>Активно пътуване</h2>
       </DataCard>
       <DataCard>
