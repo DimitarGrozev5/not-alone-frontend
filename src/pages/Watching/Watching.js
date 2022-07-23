@@ -9,6 +9,8 @@ import Modal from "../../components/UIComponents/Modal/Modal";
 import { useTState } from "../../hooks/useTState";
 import RequestItem from "./RequestItem/RequestItem";
 import WatchedTripOverview from "./WatchedTripOverview/WatchedTripOverview";
+import DataCard from "../../components/UIComponents/DataCard/DataCard";
+import Button from "../../components/FormElements/Button/Button";
 
 const Watching = () => {
   const [watching, setWatching] = useState(null);
@@ -75,25 +77,24 @@ const Watching = () => {
         </Modal>
       )}
 
-      <h1>Наблюдавани пътувания</h1>
+      <DataCard fullWidth>
+        <h1>Наблюдавани пътувания</h1>
+      </DataCard>
 
       {watching && (
         <>
-          {!watching.length && <div>Все още не наблюдавате пътувания</div>}
-          {!!watching.length && (
-            <ul>
-              {watching.map((w) => (
-                <WatchedTripOverview trip={w} key={w._id} />
-              ))}
-            </ul>
+          {!watching.length && (
+            <DataCard fullWidth>Все още не наблюдавате пътувания</DataCard>
           )}
+          {!!watching.length &&
+            watching.map((w) => <WatchedTripOverview trip={w} key={w._id} />)}
         </>
       )}
 
       {!!requests && !!requests.length && (
-        <button onClick={toggleRequestsModal} className={styles.requests}>
+        <Button onClick={toggleRequestsModal} className={styles.requests}>
           Имате {requests.length} заявки
-        </button>
+        </Button>
       )}
     </>
   );

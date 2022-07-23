@@ -3,10 +3,16 @@
   color: var(--color-dark-5);
 }
 
-.overview >p {
+.overview > p {
   margin-bottom: 0.5rem;
 }
 
 span.accent {
   font-weight: bold;
+}
+
+@media screen and (min-width: 600px) {
+  .overview:hover {
+    text-decoration: underline;
+  }
 }

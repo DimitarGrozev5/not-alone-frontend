@@ -31,7 +31,9 @@ const PlannedTrips = () => {
         <h1>Планувани пътувания</h1>
       </DataCard>
 
-      {trips && !trips.length && <div>Все още няма създадени</div>}
+      {trips && !trips.length && (
+        <DataCard fullWidth>Все още няма създадени</DataCard>
+      )}
       {trips &&
         !!trips.length &&
         trips.map((trip) => <TripOverview key={trip._id} tripData={trip} />)}
