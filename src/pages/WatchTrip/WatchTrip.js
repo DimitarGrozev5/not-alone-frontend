@@ -13,8 +13,7 @@ import Button from "../../components/FormElements/Button/Button";
 const WatchTrip = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const [showDesc, , { toggleHandler: toggleShowDesc }] =
-    useSState(false);
+  const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
 
   const [trip, setTrip] = useState(null);
   const tripId = useParams().tripId;
@@ -99,9 +98,11 @@ const WatchTrip = () => {
           )}
           {trip.tripStatus.status === "VERY_LATE" && (
             <DataCard>
-              {trip.owner.name} закъснява много. Вече имате достъп до
-              допълнителна информация за пътуването му.
-              <Button stretch onClick={toggleShowDesc}>
+              <p>
+                {trip.owner.name} закъснява много. Вече имате достъп до
+                допълнителна информация за пътуването му.
+              </p>
+              <Button onClick={toggleShowDesc}>
                 {showDesc ? "Скрий " : "Покажи "} описание на спирките
               </Button>
             </DataCard>
