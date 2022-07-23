@@ -27,14 +27,31 @@ const notificationsSlice = createSlice({
       const n = action.payload;
       switch (n.type) {
         case "OVERWATCH_REQUEST":
+          if (!state.notifications.find((no) => no.type === n.type)) {
+            state.notifications.push({
+              id: nanoid(),
+              targetPage: "/watching",
+              ...action.payload,
+            });
+          }
+          break;
+
         case "CONNECTION_REQUEST":
           if (!state.notifications.find((no) => no.type === n.type)) {
-            state.notifications.push({ id: nanoid(), ...action.payload });
+            state.notifications.push({
+              id: nanoid(),
+              targetPage: "/profile",
+              ...action.payload,
+            });
           }
           break;
 
         case "TRIP_STARTED":
-          state.notifications.push({ id: nanoid(), ...action.payload });
+          state.notifications.push({
+            id: nanoid(),
+            targetPage: `/watch/${action.payload.targetId}`,
+            ...action.payload,
+          });
           break;
 
         default:
@@ -46,8 +63,13 @@ const notificationsSlice = createSlice({
         (n) => n.id !== action.payload
       );
     },
+
     addAlert(state, action) {
-      state.alerts.push({ id: nanoid(), ...action.payload });
+      state.alerts.push({
+        id: nanoid(),
+        targetPage: `/watch/${action.payload.targetId}`,
+        ...action.payload,
+      });
     },
     removeAlert(state, action) {
       state.alerts = state.alerts.filter((n) => n.id !== action.payload);

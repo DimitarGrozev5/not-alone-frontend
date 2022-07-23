@@ -20,30 +20,26 @@ const NotificationLink = (props) => {
   };
 
   let content = "";
-  let targetPage = "";
   switch (n.type) {
     case "OVERWATCH_REQUEST":
-      targetPage = "/watching";
       content = (
-        <Button onClick={openNotificationHandler(targetPage)}>
+        <Button onClick={openNotificationHandler(n.targetPage)}>
           Има нови покани за наблюдаване
         </Button>
       );
       break;
 
     case "CONNECTION_REQUEST":
-      targetPage = "/profile";
       content = (
-        <Button onClick={openNotificationHandler(targetPage)}>
+        <Button onClick={openNotificationHandler(n.targetPage)}>
           Има нови покани за приятелство
         </Button>
       );
       break;
 
     case "TRIP_STARTED":
-      targetPage = `/watch/${n.targetId}`;
       content = (
-        <Button onClick={openNotificationHandler(targetPage)}>
+        <Button onClick={openNotificationHandler(n.targetPage)}>
           {n.userName} започна своето пътуване {n.targetName}
         </Button>
       );
@@ -51,9 +47,8 @@ const NotificationLink = (props) => {
 
     case "USER_IS_LATE":
     case "USER_IS_VERY_LATE":
-      targetPage = `/watch/${n.targetId}`;
       content = (
-        <Button onClick={openNotificationHandler(targetPage)}>
+        <Button onClick={openNotificationHandler(n.targetPage)}>
           {n.userName} закъснява за следващата спирка
         </Button>
       );
