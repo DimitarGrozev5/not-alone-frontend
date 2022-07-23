@@ -7,17 +7,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { notificationActions } from "../../../../redux-store/notificationsSlice";
 import Button from "../../../FormElements/Button/Button";
+import { useLoad } from "../../../Reload/useLoad";
 
 const NotificationLink = (props) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
+  const load = useLoad();
 
   const n = props.notification;
 
   const openNotificationHandler = (target) => (event) => {
     event.preventDefault();
     dispatch(notificationActions.removeNotification(n.id));
-    navigate(target);
+    load(target);
     props.onClick();
   };
 

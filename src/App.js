@@ -34,6 +34,7 @@ import WatchTrip from "./pages/WatchTrip/WatchTrip";
 import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
 import { notificationActions } from "./redux-store/notificationsSlice";
+import Reload from "./components/Reload/Reload";
 
 function App() {
   const dispatch = useDispatch();
@@ -118,7 +119,6 @@ function App() {
               <Route path="/watching" element={<Watching />} />
               <Route path="/ongoing-trip" element={<OngoingTrip />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="*" element={<Navigate to="/" />} />
             </Route>
             <Route path="/plan-trip" element={<PlanTrip mode="create" />} />
             <Route
@@ -134,6 +134,8 @@ function App() {
               path="/ongoing-trip/:tripId"
               element={<PlanTrip mode="view" />}
             />
+            <Route path="/reload" element={<Reload />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>
       )}

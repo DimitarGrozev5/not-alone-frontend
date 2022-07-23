@@ -5,7 +5,22 @@ const notificationsSlice = createSlice({
   name: "requests",
   initialState: {
     notifications: [],
-    alerts: [],
+    alerts: [
+      // {
+      //   id: nanoid(),
+      //   type: "USER_IS_LATE",
+      //   targetId: 1,
+      //   targetName: "test",
+      //   userName: "пешо",
+      // },
+      // {
+      //   id: nanoid(),
+      //   type: "USER_IS_VERY_LATE",
+      //   targetId: 1,
+      //   targetName: "test",
+      //   userName: "пешо",
+      // },
+    ],
   },
   reducers: {
     addNotification(state, action) {
