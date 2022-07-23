@@ -10,7 +10,7 @@ const store = configureStore({
     notif: notificationReducer,
 
     // TODO: remove requests
-    requests: requestReducer,
+    // requests: requestReducer,
   },
 });
 
