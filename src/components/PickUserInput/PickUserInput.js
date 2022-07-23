@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 
 import useUserService from "../../services/useUserService";
+import Button from "../FormElements/Button/Button";
 import LoadingSpinner from "../UIComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./PickUserInput.module.css";
 
@@ -88,7 +89,7 @@ const PickUserInput = (props) => {
   const blurHandler = () => {
     setTimeout(() => {
       setSuggetions(null);
-    }, 0);
+    }, 100);
   };
 
   return (
@@ -123,7 +124,7 @@ const PickUserInput = (props) => {
                     <span>
                       {s.name} {s.phone}
                     </span>
-                    <button onClick={selectSuggetionHandler(s)}>Избери</button>
+                    <Button onClick={selectSuggetionHandler(s)}>Избери</Button>
                   </li>
                 ))}
               </ul>

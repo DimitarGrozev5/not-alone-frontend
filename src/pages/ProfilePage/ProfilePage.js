@@ -134,12 +134,9 @@ const ProfilePage = (props) => {
             />
             <PickUserInput value={newUser} onChange={setNewUser} />
             {!!newUser && (
-              <button
-                className={styles.button}
-                onClick={requestConnectionHandler(false)}
-              >
+              <Button onClick={requestConnectionHandler(false)}>
                 Свържете се
-              </button>
+              </Button>
             )}
           </DataCard>
 
@@ -155,9 +152,7 @@ const ProfilePage = (props) => {
           </DataCard>
 
           <DataCard fullWidth>
-            <Button onClick={logoutHandler}>
-              Излизане от профила
-            </Button>
+            <Button onClick={logoutHandler}>Излизане от профила</Button>
           </DataCard>
         </>
       )}

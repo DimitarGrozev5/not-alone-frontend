@@ -60,7 +60,7 @@
   margin-right: 0.5rem;
 }
 
-.suggetions button {
+/* .suggetions button {
   padding: 0.2rem;
   font-size: inherit;
   color: inherit;
@@ -68,7 +68,7 @@
   border: 1px solid #034d00;
   border-radius: 4px;
   background-color: #c8f3d3;
-}
+} */
 
 .loader {
   text-align: center;
