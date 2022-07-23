@@ -12,8 +12,11 @@ import DurationPicker from "../../components/DurationPicker/DurationPicker";
 import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
+import { useLoad } from "../../components/Reload/useLoad";
 
 const OngoingTrip = () => {
+  const load = useLoad();
+
   // Data about trips
   const [allTrips, setAllTrips] = useState(null);
   const [activeTrip, setActiveTrip] = useState(null);
@@ -103,6 +106,7 @@ const OngoingTrip = () => {
         });
         setAllTrips(null);
         setActiveTrip(null);
+        setDeleteTrip(false)
       } catch (err) {
         console.log(err);
       }

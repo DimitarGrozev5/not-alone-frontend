@@ -67,7 +67,7 @@ function App() {
   const [reloadPaths, setReloadPaths] = useState([]);
   const currentPath = useLocation().pathname;
   useEffect(() => {
-    console.log(reloadPaths.includes(currentPath));
+    // console.log(reloadPaths);
     if (reloadPaths.includes(currentPath)) {
       setReloadPaths([]);
       load(currentPath);
