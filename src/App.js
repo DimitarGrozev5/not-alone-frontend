@@ -64,16 +64,17 @@ function App() {
   usePersistRoute();
 
   // Setup WebSocket connection for receiving notifications
-  const [reloadPath, setReloadPath] = useState("");
+  const [reloadPaths, setReloadPaths] = useState([]);
   const currentPath = useLocation().pathname;
   useEffect(() => {
-    if (reloadPath === currentPath) {
-      setReloadPath("");
-      load(reloadPath);
-    } else {
-      setReloadPath("");
+    console.log(reloadPaths.includes(currentPath));
+    if (reloadPaths.includes(currentPath)) {
+      setReloadPaths([]);
+      load(currentPath);
+    } else if (reloadPaths.length) {
+      setReloadPaths([]);
     }
-  }, [currentPath, load, reloadPath]);
+  }, [currentPath, load, reloadPaths]);
   useEffect(() => {
     if (!isLoggedIn) {
       return;
@@ -105,8 +106,13 @@ function App() {
 
         case "UPDATE":
           switch (data.payload.type) {
+            case "WATCHED_ACTIVE_TRIP_UPDATE":
             case "WATCHED_TRIP_UPDATE":
-              setReloadPath(`/watch/${data.payload.targetId}`);
+              setReloadPaths([`/watch/${data.payload.targetId}`, "/watching"]);
+              break;
+
+            case "TRIP_UPDATE":
+              setReloadPaths(["/ongoing-trip"]);
               break;
 
             default:
