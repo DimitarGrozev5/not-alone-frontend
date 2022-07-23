@@ -47,7 +47,7 @@ const WatchTrip = () => {
 
       {trip && (
         <>
-          <DataCard>
+          <DataCard fullWidth>
             <h2>Информация за пътуването</h2>
           </DataCard>
           <DataCard>
