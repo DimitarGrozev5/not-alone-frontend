@@ -1,4 +1,13 @@
-.plan > div {
+.form {
   display: flex;
   flex-direction: column;
+}
+
+@media screen and (min-width: 600px) {
+  .form {
+    grid-column: 2 / 4;
+
+    display: flex;
+    gap: 0.5rem;
+  }
 }

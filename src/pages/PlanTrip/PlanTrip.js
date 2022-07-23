@@ -109,50 +109,56 @@ const PlanTrip = (props) => {
           message="Сигурни ли сте, че желаете да изтриете пътуването? Действието не може да бъде отменено!"
         />
       )}
-      <form onSubmit={saveData}>
-        {props.mode === "create" && <h1>Планувай пътуване</h1>}
-        {props.mode === "edit" && <h1>Прегледай пътуване</h1>}
-        <div className={styles.plan}>
-          <DataCard>
-            <TripInput
-              mode={props.mode}
-              label="Име на пътуването:"
-              type="text"
-              value={trip.name}
-              onChange={actions.changeName}
-            />
+      <form onSubmit={saveData} className={styles.form}>
+        {props.mode === "create" && (
+          <DataCard fullWidth>
+            <h1>Планувай пътуване</h1>
           </DataCard>
-          <DataCard>
-            <TripStopsPlanner
-              mode={props.mode}
-              stops={trip.stops}
-              stopActions={actions.stops}
-            />
+        )}
+        {props.mode === "edit" && (
+          <DataCard fullWidth>
+            <h1>Прегледай пътуване</h1>
           </DataCard>
-          <DataCard>
-            <h2>Заявки за наблюдение</h2>
-            <TripWatchers
-              mode={props.mode}
-              watchers={trip.watchers}
-              watcherActions={actions.watchers}
-            />
-          </DataCard>
+        )}
+        <DataCard>
+          <TripInput
+            mode={props.mode}
+            label="Име на пътуването:"
+            type="text"
+            value={trip.name}
+            onChange={actions.changeName}
+          />
+        </DataCard>
+        <DataCard>
+          <TripStopsPlanner
+            mode={props.mode}
+            stops={trip.stops}
+            stopActions={actions.stops}
+          />
+        </DataCard>
+        <DataCard>
+          <h2>Заявки за наблюдение</h2>
+          <TripWatchers
+            mode={props.mode}
+            watchers={trip.watchers}
+            watcherActions={actions.watchers}
+          />
+        </DataCard>
 
-          <Button
-            stretch
-            type="submit"
-            to={props.mode === "view" ? "/ongoing-trip" : undefined}
-          >
-            {props.mode === "create" && "Създаване на пътуване"}
-            {props.mode === "edit" && "Запазване на промените"}
-            {props.mode === "view" && "Назад"}
+        <Button
+          stretch
+          type="submit"
+          to={props.mode === "view" ? "/ongoing-trip" : undefined}
+        >
+          {props.mode === "create" && "Създаване на пътуване"}
+          {props.mode === "edit" && "Запазване на промените"}
+          {props.mode === "view" && "Назад"}
+        </Button>
+        {props.mode === "edit" && (
+          <Button stretch onClick={deleteHandler(false)}>
+            Изтрий пътуването
           </Button>
-          {props.mode === "edit" && (
-            <Button stretch onClick={deleteHandler(false)}>
-              Изтрий пътуването
-            </Button>
-          )}
-        </div>
+        )}
       </form>
     </>
   );
