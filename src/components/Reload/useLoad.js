@@ -5,6 +5,7 @@ export const useLoad = () => {
   const currentPath = useLocation().pathname;
   const navigate = useNavigate();
 
+  // TODO: Test load function in useEffect. It may create infinate loop
   const load = useCallback(
     (targetPath) => {
       if (targetPath !== currentPath) {
