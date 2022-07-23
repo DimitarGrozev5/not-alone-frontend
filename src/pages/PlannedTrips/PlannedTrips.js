@@ -36,7 +36,7 @@ const PlannedTrips = () => {
         !!trips.length &&
         trips.map((trip) => <TripOverview key={trip._id} tripData={trip} />)}
       <div className={styles.add}>
-        {window.innerHeight >= 600 ? (
+        {window.innerWidth >= 600 ? (
           <Button to="/plan-trip" className={styles.add}>
             Добави ново пътуване
           </Button>
