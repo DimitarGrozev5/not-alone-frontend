@@ -5,6 +5,10 @@ const DataCard = (props) => {
   if (props.expand) {
     classes.push(styles.expand);
   }
+  if (props.fullWidth) {
+    classes.push(styles["full-width"]);
+  }
+  
   return <div className={classes.join(" ")}>{props.children}</div>;
 };
 

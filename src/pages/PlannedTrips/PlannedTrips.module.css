@@ -21,6 +21,18 @@ a.add {
 
   border: 1px solid var(--color-dark-5);
   border-radius: inherit;
-  
+
   background-color: inherit;
+}
+
+@media screen and (min-width: 600px) {
+  .add {
+    width: auto;
+    height: inherit;
+    border-radius: 0.5rem;
+  }
+  
+  a.add {
+    font-size: 1.1rem;
+  }
 }

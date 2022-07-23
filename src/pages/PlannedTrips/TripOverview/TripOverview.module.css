@@ -6,3 +6,9 @@
 .trip-link h3 {
   font-size: 1rem;
 }
+
+@media screen and (min-width: 600px) {
+  .trip-link:hover {
+    text-decoration: underline;
+  }
+}

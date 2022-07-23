@@ -6,7 +6,7 @@
   top: 0;
   bottom: 0;
 
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(3px);
 }
 
@@ -63,4 +63,28 @@
   padding: 0.5rem;
 
   flex-grow: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .modal {
+    left: 25vw;
+    right: 25vw;
+  }
+
+  .modal > header {
+    background-color: var(--color-light-5);
+  }
+
+  .modal > header > h1 {
+    font-size: 1.3rem;
+  }
+
+  .close-button {
+    font-weight: bold;
+  }
+
+  .modal > section {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
 }

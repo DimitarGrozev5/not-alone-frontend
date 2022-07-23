@@ -7,3 +7,17 @@
   display: flex;
   flex-direction: column;
 }
+
+@media screen and (min-width: 600px) {
+  .main {
+    margin-left: 0rem;
+    margin-right: 0rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: min-content;
+    gap: 0.5rem;
+  }
+}

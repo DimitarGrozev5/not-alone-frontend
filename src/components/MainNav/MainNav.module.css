@@ -35,3 +35,35 @@
   color: var(--color-light-3);
   background-color: var(--color-dark-2);
 }
+
+@media screen and (min-width: 600px) {
+  .nav {
+    position: static;
+  }
+
+  .nav > ul > li {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .nav > ul > li > a {
+    border: none;
+    background-color: inherit;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .nav > ul > li > a:hover {
+    color: var(--color-dark-3);
+  }
+
+  .nav > ul > li > a.active {
+    box-shadow: none;
+    color: var(--color-light-3);
+    background-color: var(--color-dark-2);
+    border-radius: 0.7rem;
+  }
+
+  .nav > ul > li > a.active:hover {
+    color: var(--color-light-2);
+  }
+}
