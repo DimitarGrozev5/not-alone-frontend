@@ -3,9 +3,6 @@
  * The page should be made to reload after a request for connection is send
  */
 
-import useMessages from "../../services/useMessages";
-import { useRequestsService } from "../../services/useRequestsService";
-import useUserService from "../../services/useUserService";
 import ProfileOverview from "./ProfileOverview";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
@@ -17,42 +14,39 @@ import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import ConfirmModal from "../../common-components/UIComponents/ConfirmModal/ConfirmModal";
 import { useHState } from "../../hooks/useHState";
 import Button from "../../common-components/FormElements/Button/Button";
+import { useHttpClient } from "../../hooks/useHttpClient";
+import { requestTypes } from "../../data-types/trip-data";
 
 const ProfilePage = (props) => {
-  // Get Services
-  const userService = useUserService();
-  const requestsService = useRequestsService();
-  const messages = useMessages();
-
-  // Setup loading and error state
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(undefined);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   // Get data about the user on first load
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      return () => {};
+    if (!user) {
+      const fetchData = async () => {
+        try {
+          const uData = JSON.parse(localStorage.getItem("jwt"));
+          const userData = await sendRequest(`users/${uData.userId}`, null, {
+            auth: true,
+          });
+          setUser({ ...userData, token: uData.token, id: uData.userId });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
     }
-
-    setIsLoading(true);
-    userService
-      .getUserData()
-      .then((data) => {
-        setIsLoading(false);
-        setUser(data);
-      })
-      .catch((err) => setError(err.message));
-  }, [userService, user]);
+  }, [sendRequest, user]);
 
   // Logout user
-  const logoutHandler = () => {
-    setIsLoading(true);
-    userService.logout().catch((err) => {
-      setIsLoading(false);
-      setError(err.message);
-    });
+  const logoutHandler = async () => {
+    try {
+      await sendRequest("users/logout", null, { token: user.token });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // Serach for user input
@@ -69,48 +63,43 @@ const ProfilePage = (props) => {
 
     setShowConfirmationHandler(false)();
 
-    setIsLoading(true);
+    try {
+      await sendRequest(
+        "requests",
+        {
+          from: user.id,
+          to: newUser.id,
+          type: requestTypes.CONNECTION,
+        },
+        { auth: true }
+      );
 
-    requestsService
-      .requestConnection(newUser.id)
-      .then(() => {
-        messages.alert("Request is send");
-        setNewUser(null);
-        setUser(null);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      setNewUser(null);
+      setUser(null);
+    } catch (err) {
+      console.log();
+    }
   };
 
-  const acceptRequestHandler = (id) => (event) => {
+  const acceptRequestHandler = (id) => async (event) => {
     event.preventDefault();
 
-    setIsLoading(true);
-
-    requestsService
-      .acceptRequest(id)
-      .then(() => {
-        setNewUser(null);
-        setUser(null);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
+    try {
+      await sendRequest(`requests/${id}/accept`, null, {
+        auth: true,
+        method: "POST",
       });
+      setNewUser(null);
+      setUser(null);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
-      )}
+      {error && <ErrorModal error={error} onClose={clearError} />}
 
       {showConfirmation && (
         <ConfirmModal

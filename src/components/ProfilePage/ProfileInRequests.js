@@ -1,3 +1,5 @@
+import Button from "../../common-components/FormElements/Button/Button";
+
 const ProfileInRequests = (props) => {
   return (
     <>
@@ -7,7 +9,7 @@ const ProfileInRequests = (props) => {
           {props.inRequests.map((r) => (
             <li key={r.id}>
               {r.name}, {r.phone}
-              <button onClick={props.onAccept(r.id)}>Приеми</button>
+              <Button onClick={props.onAccept(r.id)}>Приеми</Button>
             </li>
           ))}
         </ul>

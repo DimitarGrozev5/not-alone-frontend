@@ -23,10 +23,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import { userActions } from "./redux-store/userSlice";
 import PlannedTrips from "./components/PlannedTrips/PlannedTrips";
-import useUserService from "./services/useUserService";
-import useMessages from "./services/useMessages";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
-import { useRequestsService } from "./services/useRequestsService";
 import PlanTrip from "./components/PlanTrip/PlanTrip";
 import Watching from "./components/Watching/Watching";
 import WatchTrip from "./components/WatchTrip/WatchTrip";
@@ -37,9 +34,6 @@ import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {
   const dispatch = useDispatch();
-  const userService = useUserService();
-  const requestsService = useRequestsService();
-  const errMsg = useMessages();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
@@ -55,7 +49,7 @@ function App() {
     if (userData) {
       dispatch(userActions.updateAccessToken(userData.token));
     }
-  }, [isLoggedIn, userService, requestsService, errMsg, dispatch]);
+  }, [isLoggedIn, dispatch]);
 
   // Save current route to LocalStorage and retreive it on first load
   usePersistRoute();
