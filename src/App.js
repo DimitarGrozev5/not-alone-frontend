@@ -35,6 +35,7 @@ import { usePersistRoute } from "./hooks/usePersistRoute";
 import { notificationActions } from "./redux-store/notificationsSlice";
 import Reload from "./components/Reload/Reload";
 import { useLoad } from "./components/Reload/useLoad";
+import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,70 +63,8 @@ function App() {
   // Save current route to LocalStorage and retreive it on first load
   usePersistRoute();
 
-  // Setup WebSocket connection for receiving notifications
-  const [reloadPaths, setReloadPaths] = useState([]);
-  const currentPath = useLocation().pathname;
-  useEffect(() => {
-    // console.log(reloadPaths);
-    if (reloadPaths.includes(currentPath)) {
-      setReloadPaths([]);
-      load(currentPath);
-    } else if (reloadPaths.length) {
-      setReloadPaths([]);
-    }
-  }, [currentPath, load, reloadPaths]);
-  useEffect(() => {
-    if (!isLoggedIn) {
-      return;
-    }
-
-    const ws = new WebSocket("ws://localhost:8999");
-
-    ws.onopen = function (event) {
-      // When the connection opens, send user credentials
-      ws.send(JSON.stringify({ token: isLoggedIn }));
-    };
-
-    ws.onmessage = function (event) {
-      let data = {};
-      try {
-        data = JSON.parse(event.data);
-      } catch (err) {
-        console.log(err);
-      }
-
-      switch (data.type) {
-        case "NOTIFICATION":
-          dispatch(notificationActions.addNotification(data.payload));
-          break;
-
-        case "ALERT":
-          dispatch(notificationActions.addAlert(data.payload));
-          break;
-
-        case "UPDATE":
-          switch (data.payload.type) {
-            case "WATCHED_ACTIVE_TRIP_UPDATE":
-            case "WATCHED_TRIP_UPDATE":
-              setReloadPaths([`/watch/${data.payload.targetId}`, "/watching"]);
-              break;
-
-            case "TRIP_UPDATE":
-              setReloadPaths(["/ongoing-trip"]);
-              break;
-
-            default:
-              break;
-          }
-          break;
-
-        default:
-          break;
-      }
-    };
-
-    return () => ws.close();
-  }, [isLoggedIn, dispatch]);
+  // Start WebSocket listener
+  useWebSocket();
 
   return (
     <Routes>
