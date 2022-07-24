@@ -1,24 +1,22 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 import FormCard from "../../common-components/UIComponents/FormCard/FormCard";
-import useUserService from "../../services/useUserService";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import Button from "../../common-components/FormElements/Button/Button";
+import { useHttpClient } from "../../hooks/useHttpClient";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../redux-store/userSlice";
 
 const Login = (props) => {
-  const navigate = useNavigate();
-  const userService = useUserService();
+  const dispatch = useDispatch();
 
-  // Setup load status
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(undefined);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     const loginData = {
@@ -26,24 +24,21 @@ const Login = (props) => {
       password: passwordRef.current.value,
     };
 
-    setIsLoading(true);
+    try {
+      const response = await sendRequest("users/login", loginData);
 
-    userService
-      .login(loginData)
-      .then(() => navigate("/", { replace: true }))
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.message);
-        // errMsg.alert(err);
-      });
+      localStorage.setItem("jwt", JSON.stringify(response));
+      dispatch(userActions.updateAccessToken(response.token));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
-      )}
+      {error && <ErrorModal error={error} onClose={clearError} />}
+
       <h1>Login to your account</h1>
       <FormCard onSubmit={submitHandler}>
         <label htmlFor="email">E-Mail:</label>
