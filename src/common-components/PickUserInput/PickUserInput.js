@@ -1,7 +1,3 @@
-/*
- * TODO: Make the page expand as to make the suggetions bubble not overlap the navbar
- */
-
 import { useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/useHttpClient";
 import { useSState } from "../../hooks/useSState";
@@ -10,8 +6,6 @@ import useUserService from "../../services/useUserService";
 import Button from "../FormElements/Button/Button";
 import LoadingSpinner from "../UIComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./PickUserInput.module.css";
-
-let i = 1;
 
 const PickUserInput = (props) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
