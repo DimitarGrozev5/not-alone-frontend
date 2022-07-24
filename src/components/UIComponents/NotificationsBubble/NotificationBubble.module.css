@@ -93,3 +93,16 @@
 .expanded li {
   margin-bottom: 0.5rem;
 }
+
+@media screen and (min-width: 600px) {
+  .bubble {
+    right: 1.5rem;
+    top: 0.5rem;
+    cursor: pointer;
+  }
+  .expanded {
+    right: 1.5rem;
+    left: 60vw;
+    top: 0.5rem;
+  }
+}
