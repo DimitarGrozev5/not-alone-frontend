@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ErrorModal from "../components/UIComponents/ErrorModal/ErrorModal";
-import LoadingSpinner from "../components/UIComponents/LoadingSpinner/LoadingSpinner";
+import ErrorModal from "../common-components/UIComponents/ErrorModal/ErrorModal";
+import LoadingSpinner from "../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 
 export const useLoadingAndError = () => {
   // Setup loading and error state

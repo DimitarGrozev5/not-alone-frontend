@@ -16,25 +16,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import "./App.css";
-import PageTemplate from "./pages/PageTemplate/PageTemplate";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
+import PageTemplate from "./components/PageTemplate/PageTemplate";
+import HomePage from "./components/HomePage";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 import { userActions } from "./redux-store/userSlice";
-import PlannedTrips from "./pages/PlannedTrips/PlannedTrips";
+import PlannedTrips from "./components/PlannedTrips/PlannedTrips";
 import useUserService from "./services/useUserService";
 import useMessages from "./services/useMessages";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import LoggedInTemplate from "./pages/LogedInTemplate/LoggedInTemplate";
+import ProfilePage from "./components/ProfilePage/ProfilePage";
+import LoggedInTemplate from "./components/LogedInTemplate/LoggedInTemplate";
 import { useRequestsService } from "./services/useRequestsService";
-import PlanTrip from "./pages/PlanTrip/PlanTrip";
-import Watching from "./pages/Watching/Watching";
-import WatchTrip from "./pages/WatchTrip/WatchTrip";
-import OngoingTrip from "./pages/OngoingTrip/OngoingTrip";
+import PlanTrip from "./components/PlanTrip/PlanTrip";
+import Watching from "./components/Watching/Watching";
+import WatchTrip from "./components/WatchTrip/WatchTrip";
+import OngoingTrip from "./components/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
 import { notificationActions } from "./redux-store/notificationsSlice";
-import Reload from "./components/Reload/Reload";
-import { useLoad } from "./components/Reload/useLoad";
+import Reload from "./common-components/Reload/Reload";
+import { useLoad } from "./common-components/Reload/useLoad";
 import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {

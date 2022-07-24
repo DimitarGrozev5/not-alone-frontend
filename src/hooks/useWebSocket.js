@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { useLoad } from "../components/Reload/useLoad";
+import { useLoad } from "../common-components/Reload/useLoad";
 import { notificationActions } from "../redux-store/notificationsSlice";
 
 export const useWebSocket = () => {
