@@ -16,8 +16,12 @@ import { useHState } from "../../hooks/useHState";
 import Button from "../../common-components/FormElements/Button/Button";
 import { useHttpClient } from "../../hooks/useHttpClient";
 import { requestTypes } from "../../data-types/trip-data";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../redux-store/userSlice";
 
 const ProfilePage = (props) => {
+  const dispatch = useDispatch();
+
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   // Get data about the user on first load
@@ -43,7 +47,11 @@ const ProfilePage = (props) => {
   // Logout user
   const logoutHandler = async () => {
     try {
-      await sendRequest("users/logout", null, { token: user.token });
+      await sendRequest("users/logout", {
+        token: user.token,
+      });
+      localStorage.removeItem("jwt");
+      dispatch(userActions.logout());
     } catch (err) {
       console.log(err);
     }

@@ -12,7 +12,7 @@ export const useHttpClient = () => {
   const activeHttpRequests = useRef([]);
 
   const sendRequest = useCallback(
-    async (url, body = null, { method, headers, auth, notJSON }) => {
+    async (url, body = null, { method, headers, auth, notJSON } = {}) => {
       setIsLoading(true);
 
       const httpAbortCtrl = new AbortController();
@@ -51,7 +51,7 @@ export const useHttpClient = () => {
 
       // Attach httpAbort controller
       config.signal = httpAbortCtrl.signal;
-      
+
       try {
         // Fetch data
         const response = await fetch(baseUrl + url, config);
