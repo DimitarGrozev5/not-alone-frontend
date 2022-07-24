@@ -1,5 +1,6 @@
 /*
 TODO:
+Remove Services
 
 Use window focus to decide when to record gps data
 Use battery api to send battery information to the backend
