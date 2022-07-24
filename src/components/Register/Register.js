@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "../../common-components/FormElements/Button/Button";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import FormCard from "../../common-components/UIComponents/FormCard/FormCard";
 import FormInput from "../../common-components/UIComponents/FormInput/FormInput";
 import useFormInput from "../../common-components/UIComponents/FormInput/useFormInput";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
-import useMessages from "../../services/useMessages";
-import useUserService from "../../services/useUserService";
 import {
   hasLengthOf,
   isEmail,
@@ -15,17 +12,14 @@ import {
   validBGPhone,
   valuesMatch,
 } from "../../utils/data-validation";
+import { useHttpClient } from "../../hooks/useHttpClient";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../redux-store/userSlice";
 // import style from "./Register.module.css";
 
 const Register = (props) => {
-  // Get services and hooks
-  const navigate = useNavigate();
-  const userService = useUserService();
-  const messages = useMessages();
-
-  // Setup load status
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(undefined);
+  const dispatch = useDispatch();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   // Setup form state
   const [formWasTouched, setFormWasTouched] = useState(false);
@@ -39,7 +33,7 @@ const Register = (props) => {
     "repeatPassword"
   );
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     setFormWasTouched(true);
@@ -48,8 +42,6 @@ const Register = (props) => {
       return;
     }
 
-    setIsLoading(true);
-
     const data = {
       email: formData.email.value,
       name: formData.name.value,
@@ -57,24 +49,21 @@ const Register = (props) => {
       password: formData.password.value,
     };
 
-    userService
-      .register(data)
-      .then(() => {
-        messages.alert("Създаден е нов потребител");
-        navigate("/", { replace: true });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.message);
-      });
+    try {
+      const response = await sendRequest("users/register", data);
+
+      alert("Създаден е нов потребител!");
+      localStorage.setItem("jwt", JSON.stringify(response));
+      dispatch(userActions.updateAccessToken(response.token));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && (
-        <ErrorModal error={error} onClose={setError.bind(null, undefined)} />
-      )}
+      {error && <ErrorModal error={error} onClose={clearError} />}
       <h1>Register a new account</h1>
       <FormCard onSubmit={submitHandler}>
         <FormInput
@@ -147,7 +136,9 @@ const Register = (props) => {
           formWasTouched={formWasTouched}
         />
 
-        <Button type="submit" stretch>Регистрация</Button>
+        <Button type="submit" stretch>
+          Регистрация
+        </Button>
       </FormCard>
     </>
   );
