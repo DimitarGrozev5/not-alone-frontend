@@ -94,7 +94,7 @@
   margin-bottom: 0.5rem;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .bubble {
     right: 1.5rem;
     top: 0.5rem;

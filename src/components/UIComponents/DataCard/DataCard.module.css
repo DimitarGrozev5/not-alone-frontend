@@ -13,7 +13,7 @@
   flex-grow: 1;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .card {
     background-color: var(--color-light-3);
 

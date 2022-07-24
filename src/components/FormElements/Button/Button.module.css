@@ -23,7 +23,7 @@
   margin-right: 0rem;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .button {
     color: var(--color-dark-5);
     background-color: var(--color-light-5);

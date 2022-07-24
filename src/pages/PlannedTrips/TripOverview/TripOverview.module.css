@@ -7,7 +7,7 @@
   font-size: 1rem;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .trip-link:hover {
     text-decoration: underline;
   }

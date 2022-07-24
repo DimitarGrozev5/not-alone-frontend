@@ -65,7 +65,7 @@
   flex-grow: 1;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .modal {
     left: 25vw;
     right: 25vw;

@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .outlet {
     padding-bottom: 0rem;
   }

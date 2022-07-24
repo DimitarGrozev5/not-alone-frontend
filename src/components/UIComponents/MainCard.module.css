@@ -9,7 +9,7 @@
   flex-direction: column;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .main {
     margin-left: 0rem;
     margin-right: 0rem;

@@ -11,7 +11,7 @@ span.accent {
   font-weight: bold;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 935px) {
   .overview:hover {
     text-decoration: underline;
   }
