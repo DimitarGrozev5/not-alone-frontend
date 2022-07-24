@@ -6,7 +6,6 @@
 import useMessages from "../../services/useMessages";
 import { useRequestsService } from "../../services/useRequestsService";
 import useUserService from "../../services/useUserService";
-import styles from "./ProfilePage.module.css";
 import ProfileOverview from "./ProfileOverview";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";

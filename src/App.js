@@ -11,9 +11,9 @@ Cash dynamic assets
 Add maping functionality
 */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
 import PageTemplate from "./components/PageTemplate/PageTemplate";
@@ -25,16 +25,13 @@ import PlannedTrips from "./components/PlannedTrips/PlannedTrips";
 import useUserService from "./services/useUserService";
 import useMessages from "./services/useMessages";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
-import LoggedInTemplate from "./components/LogedInTemplate/LoggedInTemplate";
 import { useRequestsService } from "./services/useRequestsService";
 import PlanTrip from "./components/PlanTrip/PlanTrip";
 import Watching from "./components/Watching/Watching";
 import WatchTrip from "./components/WatchTrip/WatchTrip";
 import OngoingTrip from "./components/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
-import { notificationActions } from "./redux-store/notificationsSlice";
 import Reload from "./common-components/Reload/Reload";
-import { useLoad } from "./common-components/Reload/useLoad";
 import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {
@@ -42,7 +39,6 @@ function App() {
   const userService = useUserService();
   const requestsService = useRequestsService();
   const errMsg = useMessages();
-  const load = useLoad();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 

@@ -12,11 +12,9 @@ import DurationPicker from "../../common-components/DurationPicker/DurationPicke
 import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
-import { useLoad } from "../../common-components/Reload/useLoad";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 
 const OngoingTrip = () => {
-  const load = useLoad();
 
   // Data about trips
   const [allTrips, setAllTrips] = useState(null);
