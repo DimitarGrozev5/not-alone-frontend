@@ -1,6 +1,5 @@
 /*
 TODO:
-Remove Services
 
 Move all state load to App.js and in redux?
 
@@ -33,25 +32,13 @@ import OngoingTrip from "./components/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
 import Reload from "./common-components/Reload/Reload";
 import { useWebSocket } from "./hooks/useWebSocket";
+import { useGetLoginToken } from "./hooks/useGetLoginToken";
 
 function App() {
-  const dispatch = useDispatch();
-
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  // Check if access token is in local storage
-  useEffect(() => {
-    let userData = null;
-    try {
-      userData = JSON.parse(localStorage.getItem("jwt"));
-    } catch (err) {
-      localStorage.removeItem("jwt");
-    }
-    // Get token
-    if (userData) {
-      dispatch(userActions.updateAccessToken(userData.token));
-    }
-  }, [isLoggedIn, dispatch]);
+  // Get token from local storage
+  useGetLoginToken();
 
   // Save current route to LocalStorage and retreive it on first load
   usePersistRoute();
