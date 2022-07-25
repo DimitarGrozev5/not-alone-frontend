@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/useHttpClient";
 import { useSState } from "../../hooks/useSState";
 
-import useUserService from "../../services/useUserService";
 import Button from "../FormElements/Button/Button";
 import LoadingSpinner from "../UIComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./PickUserInput.module.css";
+import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 
 const PickUserInput = (props) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -15,8 +15,7 @@ const PickUserInput = (props) => {
     useSState("");
 
   // State that stores and controls the search query value
-  const [searchQuery, setSearchQuery, { onChangeHandler: changeSearchQuery }] =
-    useSState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // State that stores the search results
   const [searchResults, setSearchResults] = useState([]);
@@ -24,7 +23,7 @@ const PickUserInput = (props) => {
   useEffect(() => {
     // Make sure the search query changes, when the searchText Changes
     setSearchQuery(searchText);
-  }, [searchText]);
+  }, [searchText, setSearchQuery]);
 
   // State that controls if the floating window is open
   const [showFloater, setShowFloater] = useState(false);
@@ -38,7 +37,7 @@ const PickUserInput = (props) => {
     if (!props.value && !searchQuery) {
       setSearchText("");
     }
-  }, [props.value]);
+  }, [props.value, setSearchText, searchQuery]);
 
   // Perform search when the searchQuery changes and the props.value is null
   useEffect(() => {
@@ -82,7 +81,7 @@ const PickUserInput = (props) => {
       active = false;
       clearTimeout(timeoutHandle);
     };
-  }, [searchQuery, props.value]);
+  }, [searchQuery, props.value, props.searchInContacts, sendRequest]);
 
   const focusHandler = (event) => {
     setSearchQuery(searchText);
@@ -98,6 +97,7 @@ const PickUserInput = (props) => {
 
   const selectSuggetionHandler = (suggetion) => (event) => {
     setSearchResults([]);
+    setShowFloater(false);
     props.onChange(suggetion);
   };
 
@@ -108,6 +108,8 @@ const PickUserInput = (props) => {
 
   return (
     <div className={styles["pick-user"]}>
+      {error && <ErrorModal error={error} onClose={clearError} />}
+
       <label htmlFor="add-contact">{props.title || "Добави контакт:"}</label>
       <div className={styles.input}>
         {!!props.value && (
