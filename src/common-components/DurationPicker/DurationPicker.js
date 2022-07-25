@@ -16,6 +16,12 @@ const DurationPicker = (props) => {
   const [d, setD] = useEState(days);
   const [h, setH] = useEState(hours);
   const [m, setM] = useEState(minutes);
+  const validateChangeHandler = (setState) => (event) => {
+    if (!/^[0-9]*$/.test(event.target.value)) {
+      return;
+    }
+    setState(event);
+  };
 
   useEffect(() => {
     setM(minutes);
@@ -57,11 +63,11 @@ const DurationPicker = (props) => {
           ) : (
             <input
               className={styles.input}
-              type="number"
+              type="text"
               step={1}
               min={0}
               value={d}
-              onChange={setD}
+              onChange={validateChangeHandler(setD)}
               onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.DAY, days)}
             />
@@ -75,11 +81,11 @@ const DurationPicker = (props) => {
           ) : (
             <input
               className={styles.input}
-              type="number"
+              type="text"
               step={1}
               min={0}
               value={h}
-              onChange={setH}
+              onChange={validateChangeHandler(setH)}
               onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.HOUR, hours)}
             />
@@ -93,11 +99,11 @@ const DurationPicker = (props) => {
           ) : (
             <input
               className={styles.input}
-              type="number"
+              type="text"
               step={1}
               min={0}
               value={m}
-              onChange={setM}
+              onChange={validateChangeHandler(setM)}
               onKeyDown={blockEnterHandler}
               onBlur={changeHandler(TimeConst.MINUTE, minutes)}
             />
