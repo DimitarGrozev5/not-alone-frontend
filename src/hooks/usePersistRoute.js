@@ -4,20 +4,22 @@ import { useNavigate, useLocation } from "react-router-dom";
 export const usePersistRoute = () => {
   const navigate = useRef(useNavigate()).current;
 
-  useEffect(() => {
-    window.history.pushState(null, "", "profile");
-  }, []);
+  // TODO: Also save the hystory to Local storage
+  // useEffect(() => {
+  //   window.history.pushState(null, "", "planned-trips");
+  //   window.history.pushState(null, "", "watching");
+  //   window.history.pushState(null, "", "ongoing-trip");
+  // }, []);
 
   // Save the last route, whenever it changes
-  // TODO: Also save the hystory to Local storage
   const currentPath = useLocation().pathname;
   useEffect(() => {
-    localStorage.setItem("last-route", currentPath);
+    sessionStorage.setItem("last-route", currentPath);
   }, [currentPath, navigate]);
 
   // Navigate to last route, taken from Local Storage
   useEffect(() => {
-    const lastRoute = localStorage.getItem("last-route");
+    const lastRoute = sessionStorage.getItem("last-route");
     if (lastRoute) {
       navigate(lastRoute);
     }
