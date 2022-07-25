@@ -24,7 +24,7 @@ const Watching = () => {
     const getData = async () => {
       try {
         const { watchingRes, requestsRes } = await sendRequest(
-          "trips/watching",
+          "/trips/watching",
           null,
           { auth: true }
         );
@@ -42,7 +42,7 @@ const Watching = () => {
   const answerRequest = (answer, reqId) => async (event) => {
     event.preventDefault();
     try {
-      await sendRequest(`requests/${reqId}/${answer}`, null, {
+      await sendRequest(`/requests/${reqId}/${answer}`, null, {
         method: "POST",
         auth: true,
       });

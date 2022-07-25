@@ -27,7 +27,7 @@ const ProfilePage = (props) => {
       const fetchData = async () => {
         try {
           const uData = JSON.parse(localStorage.getItem("jwt"));
-          const userData = await sendRequest(`users/${uData.userId}`, null, {
+          const userData = await sendRequest(`/users/${uData.userId}`, null, {
             auth: true,
           });
           setUser({ ...userData, token: uData.token, id: uData.userId });
@@ -42,7 +42,7 @@ const ProfilePage = (props) => {
   // Logout user
   const logoutHandler = async () => {
     try {
-      await sendRequest("users/logout", {
+      await sendRequest("/users/logout", {
         token: user.token,
       });
       localStorage.removeItem("jwt");
@@ -68,7 +68,7 @@ const ProfilePage = (props) => {
 
     try {
       await sendRequest(
-        "requests",
+        "/requests",
         {
           from: user.id,
           to: newUser.id,
@@ -88,7 +88,7 @@ const ProfilePage = (props) => {
     event.preventDefault();
 
     try {
-      await sendRequest(`requests/${id}/accept`, null, {
+      await sendRequest(`/requests/${id}/accept`, null, {
         auth: true,
         method: "POST",
       });

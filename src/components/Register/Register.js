@@ -50,7 +50,7 @@ const Register = (props) => {
     };
 
     try {
-      const response = await sendRequest("users/register", data);
+      const response = await sendRequest("/users/register", data);
 
       alert("Създаден е нов потребител!");
       localStorage.setItem("jwt", JSON.stringify(response));

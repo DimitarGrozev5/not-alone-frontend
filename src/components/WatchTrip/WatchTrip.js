@@ -23,7 +23,7 @@ const WatchTrip = () => {
       const getData = async () => {
         try {
           const { trip: tripResult } = await sendRequest(
-            `trips/watching/${tripId}`,
+            `/trips/watching/${tripId}`,
             null,
             { auth: true }
           );

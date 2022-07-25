@@ -49,7 +49,7 @@ const PickUserInput = (props) => {
       // It updates the state only if the "active" flag is true
       // The active flag is set to false on useEffect exit
       const search = async () => {
-        const route = `users?query=${encodeURIComponent(searchQuery)}`;
+        const route = `/users?query=${encodeURIComponent(searchQuery)}`;
 
         const res = await sendRequest(route, null, { auth: true });
         if (active) {

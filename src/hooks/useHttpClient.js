@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { baseUrl } from "../constants/baseUrl";
 import { userActions } from "../redux-store/userSlice";
 
 export const useHttpClient = () => {
@@ -54,7 +53,7 @@ export const useHttpClient = () => {
 
       try {
         // Fetch data
-        const response = await fetch(baseUrl + url, config);
+        const response = await fetch(process.env.REACT_APP_BACKEND_API + url, config);
 
         // Convert to json
         const responseData = await response.json();

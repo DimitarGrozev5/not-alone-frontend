@@ -42,7 +42,7 @@ const OngoingTrip = () => {
       const getData = async () => {
         try {
           const { allTrips, activeTrip } = await sendRequest(
-            "trips/active",
+            "/trips/active",
             null,
             { auth: true }
           );
@@ -65,7 +65,7 @@ const OngoingTrip = () => {
     event.preventDefault();
     const settings = { notifyWatchers };
     try {
-      await sendRequest(`trips/${startTripModal._id}/start`, settings, {
+      await sendRequest(`/trips/${startTripModal._id}/start`, settings, {
         method: "POST",
         auth: true,
       });
@@ -81,7 +81,7 @@ const OngoingTrip = () => {
     async (event) => {
       event.preventDefault();
       try {
-        await sendRequest(`trips/${activeTrip._id}/${command}`, body, {
+        await sendRequest(`/trips/${activeTrip._id}/${command}`, body, {
           method: "POST",
           auth: true,
         });
@@ -99,7 +99,7 @@ const OngoingTrip = () => {
     event.preventDefault();
     if (del) {
       try {
-        await sendRequest(`trips/${activeTrip._id}`, null, {
+        await sendRequest(`/trips/${activeTrip._id}`, null, {
           method: "DELETE",
           auth: true,
         });

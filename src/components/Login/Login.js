@@ -24,7 +24,7 @@ const Login = (props) => {
     };
 
     try {
-      const response = await sendRequest("users/login", loginData);
+      const response = await sendRequest("/users/login", loginData);
 
       localStorage.setItem("jwt", JSON.stringify(response));
       dispatch(userActions.updateAccessToken(response.token));
