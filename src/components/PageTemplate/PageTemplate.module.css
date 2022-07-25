@@ -9,7 +9,7 @@ body {
   left: 0rem;
   right: 0rem;
 
-  overflow: scroll;
+  overflow: auto;
 
   display: flex;
   flex-direction: column;
