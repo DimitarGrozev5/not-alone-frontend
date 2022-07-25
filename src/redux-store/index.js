@@ -7,9 +7,6 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     notif: notificationReducer,
-
-    // TODO: remove requests
-    // requests: requestReducer,
   },
 });
 
