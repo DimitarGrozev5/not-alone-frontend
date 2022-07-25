@@ -4,6 +4,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 export const usePersistRoute = () => {
   const navigate = useRef(useNavigate()).current;
 
+  useEffect(() => {
+    window.history.pushState(null, "", "profile");
+  }, []);
+
   // Save the last route, whenever it changes
   // TODO: Also save the hystory to Local storage
   const currentPath = useLocation().pathname;

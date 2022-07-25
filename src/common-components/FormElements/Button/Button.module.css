@@ -34,12 +34,4 @@
     color: var(--color-dark-4);
     background-color: var(--color-light-4);
   }
-
-  /*TODO: modify stretch for desktop app*/
-  .stretch {
-    padding: 0.8rem 0.5rem;
-    width: 100%;
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
 }

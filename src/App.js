@@ -72,7 +72,7 @@ function App() {
       {isLoggedIn && (
         <>
           <Route path="/" element={<PageTemplate />}>
-            <Route index element={<Navigate to="/planned-trips" />} />
+            <Route index element={<Navigate to="/profile" />} />
             <Route path="/planned-trips" element={<PlannedTrips />} />
             <Route path="/watching" element={<Watching />} />
             <Route path="/ongoing-trip" element={<OngoingTrip />} />

@@ -1,8 +1,3 @@
-/*
- * TODO
- * The page should be made to reload after a request for connection is send
- */
-
 import ProfileOverview from "./ProfileOverview";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
