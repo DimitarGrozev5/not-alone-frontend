@@ -13,8 +13,7 @@ Cash dynamic assets
 Add maping functionality
 */
 
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
@@ -22,7 +21,6 @@ import PageTemplate from "./components/PageTemplate/PageTemplate";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
-import { userActions } from "./redux-store/userSlice";
 import PlannedTrips from "./components/PlannedTrips/PlannedTrips";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
 import PlanTrip from "./components/PlanTrip/PlanTrip";

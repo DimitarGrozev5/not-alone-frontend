@@ -49,7 +49,7 @@ const Login = (props) => {
         />
         <label htmlFor="password">Password:</label>
         <input ref={passwordRef} type="password" name="password" />
-        <Button stretch>Вписване</Button>
+        <Button type="submit" stretch>Вписване</Button>
       </FormCard>
     </>
   );
