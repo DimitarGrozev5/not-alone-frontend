@@ -36,7 +36,7 @@ export const useWebSocket = () => {
 
     // When the connection opens, send user credentials
     ws.onopen = function (event) {
-      ws.send(JSON.stringify({ token: isLoggedIn }));
+      ws.send(JSON.stringify({ actor: "USER", token: isLoggedIn }));
     };
 
     // When an Event is received, categorize it and performe the proper action
