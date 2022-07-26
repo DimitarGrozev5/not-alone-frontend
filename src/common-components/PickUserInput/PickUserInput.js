@@ -92,7 +92,7 @@ const PickUserInput = (props) => {
     setTimeout(() => {
       setSearchQuery("");
       setShowFloater(false);
-    }, 50);
+    }, 500);
   };
 
   const selectSuggetionHandler = (suggetion) => (event) => {
