@@ -13,7 +13,7 @@ Cash dynamic assets
 Add maping functionality
 */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -35,6 +35,9 @@ import { useAuth } from "./hooks/useAuth";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  // Service worker
+  
 
   // Get token from local storage
   useAuth();
