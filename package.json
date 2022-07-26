@@ -20,7 +20,8 @@
     "build": "react-scripts build && node ./setServiceWorker.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build && node ./setServiceWorker.js && firebase deploy"
+    "deploy": "react-scripts build && node ./setServiceWorker.js && firebase deploy",
+    "sw": "node ./setServiceWorker.js"
   },
   "eslintConfig": {
     "extends": [

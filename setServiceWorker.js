@@ -19,7 +19,7 @@ const getFileList = async (dir) => {
       //listing all files using forEach
       files.forEach(function (file) {
         // Do whatever you want to do with the file
-        fileNames.push(`"/${file}",`);
+        fileNames.push(file);
       });
 
       resolve(fileNames);
@@ -31,7 +31,7 @@ const getFileList = async (dir) => {
 
 const openFile = async (fn) => {
   const fileName = path.join(__dirname, fn);
-  return await new Promise((resolve, reject) => {
+  const files = await new Promise((resolve, reject) => {
     fs.readFile(fileName, "utf8", function (err, data) {
       if (err) {
         reject(err);
@@ -40,6 +40,7 @@ const openFile = async (fn) => {
       resolve(data);
     });
   });
+  return files;
 };
 
 const writeFile = async (fn, data) => {
@@ -56,13 +57,16 @@ const fn = async () => {
   // Get all static file names
   const cssFiles = await getFileList(cssDirectoryPath);
   const jsFiles = await getFileList(jsDirectoryPath);
-  const fileList = [...cssFiles, ...jsFiles];
+  const fileList = [
+    ...cssFiles.map((f) => `"/static/css/${f}"`),
+    ...jsFiles.map((f) => `"/static/js/${f}"`),
+  ];
 
   // Inject file names in sw.js file
   const swData = await openFile("public/sw.js");
   const plug = swData.replace(
     "// {{{Inject static folder files here}}}",
-    fileList.join("\n        ")
+    fileList.join(",\n        ")
   );
   await writeFile("build/sw.js", plug);
 };
