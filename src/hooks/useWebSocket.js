@@ -32,7 +32,7 @@ export const useWebSocket = () => {
     }
 
     // Start Websocket
-    const ws = new WebSocket("ws://localhost:8999");
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_SERVER);
 
     // When the connection opens, send user credentials
     ws.onopen = function (event) {
