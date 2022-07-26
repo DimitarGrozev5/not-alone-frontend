@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../redux-store/userSlice";
 
-export const useGetLoginToken = () => {
+export const useAuth = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -15,7 +15,8 @@ export const useGetLoginToken = () => {
     } catch (err) {
       localStorage.removeItem("jwt");
     }
-    // Get token
+
+    // Set token
     if (userData) {
       dispatch(userActions.updateAccessToken(userData.token));
     }

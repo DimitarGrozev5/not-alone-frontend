@@ -31,13 +31,13 @@ import OngoingTrip from "./components/OngoingTrip/OngoingTrip";
 import { usePersistRoute } from "./hooks/usePersistRoute";
 import Reload from "./common-components/Reload/Reload";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { useGetLoginToken } from "./hooks/useGetLoginToken";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   // Get token from local storage
-  useGetLoginToken();
+  useAuth();
 
   // Save current route to LocalStorage and retreive it on first load
   usePersistRoute();
