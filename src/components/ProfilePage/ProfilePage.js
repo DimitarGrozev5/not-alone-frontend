@@ -13,6 +13,7 @@ import { useHttpClient } from "../../hooks/useHttpClient";
 import { requestTypes } from "../../data-types/trip-data";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../redux-store/userSlice";
+import ProfileNotificationSettings from "./ProfileNotificationSettings";
 
 const ProfilePage = (props) => {
   const dispatch = useDispatch();
@@ -140,6 +141,10 @@ const ProfilePage = (props) => {
               inRequests={user.inConReq}
               onAccept={acceptRequestHandler}
             />
+          </DataCard>
+
+          <DataCard fullWidth>
+            <ProfileNotificationSettings />
           </DataCard>
 
           <DataCard fullWidth>

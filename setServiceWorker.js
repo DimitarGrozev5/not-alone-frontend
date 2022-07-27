@@ -66,7 +66,7 @@ const fn = async () => {
   const swData = await openFile("public/sw.js");
   const plug = swData.replace(
     "// {{{Inject static folder files here}}}",
-    fileList.join(",\n        ")
+    fileList.join(",\n  ")
   );
   await writeFile("build/sw.js", plug);
 };
