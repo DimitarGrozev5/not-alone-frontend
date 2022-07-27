@@ -61,6 +61,15 @@ self.addEventListener("fetch", (event) => {
   // event.respondWith(fetch(event.request));
 });
 
+self.addEventListener("push", (event) => {
+  let data = { title: "Съобщение", body: "Проверете кой е На път", url: "/" };
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+
+  event.waitUntil(self.registration.showNotification(data.title, data));
+});
+
 self.addEventListener("notificationclick", (event) => {
   const notification = event.notification;
   const action = event.action;
@@ -70,7 +79,19 @@ self.addEventListener("notificationclick", (event) => {
     console.log("open confirm link");
     notification.close();
   } else {
-    console.log(action);
+    event.waitUntil(
+      clients.matchAll().then((clis) => {
+        const client = clis.find((c) => c.visibilityState === "visible");
+
+        if (client !== undefined) {
+          client.navigate(notification.data.url);
+          client.focus();
+        } else {
+          clients.openWindow(notification.data.url);
+        }
+        notification.close();
+      })
+    );
   }
 });
 

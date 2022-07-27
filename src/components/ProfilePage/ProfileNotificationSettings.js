@@ -3,8 +3,14 @@ import webpush from "web-push";
 import { useEffect, useState } from "react";
 import Button from "../../common-components/FormElements/Button/Button";
 import styles from "./ProfilePage.module.css";
+import { urlBase64ToUint8Array } from "../../utils/urlBase64ToUint8Array";
+import { useHttpClient } from "../../hooks/useHttpClient";
+import { useSelector } from "react-redux";
 
 const ProfileNotificationSettings = (props) => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const userId = useSelector((state) => state.user.userData.userId);
+
   const [notifsEnabled, setNotifsEnabled] = useState(false);
   useEffect(() => {
     if ("Notification" in window && "permissions" in navigator) {
@@ -58,19 +64,30 @@ const ProfileNotificationSettings = (props) => {
         return swreg.pushManager.getSubscription();
       })
       .then((subs) => {
-        if (subs === null) {
-          // Create new subscription
-          reg.pushManager.subscribe({
-            userVisibleOnly: true,
-          });
-        } else {
-          // We have a subscription
-        }
-      });
+        // if (subs === null) {
+        // const convVapidKey = urlBase64ToUint8Array(
+        //   process.env.REACT_APP_VAPID_PUBLIC_KEY
+        // );
+        // Create new subscription
+        return reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC_KEY,
+        });
+        // } else {
+        //   // We have a subscription
+        // }
+      })
+      .then((newSub) => {
+        // Save new subscription to server
+        const uData = JSON.parse(localStorage.getItem("jwt"));
+        return sendRequest(
+          `/users/${uData.userId}/settings/notifications/subscriptions`,
+          { subscription: JSON.stringify(newSub) },
+          { auth: true }
+        );
+      })
+      .catch((err) => console.log(err));
   };
-
-  const keys = webpush.generateVAPIDKeys();
-  console.log(keys);
 
   return (
     <>
@@ -87,7 +104,15 @@ const ProfileNotificationSettings = (props) => {
           настройките му.
         </h4>
       )}
+      <div>
+        Receive requests:{" "}
+        {props.notifSettings.receiveRequests ? "True" : "False"}
+      </div>
+      <div>
+        Receive alerts: {props.notifSettings.receiveAlerts ? "True" : "False"}
+      </div>
       <Button onClick={askForNotifPermission}>Нотификация</Button>
+      <Button onClick={configurePushSub}>Test subscription</Button>
     </>
   );
 };

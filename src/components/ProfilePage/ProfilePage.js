@@ -144,7 +144,9 @@ const ProfilePage = (props) => {
           </DataCard>
 
           <DataCard fullWidth>
-            <ProfileNotificationSettings />
+            <ProfileNotificationSettings
+              notifSettings={user.userData.settings.notifications}
+            />
           </DataCard>
 
           <DataCard fullWidth>
