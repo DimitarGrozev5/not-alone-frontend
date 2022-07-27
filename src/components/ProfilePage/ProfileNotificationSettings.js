@@ -1,3 +1,5 @@
+import webpush from "web-push";
+
 import { useEffect, useState } from "react";
 import Button from "../../common-components/FormElements/Button/Button";
 import styles from "./ProfilePage.module.css";
@@ -7,7 +9,7 @@ const ProfileNotificationSettings = (props) => {
   useEffect(() => {
     if ("Notification" in window && "permissions" in navigator) {
       navigator.permissions.query({ name: "notifications" }).then((result) => {
-        if (result.state == "granted") {
+        if (result.state === "granted") {
           setNotifsEnabled(true);
         } else {
           setNotifsEnabled(false);
@@ -28,13 +30,13 @@ const ProfileNotificationSettings = (props) => {
           vibrate: [100, 50, 200],
           // tag: "confirm-notification", // Acts as an id, to replace notifications with newer one
           // renotify: true, // New notifications with the same tag will alert again
-          actions: [
-            {
-              action: "confirm",
-              title: "Провери настройки",
-              // icon: "/road.png",
-            },
-          ],
+          // actions: [
+          //   {
+          //     action: "confirm",
+          //     title: "Провери настройки",
+          //     // icon: "/road.png",
+          //   },
+          // ],
         };
         // new Notification("Успешно включихте нотификациите", options);
         navigator.serviceWorker.ready.then((swReg) => {
@@ -43,6 +45,32 @@ const ProfileNotificationSettings = (props) => {
       }
     });
   };
+
+  const configurePushSub = () => {
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    let reg;
+    navigator.serviceWorker.ready
+      .then((swreg) => {
+        reg = swreg;
+        return swreg.pushManager.getSubscription();
+      })
+      .then((subs) => {
+        if (subs === null) {
+          // Create new subscription
+          reg.pushManager.subscribe({
+            userVisibleOnly: true,
+          });
+        } else {
+          // We have a subscription
+        }
+      });
+  };
+
+  const keys = webpush.generateVAPIDKeys();
+  console.log(keys);
 
   return (
     <>

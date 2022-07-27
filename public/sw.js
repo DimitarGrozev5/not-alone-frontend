@@ -61,6 +61,19 @@ self.addEventListener("fetch", (event) => {
   // event.respondWith(fetch(event.request));
 });
 
+self.addEventListener("notificationclick", (event) => {
+  const notification = event.notification;
+  const action = event.action;
+
+  console.log(notification);
+  if (action === "confirm") {
+    console.log("open confirm link");
+    notification.close();
+  } else {
+    console.log(action);
+  }
+});
+
 ////////// Caching strategies
 function cacheFirst(event) {
   event.respondWith(
