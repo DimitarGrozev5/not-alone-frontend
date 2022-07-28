@@ -60,24 +60,6 @@ const ProfileNotificationSettings = (props) => {
         setNotifsEnabled(false);
       } else {
         setNotifsEnabled(true);
-        // const options = {
-        //   body: "Можете да контролирате кои нотификации да излизат, от профилната Ви страница.",
-        //   icon: "/road.png",
-        //   vibrate: [100, 50, 200],
-        //   // tag: "confirm-notification", // Acts as an id, to replace notifications with newer one
-        //   // renotify: true, // New notifications with the same tag will alert again
-        //   // actions: [
-        //   //   {
-        //   //     action: "confirm",
-        //   //     title: "Провери настройки",
-        //   //     // icon: "/road.png",
-        //   //   },
-        //   // ],
-        // };
-        // // new Notification("Успешно включихте нотификациите", options);
-        // navigator.serviceWorker.ready.then((swReg) => {
-        //   swReg.showNotification("Успешно включихте нотификациите", options);
-        // });
       }
 
       // Configure new subscription
@@ -111,6 +93,16 @@ const ProfileNotificationSettings = (props) => {
         .catch((err) => console.log(err));
     });
   };
+
+  // If notification subscribtions are empty for some reason, then make a new subscribtion
+  useEffect(() => {
+    if (
+      !props.notifSettings.subscriptions.length &&
+      (props.notifSettings.receiveRequests || props.notifSettings.receiveAlerts)
+    ) {
+      askForNotifPermission();
+    }
+  }, [props.notifSettings]);
 
   return (
     <>
