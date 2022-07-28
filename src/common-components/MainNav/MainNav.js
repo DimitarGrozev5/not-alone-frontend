@@ -4,6 +4,7 @@ import { useLongPress } from "../../hooks/useLongPress";
 import { useSState } from "../../hooks/useSState";
 
 import styles from "./MainNav.module.css";
+import { useHint } from "./useHint";
 
 const MainNav = (props) => {
   const isActiveSwitch = ({ isActive }) => (isActive ? styles.active : "");
@@ -12,19 +13,7 @@ const MainNav = (props) => {
   const windowWidth = window.innerWidth;
 
   // Long press functionality
-  const longPressEvents = useLongPress();
-  const [showHint, setShowHint, { passValueHandler: setShowHintTo }] =
-    useSState(false, { preventDefault: false });
-  useEffect(() => {
-    let t;
-    if (showHint) {
-      t = setTimeout(() => {
-        setShowHint(false);
-      }, 2000);
-    }
-
-    return () => clearTimeout(t);
-  }, [showHint]);
+  const [showHint, setShowHintTo, longPressEvents] = useHint();
 
   return (
     <nav className={styles.nav}>
