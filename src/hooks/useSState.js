@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
 
-export const useSState = (value) => {
+export const useSState = (value, { preventDefault = true } = {}) => {
   const [state, setState] = useState(value);
   const handlers = useRef({
     onChangeHandler: (event) => setState(event.target.value),
     passValueHandler: (val) => (event) => {
       if (event && event.preventDefault) {
-        event.preventDefault();
+        preventDefault && event.preventDefault();
       }
       setState(val);
     },
     toggleHandler: (event) => {
       if (event && event.preventDefault && event?.target.type !== "checkbox") {
-        event.preventDefault();
+        preventDefault && event.preventDefault();
       }
       setState((val) => !val);
     },

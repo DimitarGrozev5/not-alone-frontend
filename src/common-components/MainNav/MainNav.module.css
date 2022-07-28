@@ -8,6 +8,22 @@
   height: 3rem;
 }
 
+.hint {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: -3rem;
+
+  text-align: center;
+  font-weight: bold;
+}
+
+.hint span {
+  padding: 0.2rem;
+  background-color: var(--color-light-2);
+  border: 1px solid var(--color-dark-5);
+}
+
 .nav > ul {
   margin: 0px;
   padding: 0px;
