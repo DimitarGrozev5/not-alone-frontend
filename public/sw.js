@@ -127,27 +127,20 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   const notification = event.notification;
-  const action = event.action;
 
-  console.log(notification);
-  if (action === "confirm") {
-    console.log("open confirm link");
-    notification.close();
-  } else {
-    event.waitUntil(
-      clients.matchAll().then((clis) => {
-        const client = clis.find((c) => c.visibilityState === "visible");
+  event.waitUntil(
+    clients.matchAll().then((clis) => {
+      const client = clis.find((c) => c.visibilityState === "visible");
 
-        if (client !== undefined) {
-          client.navigate(notification.data.url);
-          client.focus();
-        } else {
-          clients.openWindow(notification.data.url);
-        }
-        notification.close();
-      })
-    );
-  }
+      if (client !== undefined) {
+        client.navigate(notification.data.url);
+        client.focus();
+      } else {
+        clients.openWindow(notification.data.url);
+      }
+      notification.close();
+    })
+  );
 });
 
 ////////// Caching strategies
