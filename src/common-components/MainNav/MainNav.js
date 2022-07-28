@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useLongPress } from "../../hooks/useLongPress";
-import { useSState } from "../../hooks/useSState";
 
 import styles from "./MainNav.module.css";
 import { useHint } from "./useHint";

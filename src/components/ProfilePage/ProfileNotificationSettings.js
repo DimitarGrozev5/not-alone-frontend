@@ -1,17 +1,14 @@
-import webpush from "web-push";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Button from "../../common-components/FormElements/Button/Button";
-import styles from "./ProfilePage.module.css";
-import { urlBase64ToUint8Array } from "../../utils/urlBase64ToUint8Array";
+// import styles from "./ProfilePage.module.css";
 import { useHttpClient } from "../../hooks/useHttpClient";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useSState } from "../../hooks/useSState";
 import Modal from "../../common-components/UIComponents/Modal/Modal";
 
 const ProfileNotificationSettings = (props) => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  const userId = useSelector((state) => state.user.userData.userId);
+  const { sendRequest } = useHttpClient();
+  // const userId = useSelector((state) => state.user.userData.userId);
 
   const [notifsEnabled, setNotifsEnabled] = useState(false);
   const [notifsModal, setNotifsModal, { passValueHandler: setNotifsModalTo }] =
@@ -40,7 +37,11 @@ const ProfileNotificationSettings = (props) => {
         }
       });
     }
-  }, []);
+  }, [
+    props.notifSettings.receiveAlerts,
+    props.notifSettings.receiveRequests,
+    setNotifsModal,
+  ]);
 
   const showNotifsButton =
     (props.notifSettings.receiveRequests ||
@@ -53,7 +54,7 @@ const ProfileNotificationSettings = (props) => {
     localStorage.setItem("notifs-prompt", "rejected");
   };
 
-  const askForNotifPermission = () => {
+  const askForNotifPermission = useCallback(() => {
     setNotifsModal(false);
     Notification.requestPermission((result) => {
       if (result !== "granted") {
@@ -92,7 +93,7 @@ const ProfileNotificationSettings = (props) => {
         .then(() => alert("Устройството ще получава нотификации!"))
         .catch((err) => console.log(err));
     });
-  };
+  }, [sendRequest, setNotifsModal]);
 
   // If notification subscribtions are empty for some reason, then make a new subscribtion
   useEffect(() => {
@@ -102,7 +103,7 @@ const ProfileNotificationSettings = (props) => {
     ) {
       askForNotifPermission();
     }
-  }, [props.notifSettings]);
+  }, [props.notifSettings, askForNotifPermission]);
 
   return (
     <>

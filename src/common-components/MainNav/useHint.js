@@ -15,7 +15,7 @@ export const useHint = ({ hintDelay = 2000, longPressDelay = 300 } = {}) => {
     }
 
     return () => clearTimeout(t);
-  }, [showHint]);
+  }, [showHint, hintDelay, setShowHint]);
 
   return [showHint, setShowHintTo, longPressEvents];
 };
