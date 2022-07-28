@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
+
 import { userActions } from "../redux-store/userSlice";
 
 export const useAuth = () => {
@@ -12,8 +14,16 @@ export const useAuth = () => {
     let userData = null;
     try {
       userData = JSON.parse(localStorage.getItem("jwt"));
+
+      // Logout if token is expired
+      const exp = jwt_decode(userData.token).exp;
+      if (exp * 1000 < +new Date()) {
+        throw new Error("Expired token");
+      }
     } catch (err) {
+      console.log(err);
       localStorage.removeItem("jwt");
+      dispatch(userActions.updateAccessToken(null));
     }
 
     // Set token
