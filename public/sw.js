@@ -62,12 +62,67 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  let data = { title: "Съобщение", body: "Проверете кой е На път", url: "/" };
+  let data = {
+    title: "Съобщение",
+    body: "Проверете кой е На път",
+    url: "/",
+    type: "NOTIFICATION",
+  };
   if (event.data) {
     data = JSON.parse(event.data.text());
   }
 
-  event.waitUntil(self.registration.showNotification(data.title, data));
+  let options;
+  switch (data.type) {
+    case "TRIP_REQUEST":
+      options = {
+        body: data.body,
+        icon: "/road.png",
+        vibrate: [100, 50, 200],
+        tag: "confirm-trip", // Acts as an id, to replace notifications with newer one
+        renotify: true, // New notifications with the same tag will alert again
+        data: {
+          url: data.url,
+        },
+      };
+      break;
+    case "CONNECTION_REQUEST":
+      options = {
+        body: data.body,
+        icon: "/road.png",
+        vibrate: [100, 50, 200],
+        tag: "confirm-connection", // Acts as an id, to replace notifications with newer one
+        renotify: true, // New notifications with the same tag will alert again
+        data: {
+          url: data.url,
+        },
+      };
+    case "ALERT":
+      options = {
+        body: data.body,
+        icon: "/road.png",
+        vibrate: [400, 50, 400],
+        data: {
+          url: data.url,
+        },
+      };
+      break;
+
+    default:
+      options = {
+        body: data.body,
+        icon: "/road.png",
+        vibrate: [100, 50, 200],
+        tag: "generic-notification", // Acts as an id, to replace notifications with newer one
+        renotify: true, // New notifications with the same tag will alert again
+        data: {
+          url: data.url,
+        },
+      };
+      break;
+  }
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
