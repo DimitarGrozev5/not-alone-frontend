@@ -4,12 +4,20 @@ import React from "react";
 import styles from "./LoadingSpinner.module.css";
 
 const LoadingSpinner = (props) => {
-  return ReactDOM.createPortal(
+  const content = (
     <div className={props.asOverlay && styles["loading-spinner__overlay"]}>
       <div className={styles["lds-dual-ring"]}></div>
-    </div>,
-    document.getElementById("modal-root")
+    </div>
   );
+
+  if (props.asOverlay) {
+    return ReactDOM.createPortal(
+      content,
+      document.getElementById("modal-root")
+    );
+  }
+
+  return content;
 };
 
 export default LoadingSpinner;
