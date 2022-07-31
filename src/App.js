@@ -32,11 +32,13 @@ import { usePersistRoute } from "./hooks/usePersistRoute";
 import Reload from "./common-components/Reload/Reload";
 import { useWebSocket } from "./hooks/useWebSocket";
 import { useAuth } from "./hooks/useAuth";
+// import { useGPSRecorder } from "./hooks/useGPSRecorder";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  // Service worker
+  // // Handle GPS recording
+  // useGPSRecorder();
 
   // Get token from local storage
   useAuth();

@@ -60,6 +60,10 @@ const OngoingActive = (props) => {
           <Button stretch onClick={props.onTripControl("next-stop")}>
             Стигнах до следващата спирка
           </Button>
+          <div>Можете да запазите локация и данни за батерията</div>
+          <Button stretch onClick={props.onSnapshot}>
+            Запазване на локация
+          </Button>
         </DataCard>
       )}
       {activeTrip.tripStatus.status === "FINISHED" && (

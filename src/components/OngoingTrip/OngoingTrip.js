@@ -13,8 +13,13 @@ import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
+import { getLocation } from "../../utils/getLocation";
+import { getBattery } from "../../utils/getBattery";
+// import { useDispatch } from "react-redux";
+// import { setGpsRecordTo } from "../../redux-store/gpsThunks/changeGpsRecordThunk";
 
 const OngoingTrip = () => {
+  // const dispatch = useDispatch();
 
   // Data about trips
   const [allTrips, setAllTrips] = useState(null);
@@ -34,7 +39,8 @@ const OngoingTrip = () => {
   ] = useSState(false);
 
   // Get HTTP Client
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError, setError } =
+    useHttpClient();
 
   // Load Data
   useEffect(() => {
@@ -61,8 +67,35 @@ const OngoingTrip = () => {
   // Trip controllers
   const [notifyWatchers, , { toggleHandler: toggleNotify }] = useSState(false);
 
+  // // Should the user record GPS data
+  // const [recordGPS, setRecordGPS] = useState(false);
+  // // What is the current status of the geolocation permition
+  // const [gpsState, setGPSState] = useState("denied");
+
+  // Update the geolocation permition after component load
+  // useEffect(() => {
+  //   if ("geolocation" in navigator && "permissions" in navigator) {
+  //     navigator.permissions.query({ name: "geolocation" }).then((result) => {
+  //       setGPSState(result.state);
+  //     });
+  //   } else {
+  //     setGPSState("unavailable");
+  //   }
+  // }, []);
+
+  // const toggleRecordGPS = (event) => {
+  //   setRecordGPS((gps) => !gps);
+  //   // If the user turns on the GPS recording, prompt for permition
+  //   if (gpsState === "prompt") {
+  //     navigator.geolocation.getCurrentPosition(() => {});
+  //   }
+  // };
+
   const sendStartTrip = async (event) => {
     event.preventDefault();
+
+    // dispatch(setGpsRecordTo(recordGPS));
+
     const settings = { notifyWatchers };
     try {
       await sendRequest(`/trips/${startTripModal._id}/start`, settings, {
@@ -105,12 +138,32 @@ const OngoingTrip = () => {
         });
         setAllTrips(null);
         setActiveTrip(null);
-        setDeleteTrip(false)
+        setDeleteTrip(false);
       } catch (err) {
         console.log(err);
       }
     } else {
       setDeleteTrip(true);
+    }
+  };
+
+  const snapshotHandler = async () => {
+    if ("geolocation" in navigator) {
+      if ("getBattery" in navigator) {
+        // Get location
+        const [location, battery] = await Promise.allSettled([
+          getLocation(),
+          getBattery(),
+        ]).then((results) => {
+          return results.map((r) =>
+            r.status === "fulfilled" ? r.value : null
+          );
+        });
+        console.log(location, battery);
+      } else {
+      }
+    } else {
+      setError("Този браузър не подържа записване на GPS данни");
     }
   };
 
@@ -126,6 +179,9 @@ const OngoingTrip = () => {
           tripName={startTripModal.name}
           notify={notifyWatchers}
           onNotifyChange={toggleNotify}
+          // recordGPS={recordGPS}
+          // gpsState={gpsState}
+          // onRecordGPSChange={toggleRecordGPS}
           onClose={startTripHandler(null)}
           onStart={sendStartTrip}
         />
@@ -154,11 +210,14 @@ const OngoingTrip = () => {
           onTripControl={tripControlHandler}
           onDeleteTrip={deleteTripHandler}
           onExtendTime={extendTimeHandler}
+          onSnapshot={snapshotHandler}
         />
       )}
 
       {/* Display data */}
-      {allTrips && !allTrips.length && <DataCard fullWidth>Все още нямате пътувания</DataCard>}
+      {allTrips && !allTrips.length && (
+        <DataCard fullWidth>Все още нямате пътувания</DataCard>
+      )}
       {allTrips && !!allTrips.length && (
         <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
       )}
