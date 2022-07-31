@@ -37,8 +37,7 @@ const OngoingTrip = () => {
   ] = useSState(false);
 
   // Get HTTP Client
-  const { isLoading, error, sendRequest, clearError } =
-    useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   // Load Data
   useEffect(() => {

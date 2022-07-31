@@ -55,7 +55,6 @@ const OngoingActive = (props) => {
 
       // Send request
       try {
-        console.log(reqBody);
         await sendRequest(
           `/trips/${props.activeTrip._id}/add-details`,
           reqBody,

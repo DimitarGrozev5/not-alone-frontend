@@ -12,8 +12,6 @@ const LoadingSpinner = (props) => {
     classes = styles["loading-spinner__mini"];
   }
 
-  console.log(classes);
-
   const content = (
     <div className={classes}>
       <div className={styles["lds-dual-ring"]}></div>
