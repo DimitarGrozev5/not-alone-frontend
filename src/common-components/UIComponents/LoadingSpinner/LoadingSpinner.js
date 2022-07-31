@@ -4,8 +4,18 @@ import React from "react";
 import styles from "./LoadingSpinner.module.css";
 
 const LoadingSpinner = (props) => {
+  let classes = "";
+  if (props.asOverlay) {
+    classes = styles["loading-spinner__overlay"];
+  }
+  if (props.minimize) {
+    classes = styles["loading-spinner__mini"];
+  }
+
+  console.log(classes);
+
   const content = (
-    <div className={props.asOverlay && styles["loading-spinner__overlay"]}>
+    <div className={classes}>
       <div className={styles["lds-dual-ring"]}></div>
     </div>
   );

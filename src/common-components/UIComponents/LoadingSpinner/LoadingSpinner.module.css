@@ -16,6 +16,24 @@
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
+.loading-spinner__mini .lds-dual-ring {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.loading-spinner__mini .lds-dual-ring:after {
+  content: " ";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid var(--color-dark-5);
+  border-color: var(--color-dark-5) transparent var(--color-dark-5) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
 .loading-spinner__overlay {
   height: 100%;
   width: 100%;

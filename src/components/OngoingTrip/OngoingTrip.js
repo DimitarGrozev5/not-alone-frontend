@@ -13,8 +13,6 @@ import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
-import { getLocation } from "../../utils/getLocation";
-import { getBattery } from "../../utils/getBattery";
 // import { useDispatch } from "react-redux";
 // import { setGpsRecordTo } from "../../redux-store/gpsThunks/changeGpsRecordThunk";
 
@@ -39,7 +37,7 @@ const OngoingTrip = () => {
   ] = useSState(false);
 
   // Get HTTP Client
-  const { isLoading, error, sendRequest, clearError, setError } =
+  const { isLoading, error, sendRequest, clearError } =
     useHttpClient();
 
   // Load Data
@@ -147,26 +145,6 @@ const OngoingTrip = () => {
     }
   };
 
-  const snapshotHandler = async () => {
-    if ("geolocation" in navigator) {
-      if ("getBattery" in navigator) {
-        // Get location
-        const [location, battery] = await Promise.allSettled([
-          getLocation(),
-          getBattery(),
-        ]).then((results) => {
-          return results.map((r) =>
-            r.status === "fulfilled" ? r.value : null
-          );
-        });
-        console.log(location, battery);
-      } else {
-      }
-    } else {
-      setError("Този браузър не подържа записване на GPS данни");
-    }
-  };
-
   return (
     <>
       {/* Loading and error handling */}
@@ -210,7 +188,6 @@ const OngoingTrip = () => {
           onTripControl={tripControlHandler}
           onDeleteTrip={deleteTripHandler}
           onExtendTime={extendTimeHandler}
-          onSnapshot={snapshotHandler}
         />
       )}
 

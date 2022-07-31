@@ -3,13 +3,76 @@ import DataCard from "../../../common-components/UIComponents/DataCard/DataCard"
 import Button from "../../../common-components/FormElements/Button/Button";
 import { useTimeLeft } from "../../../hooks/useTimeLeft";
 import StopsMonitor from "../../../common-components/StopsMonitor/StopsMonitor";
+import { useHttpClient } from "../../../hooks/useHttpClient";
+import { getLocation } from "../../../utils/getLocation";
+import { getBattery } from "../../../utils/getBattery";
+import ErrorModal from "../../../common-components/UIComponents/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 
 const OngoingActive = (props) => {
   const activeTrip = props.activeTrip;
 
+  const { isLoading, error, sendRequest, clearError, setError } =
+    useHttpClient();
+
+  const snapshotHandler = async () => {
+    if ("geolocation" in navigator) {
+      let [location, battery] = [null, null];
+      try {
+        if ("getBattery" in navigator) {
+          // Get location
+
+          [location, battery] = await Promise.allSettled([
+            getLocation(),
+            getBattery(),
+          ]).then((results) =>
+            results.map((r) => {
+              if (r.status !== "fulfilled") {
+                throw new Error(r.reason.message);
+              }
+              return r.value;
+            })
+          );
+        } else {
+          location = await Promise.allSettled([getLocation()]);
+        }
+      } catch (err) {
+        setError(err.message);
+        return;
+      }
+
+      const reqBody = {};
+      if (location) {
+        reqBody.location = location;
+      }
+      if (battery) {
+        reqBody.battery = battery;
+      }
+
+      if (!location && !battery) {
+        return;
+      }
+
+      // Send request
+      try {
+        await sendRequest(
+          `/trips/${props.activeTrip._id}/add-details`,
+          reqBody,
+          { auth: true }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setError("Този браузър не подържа записване на GPS данни");
+    }
+  };
+
   const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
   return (
     <>
+      {error && <ErrorModal error={error} onClose={clearError} />}
+
       <DataCard fullWidth>
         <h2>Активно пътуване</h2>
       </DataCard>
@@ -61,8 +124,8 @@ const OngoingActive = (props) => {
             Стигнах до следващата спирка
           </Button>
           <div>Можете да запазите локация и данни за батерията</div>
-          <Button stretch onClick={props.onSnapshot}>
-            Запазване на локация
+          <Button disabled={isLoading} stretch onClick={snapshotHandler}>
+            Запазване на локация {isLoading && <LoadingSpinner minimize />}
           </Button>
         </DataCard>
       )}
