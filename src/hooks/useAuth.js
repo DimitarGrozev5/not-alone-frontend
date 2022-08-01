@@ -13,7 +13,11 @@ export const useAuth = () => {
   useEffect(() => {
     let userData = null;
     try {
-      userData = JSON.parse(localStorage.getItem("jwt"));
+      const jwt = localStorage.getItem("jwt");
+      if (!jwt) {
+        return;
+      }
+      userData = JSON.parse(jwt);
 
       // Logout if token is expired
       const exp = jwt_decode(userData.token).exp;

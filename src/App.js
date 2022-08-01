@@ -37,9 +37,6 @@ import { useAuth } from "./hooks/useAuth";
 function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  // // Handle GPS recording
-  // useGPSRecorder();
-
   // Get token from local storage
   useAuth();
 
