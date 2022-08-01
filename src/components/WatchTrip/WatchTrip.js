@@ -9,11 +9,16 @@ import { useTimeLeft } from "../../hooks/useTimeLeft";
 import styles from "./WatchTrip.module.css";
 import { useSState } from "../../hooks/useSState";
 import Button from "../../common-components/FormElements/Button/Button";
+import Modal from "../../common-components/UIComponents/Modal/Modal";
+import Map from "../../common-components/Map/Map";
 
 const WatchTrip = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
+
+  const [mapRoute, setMapRoute, { passValueHandler: setMapRouteTo }] =
+    useSState(null);
 
   const [trip, setTrip] = useState(null);
   const tripId = useParams().tripId;
@@ -39,10 +44,19 @@ const WatchTrip = () => {
 
   const timeLeft = useTimeLeft(trip?.tripStatus.dueBy);
 
+  const showMapHandler = () => {
+    setMapRoute(true);
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
+      {mapRoute && (
+        <Modal onClose={setMapRouteTo(null)}>
+          <Map />
+        </Modal>
+      )}
 
       {trip && (
         <>
@@ -105,6 +119,23 @@ const WatchTrip = () => {
               <Button onClick={toggleShowDesc}>
                 {showDesc ? "Скрий " : "Покажи "} описание на спирките
               </Button>
+              {trip.tripStatus.data.locations.length && (
+                <Button onClick={showMapHandler}>
+                  Виж пътуването на карта
+                </Button>
+              )}
+            </DataCard>
+          )}
+          {trip.tripStatus.status === "VERY_LATE" && (
+            <DataCard>
+              <h2>Нива на батерията</h2>
+              <ul>
+                {trip.tripStatus.data.batteries.map((b) => (
+                  <li key={b._id}>
+                    [{new Date(b.timestamp).toString()}] {b.level}%
+                  </li>
+                ))}
+              </ul>
             </DataCard>
           )}
         </>
