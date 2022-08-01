@@ -74,7 +74,7 @@ export const fd = (d, f, { lang = "bg" } = {}) => {
   format = format.replace("n", minute);
 
   const second = date.getSeconds();
-  format = format.replace("s", (second + 1000).toString().substring(2));
+  format = format.replace("ss", (second + 1000).toString().substring(2));
   format = format.replace("s", second);
 
   return format;
