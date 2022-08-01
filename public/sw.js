@@ -4,6 +4,7 @@ const dynamicCacheVersion = "dynamic-v2";
 const staticRoutes = [
   "/",
   "/index.html",
+  "/index.html/profile",
   "/profile",
   "/planned-trips",
   "/watching",
