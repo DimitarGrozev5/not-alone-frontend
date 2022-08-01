@@ -11,6 +11,7 @@ import { useSState } from "../../hooks/useSState";
 import Button from "../../common-components/FormElements/Button/Button";
 import Modal from "../../common-components/UIComponents/Modal/Modal";
 import Map from "../../common-components/Map/Map";
+import { fd } from "../../utils/format-date";
 
 const WatchTrip = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -132,7 +133,7 @@ const WatchTrip = () => {
               <ul>
                 {trip.tripStatus.data.batteries.map((b) => (
                   <li key={b._id}>
-                    [{new Date(b.timestamp).toString()}] {b.level}%
+                    [{fd(b.timestamp, "dd.mm.yyyy hh:nn")}] {b.level}%
                   </li>
                 ))}
               </ul>
