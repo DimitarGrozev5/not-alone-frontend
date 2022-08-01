@@ -48,6 +48,13 @@
   align-items: center;
 }
 
+.loading-spinner__center-page {
+  position: fixed;
+  left: 50%;
+  right: 50%;
+  top: 45vh;
+}
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);

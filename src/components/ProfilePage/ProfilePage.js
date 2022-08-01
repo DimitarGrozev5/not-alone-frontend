@@ -10,7 +10,6 @@ import ConfirmModal from "../../common-components/UIComponents/ConfirmModal/Conf
 import { useHState } from "../../hooks/useHState";
 import Button from "../../common-components/FormElements/Button/Button";
 import { useHttpClient } from "../../hooks/useHttpClient";
-import { requestTypes } from "../../data-types/trip-data";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../redux-store/userSlice";
 import ProfileNotificationSettings from "./ProfileNotificationSettings";
@@ -73,7 +72,7 @@ const ProfilePage = (props) => {
         {
           from: user.id,
           to: newUser.id,
-          type: requestTypes.CONNECTION,
+          type: "CONNECTION",
         },
         { auth: true }
       );

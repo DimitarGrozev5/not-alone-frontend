@@ -7,11 +7,16 @@ export const useHttpClient = () => {
   const token = useSelector((state) => state.user.isLoggedIn);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [cached, setCached] = useState(false);
 
   const activeHttpRequests = useRef([]);
 
   const sendRequest = useCallback(
-    async (url, body = null, { method, headers, auth, notJSON } = {}) => {
+    async (
+      url,
+      body = null,
+      { method, headers, auth, notJSON, getCache } = {}
+    ) => {
       setIsLoading(true);
 
       const httpAbortCtrl = new AbortController();
@@ -52,8 +57,25 @@ export const useHttpClient = () => {
       config.signal = httpAbortCtrl.signal;
 
       try {
+        // Get data from cache
+        if ("caches" in window && getCache) {
+          caches
+            .match(process.env.REACT_APP_BACKEND_API + url)
+            .then((response) => {
+              if (response) {
+                return response.json();
+              }
+            })
+            .then((response) => {
+              setCached(response);
+            });
+        }
+
         // Fetch data
-        const response = await fetch(process.env.REACT_APP_BACKEND_API + url, config);
+        const response = await fetch(
+          process.env.REACT_APP_BACKEND_API + url,
+          config
+        );
 
         // Convert to json
         const responseData = await response.json();
@@ -74,6 +96,7 @@ export const useHttpClient = () => {
         }
 
         setIsLoading(false);
+        setCached(false);
         return responseData;
       } catch (err) {
         setError(err.message);
@@ -93,5 +116,5 @@ export const useHttpClient = () => {
 
   const clearError = () => setError(null);
 
-  return { isLoading, error, sendRequest, clearError, setError };
+  return { isLoading, cached, error, sendRequest, clearError, setError };
 };

@@ -53,9 +53,9 @@ self.addEventListener("fetch", (event) => {
     cacheFirst(event);
   }
   // If GET Request - Cache first on page, then network and dynamic caching
-  else if (event.request.method === "GET") {
-    networkThenDynamicCaching(event);
-  }
+  // else if (event.request.method === "GET") {
+  //   networkWithDynamicCaching(event);
+  // }
   // In all other cases - network only
   else {
     networkOnly(event);
@@ -64,6 +64,8 @@ self.addEventListener("fetch", (event) => {
   // event.respondWith(fetch(event.request));
 });
 
+
+// Handle push notifications
 self.addEventListener("push", (event) => {
   let data = {
     title: "Съобщение",
@@ -171,6 +173,19 @@ function cacheFirst(event) {
         return response;
       }
       return fetch(event.request);
+    })
+  );
+}
+
+// Fetch from network and return response
+// Cache response
+function networkWithDynamicCaching(event) {
+  event.respondWith(
+    fetch(event.request).then((response) => {
+      caches.open(dynamicCacheVersion).then((cache) => {
+        cache.put(event.request, response);
+      });
+      return response.clone();
     })
   );
 }

@@ -11,6 +11,9 @@ const LoadingSpinner = (props) => {
   if (props.minimize) {
     classes = styles["loading-spinner__mini"];
   }
+  if (props.centerPage) {
+    classes = styles["loading-spinner__center-page"];
+  }
 
   const content = (
     <div className={classes}>
