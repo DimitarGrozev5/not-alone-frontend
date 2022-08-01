@@ -1,4 +1,4 @@
-const staticCacheVersion = "static-v3";
+const staticCacheVersion = "static-v4";
 const dynamicCacheVersion = "dynamic-v1";
 
 const staticRoutes = [
