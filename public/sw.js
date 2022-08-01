@@ -1,10 +1,11 @@
-const staticCacheVersion = "static-v5";
+const staticCacheVersion = "static-v7";
 const dynamicCacheVersion = "dynamic-v2";
 
 const staticRoutes = [
   "/",
   "/index.html",
-  "/index.html/profile",
+  "/register",
+  "/login",
   "/profile",
   "/planned-trips",
   "/watching",
@@ -52,9 +53,9 @@ self.addEventListener("fetch", (event) => {
     cacheFirst(event);
   }
   // If GET Request - Cache first on page, then network and dynamic caching
-  // else if (event.request.method === "GET") {
-  //   networkThenDynamicCaching(event)
-  // }
+  else if (event.request.method === "GET") {
+    networkThenDynamicCaching(event);
+  }
   // In all other cases - network only
   else {
     networkOnly(event);
@@ -146,10 +147,27 @@ self.addEventListener("notificationclick", (event) => {
 });
 
 ////////// Caching strategies
+
+// Return imidiatly response from cache if available
+// Fetch data from network and update the cache
 function cacheFirst(event) {
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
+        // Send request for updating the cache
+        caches.open(staticCacheVersion).then((cache) => {
+          // cache.add(event.request.url);
+          fetch(event.request)
+            .then((response) => {
+              if (response.ok) {
+                return cache.put(event.request, response);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+
         return response;
       }
       return fetch(event.request);
@@ -157,15 +175,20 @@ function cacheFirst(event) {
   );
 }
 
+// Fetch from network and return response
+// Cache response
+// If there is an error return previous cached response
 function networkThenDynamicCaching(event) {
-  // event.respondWith(
-  //   fetch(event.request).then((response) => {
-  //     caches.open(dynamicCacheVersion).then((cache) => {
-  //       cache.put(response.clone());
-  //     });
-  //     return response;
-  //   })
-  // );
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        caches.open(dynamicCacheVersion).then((cache) => {
+          cache.put(event.request, response);
+        });
+        return response.clone();
+      })
+      .catch(() => caches.match(event.request))
+  );
 }
 
 function networkOnly(event) {
