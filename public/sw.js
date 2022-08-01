@@ -1,8 +1,9 @@
-const staticCacheVersion = "static-v4";
-const dynamicCacheVersion = "dynamic-v1";
+const staticCacheVersion = "static-v5";
+const dynamicCacheVersion = "dynamic-v2";
 
 const staticRoutes = [
   "/",
+  "/index.html",
   "/profile",
   "/planned-trips",
   "/watching",
