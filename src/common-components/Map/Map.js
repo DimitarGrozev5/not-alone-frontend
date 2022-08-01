@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-webpack-loader-syntax
 import mapboxgl from "!mapbox-gl";
 import { useEffect, useRef, useState } from "react";
 
