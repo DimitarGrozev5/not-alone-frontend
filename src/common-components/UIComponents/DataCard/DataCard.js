@@ -8,7 +8,10 @@ const DataCard = (props) => {
   if (props.fullWidth) {
     classes.push(styles["full-width"]);
   }
-  
+  if (props.limitHeight) {
+    classes.push(styles.limit);
+  }
+
   return <div className={classes.join(" ")}>{props.children}</div>;
 };
 

@@ -1,3 +1,4 @@
 span.accent {
   font-weight: bold;
+  color: var(--color-dark-3)
 }

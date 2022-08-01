@@ -46,7 +46,30 @@ const WatchTrip = () => {
   const timeLeft = useTimeLeft(trip?.tripStatus.dueBy);
 
   const showMapHandler = () => {
-    setMapRoute(true);
+    const loc = trip.tripStatus.data.locations;
+
+    // const [minLng, minLat, maxLng, maxLat] = loc.reduce(
+    //   ([minLng, minLat, maxLng, maxLat], lo) => {
+    //     return [
+    //       minLng > lo.longitude ? lo.longitude : minLng,
+    //       minLat > lo.latitude ? lo.latitude : minLat,
+    //       maxLng < lo.longitude ? lo.longitude : maxLng,
+    //       maxLat < lo.latitude ? lo.latitude : maxLat,
+    //     ];
+    //   },
+    //   [1000, 1000, 0, 0]
+    // );
+    // const lng = (maxLng + minLng) / 2;
+    // const lat = (maxLat + minLat) / 2;
+
+    // const max = Math.max(maxLng - minLng, maxLat - minLat);
+    // const zoom = Math.log2(59959.436 / max);
+
+    const props = {
+      route: loc,
+    };
+
+    setMapRoute(props);
   };
 
   return (
@@ -55,7 +78,7 @@ const WatchTrip = () => {
       {error && <ErrorModal error={error} onClose={clearError} />}
       {mapRoute && (
         <Modal onClose={setMapRouteTo(null)}>
-          <Map />
+          <Map {...mapRoute} />
         </Modal>
       )}
 
@@ -128,16 +151,34 @@ const WatchTrip = () => {
             </DataCard>
           )}
           {trip.tripStatus.status === "VERY_LATE" && (
-            <DataCard>
-              <h2>Нива на батерията</h2>
-              <ul>
-                {trip.tripStatus.data.batteries.map((b) => (
-                  <li key={b._id}>
-                    [{fd(b.timestamp, "dd.mm.yyyy hh:nn")}] {b.level}%
-                  </li>
-                ))}
-              </ul>
-            </DataCard>
+            <>
+              <DataCard limitHeight>
+                <h2>Нива на батерията</h2>
+                <ul>
+                  {trip.tripStatus.data.batteries.map((b) => (
+                    <li key={b._id}>
+                      <span className={styles.accent}>
+                        [{fd(b.timestamp, "dd.mm.yyyy hh:nn")}]
+                      </span>{" "}
+                      {b.level}%
+                    </li>
+                  ))}
+                </ul>
+              </DataCard>
+              <DataCard limitHeight>
+                <h2>Записани GPS локации</h2>
+                <ul>
+                  {trip.tripStatus.data.locations.map((loc) => (
+                    <li key={loc._id}>
+                      <span className={styles.accent}>
+                        [{fd(loc.timestamp, "dd.mm.yyyy hh:nn")}]
+                      </span>{" "}
+                      {loc.latitude}, {loc.longitude}
+                    </li>
+                  ))}
+                </ul>
+              </DataCard>
+            </>
           )}
         </>
       )}

@@ -13,6 +13,11 @@
   flex-grow: 1;
 }
 
+.limit {
+  max-height: 25vh;
+  overflow: auto;
+}
+
 @media screen and (min-width: 935px) {
   .card {
     background-color: var(--color-light-3);
