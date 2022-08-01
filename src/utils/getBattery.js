@@ -1,4 +1,4 @@
 export const getBattery = () =>
   navigator.getBattery().then((b) => ({
-    level: b.level * 100,
+    level: +(b.level * 100).toFixed(),
   }));
