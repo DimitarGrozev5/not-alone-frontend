@@ -73,8 +73,9 @@ const OngoingActive = (props) => {
   const onReload = props.onReload;
   useEffect(() => {
     if (
-      (dt < -60 * 1000 && activeTrip.tripStatus.status === "ONGOING") ||
-      (dt < -1 * 60 * 60 * 1000 && activeTrip.tripStatus.status === "LATE")
+      (dt < -65 * 1000 && activeTrip.tripStatus.status === "ONGOING") ||
+      (dt < -1 * 60 * 60 * 1000 + 5000 &&
+        activeTrip.tripStatus.status === "LATE")
     ) {
       onReload();
     }

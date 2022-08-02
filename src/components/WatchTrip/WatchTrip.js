@@ -43,7 +43,18 @@ const WatchTrip = () => {
     }
   }, [sendRequest, tripId, trip]);
 
-  const timeLeft = useTimeLeft(trip?.tripStatus.dueBy);
+  const [dt, timeLeft] = useTimeLeft(trip?.tripStatus.dueBy);
+  useEffect(() => {
+    if (!trip) {
+      return;
+    }
+    if (
+      (dt < -65 * 1000 && trip.tripStatus.status === "ONGOING") ||
+      (dt < -1 * 60 * 60 * 1000 + 5000 && trip.tripStatus.status === "LATE")
+    ) {
+      setTrip(null);
+    }
+  }, [dt, trip?.tripStatus.status]);
 
   const showMapHandler = () => {
     const loc = trip.tripStatus.data.locations;
