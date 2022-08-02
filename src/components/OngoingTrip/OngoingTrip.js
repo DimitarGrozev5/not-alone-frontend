@@ -13,12 +13,8 @@ import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
-// import { useDispatch } from "react-redux";
-// import { setGpsRecordTo } from "../../redux-store/gpsThunks/changeGpsRecordThunk";
 
 const OngoingTrip = () => {
-  // const dispatch = useDispatch();
-
   // Data about trips
   const [allTrips, setAllTrips] = useState(null);
   const [activeTrip, setActiveTrip] = useState(null);
@@ -49,7 +45,6 @@ const OngoingTrip = () => {
             null,
             { auth: true }
           );
-          // console.log(activeTrip);
           setAllTrips(allTrips);
           setActiveTrip(activeTrip);
         } catch (err) {
@@ -64,34 +59,8 @@ const OngoingTrip = () => {
   // Trip controllers
   const [notifyWatchers, , { toggleHandler: toggleNotify }] = useSState(false);
 
-  // // Should the user record GPS data
-  // const [recordGPS, setRecordGPS] = useState(false);
-  // // What is the current status of the geolocation permition
-  // const [gpsState, setGPSState] = useState("denied");
-
-  // Update the geolocation permition after component load
-  // useEffect(() => {
-  //   if ("geolocation" in navigator && "permissions" in navigator) {
-  //     navigator.permissions.query({ name: "geolocation" }).then((result) => {
-  //       setGPSState(result.state);
-  //     });
-  //   } else {
-  //     setGPSState("unavailable");
-  //   }
-  // }, []);
-
-  // const toggleRecordGPS = (event) => {
-  //   setRecordGPS((gps) => !gps);
-  //   // If the user turns on the GPS recording, prompt for permition
-  //   if (gpsState === "prompt") {
-  //     navigator.geolocation.getCurrentPosition(() => {});
-  //   }
-  // };
-
   const sendStartTrip = async (event) => {
     event.preventDefault();
-
-    // dispatch(setGpsRecordTo(recordGPS));
 
     const settings = { notifyWatchers };
     try {
@@ -156,9 +125,6 @@ const OngoingTrip = () => {
           tripName={startTripModal.name}
           notify={notifyWatchers}
           onNotifyChange={toggleNotify}
-          // recordGPS={recordGPS}
-          // gpsState={gpsState}
-          // onRecordGPSChange={toggleRecordGPS}
           onClose={startTripHandler(null)}
           onStart={sendStartTrip}
         />
@@ -187,6 +153,7 @@ const OngoingTrip = () => {
           onTripControl={tripControlHandler}
           onDeleteTrip={deleteTripHandler}
           onExtendTime={extendTimeHandler}
+          onReload={setActiveTrip.bind(null, null)}
         />
       )}
 

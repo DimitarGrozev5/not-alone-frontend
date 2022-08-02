@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { timeLeft } from "../utils/time";
 
 export const useTimeLeft = (targetTime) => {
-  const [left, setLeft] = useState("");
+  const [left, setLeft] = useState([0, ""]);
 
   useEffect(() => {
     let latestRequest;
     const update = () => {
-      const text = timeLeft(targetTime);
-      setLeft(text);
+      const [dt, text] = timeLeft(targetTime);
+      setLeft([dt, text]);
       latestRequest = requestAnimationFrame(update);
     };
     if (targetTime) {

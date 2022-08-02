@@ -8,6 +8,7 @@ import { getLocation } from "../../../utils/getLocation";
 import { getBattery } from "../../../utils/getBattery";
 import ErrorModal from "../../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
+import { useEffect } from "react";
 
 const OngoingActive = (props) => {
   const activeTrip = props.activeTrip;
@@ -68,7 +69,16 @@ const OngoingActive = (props) => {
     }
   };
 
-  const timeLeft = useTimeLeft(activeTrip?.tripStatus.dueBy);
+  const [dt, timeLeft] = useTimeLeft(activeTrip?.tripStatus.dueBy);
+  const onReload = props.onReload;
+  useEffect(() => {
+    if (
+      (dt < -60 * 1000 && activeTrip.tripStatus.status === "ONGOING") ||
+      (dt < -1 * 60 * 60 * 1000 && activeTrip.tripStatus.status === "LATE")
+    ) {
+      onReload();
+    }
+  }, [dt, activeTrip.tripStatus.status, onReload]);
   return (
     <>
       {error && <ErrorModal error={error} onClose={clearError} />}
