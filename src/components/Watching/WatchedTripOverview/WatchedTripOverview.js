@@ -6,7 +6,7 @@ import styles from "./WatchedTripOverview.module.css";
 const WatchedTripOverview = (props) => {
   const w = props.trip;
 
-  const timeLeft = useTimeLeft(w.tripStatus.dueBy);
+  const [,timeLeft] = useTimeLeft(w.tripStatus.dueBy);
   return (
     <DataCard>
       <Link to={`/watch/${w._id}`} className={styles.overview}>
