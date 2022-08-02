@@ -88,7 +88,7 @@ const PickUserInput = (props) => {
     setShowFloater(true);
   };
   const blurHandler = (event) => {
-    // TODO: find a solution that is not hacky
+    // TODO: find a solution that is not so hacky
     setTimeout(() => {
       setSearchQuery("");
       setShowFloater(false);

@@ -2,12 +2,13 @@ import { NavLink } from "react-router-dom";
 
 import styles from "./MainNav.module.css";
 import { useHint } from "./useHint";
+import { useWindowSize } from "./useWindowSize";
 
 const MainNav = (props) => {
   const isActiveSwitch = ({ isActive }) => (isActive ? styles.active : "");
 
   // TODO: I am assuming that the window size won't change
-  const windowWidth = window.innerWidth;
+  const windowWidth = useWindowSize();
 
   // Long press functionality
   const [showHint, setShowHintTo, longPressEvents] = useHint();
@@ -26,7 +27,7 @@ const MainNav = (props) => {
             to="/planned-trips"
             className={isActiveSwitch}
           >
-            {windowWidth >= 600 ? "Пътувания" : "П"}
+            {windowWidth >= 750 ? "Пътувания" : "П"}
           </NavLink>
         </li>
         <li>
@@ -35,7 +36,7 @@ const MainNav = (props) => {
             to="/watching"
             className={isActiveSwitch}
           >
-            {windowWidth >= 600 ? "Наблюдавай" : "Н"}
+            {windowWidth >= 750 ? "Наблюдавай" : "Н"}
           </NavLink>
         </li>
         <li>
@@ -44,7 +45,7 @@ const MainNav = (props) => {
             to="/ongoing-trip"
             className={isActiveSwitch}
           >
-            {windowWidth >= 600 ? "Активно пътуване" : "А"}
+            {windowWidth >= 750 ? "Активно пътуване" : "А"}
           </NavLink>
         </li>
         <li>
@@ -53,7 +54,7 @@ const MainNav = (props) => {
             to="/profile"
             className={isActiveSwitch}
           >
-            {windowWidth >= 600 ? "Профил" : "П"}
+            {windowWidth >= 750 ? "Профил" : "П"}
           </NavLink>
         </li>
       </ul>
