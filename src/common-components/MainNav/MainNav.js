@@ -7,7 +7,6 @@ import { useWindowSize } from "./useWindowSize";
 const MainNav = (props) => {
   const isActiveSwitch = ({ isActive }) => (isActive ? styles.active : "");
 
-  // TODO: I am assuming that the window size won't change
   const windowWidth = useWindowSize();
 
   // Long press functionality
