@@ -62,9 +62,19 @@ const fn = async () => {
     ...jsFiles.map((f) => `"/static/js/${f}"`),
   ];
 
-  // Inject file names in sw.js file
   const swData = await openFile("public/sw.js");
-  const plug = swData.replace(
+
+  // Replace version number for static and dynamic cache
+  const staticVersion = swData.match(/static-v([0-9]+)/)[1];
+  const dynamicVersion = swData.match(/static-v([0-9]+)/)[1];
+
+  const ver = swData
+    .replace(`static-v${staticVersion}`, `static-v${1 + +staticVersion}`)
+    .replace(`dynamic-v${dynamicVersion}`, `dynamic-v${1 + +dynamicVersion}`);
+  await writeFile("public/sw.js", ver);
+
+  // Inject file names in sw.js file
+  const plug = ver.replace(
     "// {{{Inject static folder files here}}}",
     fileList.join(",\n  ")
   );
