@@ -60,6 +60,7 @@ const ProfileNotificationSettings = (props) => {
       if (result !== "granted") {
         setNotifsEnabled(false);
       } else {
+        localStorage.removeItem("notifs-prompt")
         setNotifsEnabled(true);
       }
 

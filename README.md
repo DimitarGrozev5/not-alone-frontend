@@ -22,22 +22,28 @@ This Web Application provides the following user experience.
 This web application is developed using the following technologies, libraries and services:
 
 1. React
-   Used for building the user interface
+
+Used for building the user interface
 
 2. React Router v6
-   Used for routing and navigation in the app
+
+Used for routing and navigation in the app
 
 3. Redux Toolkit
-   It was added early in the development process and it's used for global state managment. It turned out that the added functionality is not required and can be replaced with the Context API.
+
+Used for global state managment.
 
 4. Mapbox GL JS
-   Library and Service used for displaying maps and visualising geospatial data.
+
+Library and Service used for displaying maps and visualising geospatial data.
 
 5. WebSockets
-   WebSockets are implemented for receiving events from the backend API in real time.
+
+WebSockets are implemented for receiving events from the backend API in real time.
 
 6. Service Worker
-   A Service Worker is implemented for a couple of reasons.
+
+A Service Worker is implemented for a couple of reasons.
 
 - Handling Push Notification
 - Allowing the Web App to be installed like a normal application
@@ -48,10 +54,9 @@ A Service Worker allows additional functionality to be added later on:
 - Caching dynamic assets for an improved offline capability
 - Implementing the Sync API for background synchronization of POST requests, when the internet access is limited
 
-Both functionalities would be usefull for this particular Web App
-
 7. Other
-   Additional libraries where used to solve specific tasks:
+
+Additional libraries where used to solve specific tasks:
 
 - **jwt-decode** - for decoding JSON Web Tokens
 - **nanoid** - for generating IDs
@@ -78,11 +83,11 @@ The src folder contains all of the Application **javascript** and **css** code.
 
 ## /src/index.js
 
-The **index.js** file wraps the React Application with Redux **Provider** and a **Router**.
+The **index.js** file wraps the React Application with Redux **Provider** and a **Router** and renders the App to the page.
 
 ## /src/App.js
 
-The **App.js** file sets up the Routs for React Router. It also handles authentication percistance and connects to the WebSocket Server
+The **App.js** file sets up the Routes for React Router. It also handles authentication percistance and connects to the WebSocket Server
 
 ## /src/components
 
@@ -130,11 +135,11 @@ On every App load the useAuth custom hook:
 
 ### Routing
 
-Route Components are rendered conditionaly based on the logged in statuse, that is taken from the Redux Store. A Nav Bar is created, using NavLink for navigating between pages.
+Route Components are rendered conditionaly based on the logged in status, that is taken from the Redux Store. A Nav Bar is created, using NavLink for navigating between pages.
 Two custom hooks are created to solve specific issues:
 
-- usePersistRoute - This hook saves the current page path to localStorage. After a reload it reads it and navigates authomaticaly.
-- useLoad and Reload component - There was a need to force some pages to reload. The solution was to create a useLoad hook that accepts a path and if the provided path is also the current path it navigates to the Reload component where it navigates back to the orginal page. A very hacky solution but it gets the job done.
+- usePersistRoute - This hook saves the current page path to localStorage. After a reload it reads it and navigates authomaticaly. This makes sure that if the page reloads it will load the correct route and not default to root.
+- useLoad and Reload component - There was a need to force some pages to reload. The solution was to create a useLoad hook that accepts a path and if the provided path matches the current path it navigates to the Reload component where it navigates back to the orginal page. A very hacky solution but it gets the job done.
 
 ### Page structure
 
@@ -160,7 +165,7 @@ After that the Server will send messages with events. There are three types of E
 
 - **NOTIFICATION** - updates the Redux Store and displays a pop up message with the notification for requests, started trips or other
 - **ALERT** - updates the Redux Store and displays a pop up message with the notification for a user that is late to a destination
-- **UPDATE** - if an UPDATE has happend on the current page, the page will reload, using the useLoad hook, so the updated data can be fetched
+- **UPDATE** - if an UPDATE has happend on the current page, the page will reload, using the useLoad hook, so the updated data can be fetched from the backend
 
 # Specific functionalities
 
@@ -168,7 +173,7 @@ After that the Server will send messages with events. There are three types of E
 
 ### Plan Trip component
 
-**PlanTrip** is a component that can create, update and delete a trip. It accepts a `mode` prop, that sets it to _create, edit_ or _view_ mode. Depending on the mode it provides a blank form, or it loads data and displays it.
+**PlanTrip** is a component that can create, update and delete a trip. It accepts a `mode` prop, that sets it to _create, edit_ or _view_ mode. Depending on the mode, it provides a blank form, or it loads data and displays it.
 A single trip is a relativly complex data structure. It contains multiple stops, each stop having multiple properties. It also has a name and a list of watchers. For this reason the state is managed through a `useReducer` hook that can handle multiple different actions. The **Reducer** function, that handles the incoming actions, uses **Immer**, in order to facilitate updates to the state without mutating it directly.
 
 ### PickUserInput component
