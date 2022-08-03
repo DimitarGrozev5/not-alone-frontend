@@ -60,7 +60,7 @@ const ProfileNotificationSettings = (props) => {
       if (result !== "granted") {
         setNotifsEnabled(false);
       } else {
-        localStorage.removeItem("notifs-prompt")
+        localStorage.removeItem("notifs-prompt");
         setNotifsEnabled(true);
       }
 
@@ -108,17 +108,18 @@ const ProfileNotificationSettings = (props) => {
 
   return (
     <>
-      {notifsModal && (
-        <Modal title="Нотификации" onClose={setNotifsModalTo(false)}>
-          <div>
-            Нотификациите не са активирани на това устройство. Няма да
-            получавате съобщения ако се случи нещо важно. Искате ли да ги
-            включите?
-          </div>
-          <Button onClick={askForNotifPermission}>Да</Button>
-          <Button onClick={cancelNotifPrompt}>Не</Button>
-        </Modal>
-      )}
+      <Modal
+        show={!!notifsModal}
+        title="Нотификации"
+        onClose={setNotifsModalTo(false)}
+      >
+        <div>
+          Нотификациите не са активирани на това устройство. Няма да получавате
+          съобщения ако се случи нещо важно. Искате ли да ги включите?
+        </div>
+        <Button onClick={askForNotifPermission}>Да</Button>
+        <Button onClick={cancelNotifPrompt}>Не</Button>
+      </Modal>
 
       <h3>Настройки на нотификациите</h3>
       {!("Notification" in window) && (

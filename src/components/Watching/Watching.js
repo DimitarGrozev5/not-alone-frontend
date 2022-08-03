@@ -57,25 +57,27 @@ const Watching = () => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
-      {requestsModal && requests && (
-        <Modal title="Заявки" onClose={toggleRequestsModal}>
-          {!requests.length && "Няма нови молби"}
-          {!!requests.length && (
-            <ul>
-              {requests.map((req) => (
-                <RequestItem
-                  key={req._id}
-                  request={req}
-                  onAccept={answerRequest("accept", req._id)}
-                  onReject={answerRequest("reject", req._id)}
-                />
-              ))}
-            </ul>
-          )}
-        </Modal>
-      )}
+      <Modal
+        show={!!requestsModal}
+        title="Заявки"
+        onClose={toggleRequestsModal}
+      >
+        {!requests.length && "Няма нови молби"}
+        {!!requests.length && (
+          <ul>
+            {requests.map((req) => (
+              <RequestItem
+                key={req._id}
+                request={req}
+                onAccept={answerRequest("accept", req._id)}
+                onReject={answerRequest("reject", req._id)}
+              />
+            ))}
+          </ul>
+        )}
+      </Modal>
 
       <DataCard fullWidth>
         <h1>Наблюдавани пътувания</h1>

@@ -5,7 +5,7 @@ import Modal from "../Modal/Modal";
 
 const ConfirmModal = (props) => {
   return (
-    <Modal onClose={props.onCancel} title="Потвърдете">
+    <Modal show={props.show} onClose={props.onCancel} title="Потвърдете">
       <>
         <p>{props.message}</p>
         <Button onClick={props.onConfirm}>Да</Button>

@@ -39,7 +39,7 @@ const HomePage = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard expand>
         <div>
