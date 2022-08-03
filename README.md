@@ -125,25 +125,27 @@ The Web App is split in four parts:
 ### Authentication
 
 The backend allows the registration and login of users. After a successfull registration or login it sends back a JWT that is stored in localStorage.
-LocalStorage is chosen, firstly because at this time the backend doesn't support http-only cookies and secondly because all user inputs are sanitized on the backend by the REST API or on the frontend by React.
+LocalStorage is chosen, firstly because at this time the backend doesn't support http-only cookies and secondly because all user inputs are sanitized both on the frontend and backend.
 After the JWT is stored in localStorage, the Redux Store is updated by setting the isLogedIn property to true.
-On every App load the useAuth custom hook:
 
-- Checks if there is a JWT in the localStorage
-- Checks if the token is valid and is not expired
-- Updates the app state through the Redux Store
+A custom hook - useAuth performs the following actions on first render of the App:
+
+1. Checks if there is a JWT in the localStorage
+2. Checks if the token is valid and is not expired
+3. Updates the app state through the Redux Store
 
 ### Routing
 
-Route Components are rendered conditionaly based on the logged in status, that is taken from the Redux Store. A Nav Bar is created, using NavLink for navigating between pages.
-Two custom hooks are created to solve specific issues:
+Route Components are rendered conditionaly based on the logged in status, that is taken from the Redux Store.
+Two custom hooks are created to solve specific routing issues:
 
-- usePersistRoute - This hook saves the current page path to localStorage. After a reload it reads it and navigates authomaticaly. This makes sure that if the page reloads it will load the correct route and not default to root.
-- useLoad and Reload component - There was a need to force some pages to reload. The solution was to create a useLoad hook that accepts a path and if the provided path matches the current path it navigates to the Reload component where it navigates back to the orginal page. A very hacky solution but it gets the job done.
+- **usePersistRoute** - When the user reloads the page, the current url gets reset to the base url of the app. To avoid that, the **usePersistRoute** saves the current url to localStorage, whenever it changes. When the user reloads the page, the cutom hook loads the last saved route and navigates to it. This behaviour can be better achieved by configuring the server properly, but this is not yet done.
+
+- **useLoad** and **Reload Component** - All pages are able to reload their data, when needed, but this functionality is available only from the **Component** that is rendered by the current Route. In some cases the App Component needs to force a reload of the currently rendered Route, without having access to it's inner functionalities. The **useNavigate** hook can't be used because it doesn't reload the component, if the tharget Route matches the current Route. For this reason the **useLoad** custom hook and **Reload** Component where created - to force reloads for the currently rendered Route.
 
 ### Page structure
 
-Every page loads it's data form the backend, when the user navigates to it. A custom useHttpClient was created. The hook exposes a couple of states and functions:
+When a user navigates to a Route, a Component is rendered. When the Component renders, it loads it's data from the backend and displays it. This happens every time the Route changes. A custom useHttpClient was created, to handle this data load. The hook exposes a couple of states and functions:
 
 - `isLoading` - _true_ if the page is fetching data
 - `error` - _false_ if there is no error or _error message_ if there was an http error or server error
