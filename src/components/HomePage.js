@@ -24,13 +24,14 @@ const HomePage = (props) => {
         }
       })();
     }
-  }, [randomTrip]);
+  }, [randomTrip, sendRequest]);
 
   const [dt, timeLeft] = useTimeLeft(randomTrip?.tripStatus.dueBy);
   useEffect(() => {
     if (
       (dt < -65 * 1000 && randomTrip?.tripStatus.status === "ONGOING") ||
-      (dt < -1 * 60 * 60 * 1000 + 5000 && randomTrip?.tripStatus.status === "LATE")
+      (dt < -1 * 60 * 60 * 1000 + 5000 &&
+        randomTrip?.tripStatus.status === "LATE")
     ) {
       setRandomTrip(null);
     }
@@ -39,7 +40,7 @@ const HomePage = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard expand>
         <div>

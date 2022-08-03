@@ -101,14 +101,15 @@ const PlanTrip = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
-      {confirmDelete && (
-        <ConfirmModal
-          onCancel={setConfirmDelete.bind(null, false)}
-          onConfirm={deleteHandler(true)}
-          message="Сигурни ли сте, че желаете да изтриете пътуването? Действието не може да бъде отменено!"
-        />
-      )}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
+
+      <ConfirmModal
+        show={!!confirmDelete}
+        onCancel={setConfirmDelete.bind(null, false)}
+        onConfirm={deleteHandler(true)}
+        message="Сигурни ли сте, че желаете да изтриете пътуването? Действието не може да бъде отменено!"
+      />
+
       <form onSubmit={saveData} className={styles.form}>
         {props.mode === "create" && (
           <DataCard fullWidth>

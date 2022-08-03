@@ -118,34 +118,38 @@ const OngoingTrip = () => {
       {/* Loading and error handling */}
       {isLoading && <LoadingSpinner asOverlay />}
       {error && <ErrorModal error={error} onClose={clearError} />}
-
       {/* Modals control */}
-      {startTripModal && (
-        <StartTripModal
-          tripName={startTripModal.name}
-          notify={notifyWatchers}
-          onNotifyChange={toggleNotify}
-          onClose={startTripHandler(null)}
-          onStart={sendStartTrip}
+      <StartTripModal
+        show={!!startTripModal}
+        tripName={startTripModal.name}
+        notify={notifyWatchers}
+        onNotifyChange={toggleNotify}
+        onClose={startTripHandler(null)}
+        onStart={sendStartTrip}
+      />
+
+      <Modal
+        show={!!extendTimeModal}
+        title="Удължаване на времето"
+        onClose={extendTimeHandler(false)}
+      >
+        <DurationPicker
+          duration={extendTimeModal}
+          onChange={setExtendTime}
+          mode="create"
         />
-      )}
-      {extendTimeModal !== false && (
-        <Modal title="Удължаване на времето" onClose={extendTimeHandler(false)}>
-          <DurationPicker
-            duration={extendTimeModal}
-            onChange={setExtendTime}
-            mode="create"
-          />
-          <Button onClick={sendExtendTime}>Удължи</Button>
-        </Modal>
-      )}
-      {deleteTripModal && (
-        <Modal title="Внимание" onClose={closeDeleteHandler(false)}>
-          Пътуването е свършило и ще бъде изтрито!
-          <Button onClick={closeDeleteHandler(false)}>Не</Button>
-          <Button onClick={deleteTripHandler(true)}>Добре</Button>
-        </Modal>
-      )}
+        <Button onClick={sendExtendTime}>Удължи</Button>
+      </Modal>
+
+      <Modal
+        show={!!deleteTripModal}
+        title="Внимание"
+        onClose={closeDeleteHandler(false)}
+      >
+        Пътуването е свършило и ще бъде изтрито!
+        <Button onClick={closeDeleteHandler(false)}>Не</Button>
+        <Button onClick={deleteTripHandler(true)}>Добре</Button>
+      </Modal>
 
       {activeTrip && (
         <OngoingActive

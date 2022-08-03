@@ -4,7 +4,11 @@ import styles from "./StartTripModal.module.css";
 
 const StartTripModal = (props) => {
   return (
-    <Modal title="Започване на пътуване" onClose={props.onClose}>
+    <Modal
+      show={props.show}
+      title="Започване на пътуване"
+      onClose={props.onClose}
+    >
       <div className={styles["start-trip"]}>
         <h1>{props.tripName}</h1>
         <div className={styles["start-trip__checkbox"]}>

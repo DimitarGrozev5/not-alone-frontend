@@ -82,7 +82,7 @@ const OngoingActive = (props) => {
   }, [dt, activeTrip.tripStatus.status, onReload]);
   return (
     <>
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard fullWidth>
         <h2>Активно пътуване</h2>

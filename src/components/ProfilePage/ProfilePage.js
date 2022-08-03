@@ -102,15 +102,14 @@ const ProfilePage = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
-      {showConfirmation && (
-        <ConfirmModal
-          message="Да бъде ли изпратена покана? Другият потребител ще види името и имейла Ви."
-          onConfirm={requestConnectionHandler(true)}
-          onCancel={setShowConfirmationHandler(false)}
-        />
-      )}
+      <ConfirmModal
+        show={!!showConfirmation}
+        message="Да бъде ли изпратена покана? Другият потребител ще види името и имейла Ви."
+        onConfirm={requestConnectionHandler(true)}
+        onCancel={setShowConfirmationHandler(false)}
+      />
 
       <DataCard fullWidth>
         <h1>Профил</h1>

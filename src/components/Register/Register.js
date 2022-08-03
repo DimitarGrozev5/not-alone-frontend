@@ -63,7 +63,7 @@ const Register = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
       <h1>Register a new account</h1>
       <FormCard onSubmit={submitHandler}>
         <FormInput

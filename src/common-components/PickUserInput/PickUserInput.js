@@ -108,7 +108,7 @@ const PickUserInput = (props) => {
 
   return (
     <div className={styles["pick-user"]}>
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <label htmlFor="add-contact">{props.title || "Добави контакт:"}</label>
       <div className={styles.input}>

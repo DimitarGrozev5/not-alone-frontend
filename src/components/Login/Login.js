@@ -36,7 +36,7 @@ const Login = (props) => {
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <h1>Login to your account</h1>
       <FormCard onSubmit={submitHandler}>
@@ -49,7 +49,9 @@ const Login = (props) => {
         />
         <label htmlFor="password">Password:</label>
         <input ref={passwordRef} type="password" name="password" />
-        <Button type="submit" stretch>Вписване</Button>
+        <Button type="submit" stretch>
+          Вписване
+        </Button>
       </FormCard>
     </>
   );

@@ -5,10 +5,7 @@ import Modal from "../Modal/Modal";
 
 const ErrorModal = (props) => {
   return (
-    <Modal
-      onClose={props.onClose}
-      title="Възника грешка!"
-    >
+    <Modal show={props.show} onClose={props.onClose} title="Възника грешка!">
       <>
         <p>{props.error}</p>
         <Button onClick={props.onClose}>ОК</Button>
