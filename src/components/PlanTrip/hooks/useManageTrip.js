@@ -1,4 +1,4 @@
-import { useReducer, useRef } from "react";
+import { useMemo, useReducer } from "react";
 import produce from "immer";
 import { nanoid } from "nanoid";
 
@@ -75,8 +75,9 @@ const tripReducer = (state, action) =>
 
       case "CHANGE_STOP_DESCRIPTION":
         t = action.payload.value;
-        draft.stops.find((s) => s.id === action.payload.id).data.placeDescription =
-          t < 0 ? 0 : t;
+        draft.stops.find(
+          (s) => s.id === action.payload.id
+        ).data.placeDescription = t < 0 ? 0 : t;
         break;
 
       case "ADD_WATCHER":
@@ -120,31 +121,35 @@ export const useManageTrip = () => {
   });
 
   // Action creators
-  const actions = useRef({
-    initTrip: (trip) => dispatch({ type: "INIT", payload: trip }),
+  const actions = useMemo(
+    () => ({
+      initTrip: (trip) => dispatch({ type: "INIT", payload: trip }),
 
-    changeName: (value) => dispatch({ type: "CHANGE_NAME", payload: value }),
-    stops: {
-      changeFirstStop: (value) =>
-        dispatch({ type: "CHANGE_FIRST_STOP", payload: value }),
+      changeName: (value) => dispatch({ type: "CHANGE_NAME", payload: value }),
+      stops: {
+        changeFirstStop: (value) =>
+          dispatch({ type: "CHANGE_FIRST_STOP", payload: value }),
 
-      appendStop: () => dispatch({ type: "APPEND_STOP" }),
-      deleteStop: (id) => () => dispatch({ type: "DELETE_STOP", payload: id }),
+        appendStop: () => dispatch({ type: "APPEND_STOP" }),
+        deleteStop: (id) => () =>
+          dispatch({ type: "DELETE_STOP", payload: id }),
 
-      changeText: (id) => (value) =>
-        dispatch({ type: "CHANGE_STOP_TEXT", payload: { id, value } }),
-      changeDuration: (id) => (value) =>
-        dispatch({ type: "CHANGE_STOP_DURATION", payload: { id, value } }),
-      changeDescription: (id) => (value) =>
-        dispatch({ type: "CHANGE_STOP_DESCRIPTION", payload: { id, value } }),
-    },
-    watchers: {
-      addNewWatcher: (value) =>
-        dispatch({ type: "ADD_WATCHER", payload: value }),
-      removeNewWatcher: (value) =>
-        dispatch({ type: "REMOVE_WATCHER", payload: value }),
-    },
-  }).current;
+        changeText: (id) => (value) =>
+          dispatch({ type: "CHANGE_STOP_TEXT", payload: { id, value } }),
+        changeDuration: (id) => (value) =>
+          dispatch({ type: "CHANGE_STOP_DURATION", payload: { id, value } }),
+        changeDescription: (id) => (value) =>
+          dispatch({ type: "CHANGE_STOP_DESCRIPTION", payload: { id, value } }),
+      },
+      watchers: {
+        addNewWatcher: (value) =>
+          dispatch({ type: "ADD_WATCHER", payload: value }),
+        removeNewWatcher: (value) =>
+          dispatch({ type: "REMOVE_WATCHER", payload: value }),
+      },
+    }),
+    []
+  );
 
   return { trip, actions };
 };
