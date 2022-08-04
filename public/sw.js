@@ -1,5 +1,5 @@
-const staticCacheVersion = "static-v15";
-const dynamicCacheVersion = "dynamic-v15";
+const staticCacheVersion = "static-v16";
+const dynamicCacheVersion = "dynamic-v16";
 
 const staticRoutes = [
   "/",
