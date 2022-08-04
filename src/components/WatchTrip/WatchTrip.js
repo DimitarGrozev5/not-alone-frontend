@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useHttpClient } from "../../hooks/useHttpClient";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
@@ -12,34 +11,18 @@ import Button from "../../common-components/FormElements/Button/Button";
 import Modal from "../../common-components/UIComponents/Modal/Modal";
 import Map from "../../common-components/Map/Map";
 import { fd } from "../../utils/format-date";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const WatchTrip = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const tripId = useParams().tripId;
+  const { data, reloadData, isLoading, error, sendRequest, clearError } =
+    useLoadPageData(`/trips/watching/${tripId}`);
+  const trip = data?.trip;
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
 
   const [mapRoute, setMapRoute, { passValueHandler: setMapRouteTo }] =
     useSState(null);
-
-  const [trip, setTrip] = useState(null);
-  const tripId = useParams().tripId;
-
-  useEffect(() => {
-    if (!trip) {
-      const getData = async () => {
-        try {
-          const { trip: tripResult } = await sendRequest(
-            `/trips/watching/${tripId}`
-          );
-          setTrip(tripResult);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      getData();
-    }
-  }, [sendRequest, tripId, trip]);
 
   const [dt, timeLeft] = useTimeLeft(trip?.tripStatus.dueBy);
   useEffect(() => {
@@ -47,30 +30,13 @@ const WatchTrip = () => {
       (dt < -65 * 1000 && trip?.tripStatus.status === "ONGOING") ||
       (dt < -1 * 60 * 60 * 1000 + 5000 && trip?.tripStatus.status === "LATE")
     ) {
-      setTrip(null);
+      // setTrip(null);
+      reloadData();
     }
   }, [dt, trip?.tripStatus.status]);
 
   const showMapHandler = () => {
     const loc = trip.tripStatus.data.locations;
-
-    // const [minLng, minLat, maxLng, maxLat] = loc.reduce(
-    //   ([minLng, minLat, maxLng, maxLat], lo) => {
-    //     return [
-    //       minLng > lo.longitude ? lo.longitude : minLng,
-    //       minLat > lo.latitude ? lo.latitude : minLat,
-    //       maxLng < lo.longitude ? lo.longitude : maxLng,
-    //       maxLat < lo.latitude ? lo.latitude : maxLat,
-    //     ];
-    //   },
-    //   [1000, 1000, 0, 0]
-    // );
-    // const lng = (maxLng + minLng) / 2;
-    // const lat = (maxLat + minLat) / 2;
-
-    // const max = Math.max(maxLng - minLng, maxLat - minLat);
-    // const zoom = Math.log2(59959.436 / max);
-
     const props = {
       route: loc,
     };
@@ -82,11 +48,10 @@ const WatchTrip = () => {
     <>
       {isLoading && <LoadingSpinner asOverlay />}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
-      {mapRoute && (
-        <Modal onClose={setMapRouteTo(null)}>
-          <Map {...mapRoute} />
-        </Modal>
-      )}
+
+      <Modal show={!!mapRoute} onClose={setMapRouteTo(null)}>
+        <Map {...mapRoute} />
+      </Modal>
       {trip && (
         <>
           <DataCard fullWidth>
