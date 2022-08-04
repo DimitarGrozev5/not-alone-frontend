@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-
 // import styles from "./OngoingTrip.module.css";
-import { useHttpClient } from "../../hooks/useHttpClient";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import Button from "../../common-components/FormElements/Button/Button";

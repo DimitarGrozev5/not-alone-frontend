@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
-import { useHttpClient } from "../../hooks/useHttpClient";
 
 import styles from "./PlannedTrips.module.css";
 import TripOverview from "./TripOverview/TripOverview";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import Button from "../../common-components/FormElements/Button/Button";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const PlannedTrips = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
-  const [trips, setTrips] = useState(null);
-
-  useEffect(() => {
-    sendRequest("/trips")
-      .then(({ trips }) => {
-        setTrips(trips);
-      })
-      .catch((err) => console.log(err));
-  }, [sendRequest]);
+  const { data, isLoading, error, clearError } = useLoadPageData("/trips");
+  const trips = data?.trips;
 
   return (
     <>
