@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useHttpClient } from "./useHttpClient";
 
-export const useLoadPageData = (loadUrl, { auth = true }) => {
+export const useLoadPageData = (loadUrl, { auth = true } = {}) => {
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
 

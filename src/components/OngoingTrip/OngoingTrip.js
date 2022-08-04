@@ -13,11 +13,15 @@ import StartTripModal from "./StartTripModal/StartTripModal";
 import OngoingAllTrips from "./OngoingAllTrips/OngoingAllTrips";
 import OngoingActive from "./OngoingActive/OngoingActive";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const OngoingTrip = () => {
+  const { data, reloadData, isLoading, error, sendRequest, clearError } =
+    useLoadPageData("/trips/active");
+
   // Data about trips
-  const [allTrips, setAllTrips] = useState(null);
-  const [activeTrip, setActiveTrip] = useState(null);
+  const allTrips = data?.allTrips;
+  const activeTrip = data?.activeTrip;
 
   // Modal visibility states
   const [startTripModal, startTripHandler] = useHState(false);
@@ -32,25 +36,22 @@ const OngoingTrip = () => {
     { passValueHandler: closeDeleteHandler },
   ] = useSState(false);
 
-  // Get HTTP Client
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
   // Load Data
-  useEffect(() => {
-    if (!allTrips && !activeTrip) {
-      const getData = async () => {
-        try {
-          const { allTrips, activeTrip } = await sendRequest("/trips/active");
-          setAllTrips(allTrips);
-          setActiveTrip(activeTrip);
-        } catch (err) {
-          console.log(err);
-        }
-      };
+  // useEffect(() => {
+  //   if (!allTrips && !activeTrip) {
+  //     const getData = async () => {
+  //       try {
+  //         const { allTrips, activeTrip } = await sendRequest("/trips/active");
+  //         setAllTrips(allTrips);
+  //         setActiveTrip(activeTrip);
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     };
 
-      getData();
-    }
-  }, [allTrips, activeTrip, sendRequest]);
+  //     getData();
+  //   }
+  // }, [allTrips, activeTrip, sendRequest]);
 
   // Trip controllers
   const [notifyWatchers, , { toggleHandler: toggleNotify }] = useSState(false);
@@ -63,7 +64,8 @@ const OngoingTrip = () => {
       await sendRequest(`/trips/${startTripModal._id}/start`, {
         body: settings,
       });
-      setAllTrips(null);
+      // setAllTrips(null);
+      reloadData();
       startTripHandler(null)();
     } catch (err) {
       console.log(err);
@@ -75,9 +77,13 @@ const OngoingTrip = () => {
     async (event) => {
       event.preventDefault();
       try {
-        await sendRequest(`/trips/${activeTrip._id}/${command}`, { body });
-        setAllTrips(null);
-        setActiveTrip(null);
+        await sendRequest(`/trips/${activeTrip._id}/${command}`, {
+          body,
+          method: "POST",
+        });
+        // setAllTrips(null);
+        // setActiveTrip(null);
+        reloadData();
       } catch (err) {
         console.log(err);
       }
@@ -93,8 +99,9 @@ const OngoingTrip = () => {
         await sendRequest(`/trips/${activeTrip._id}`, {
           method: "DELETE",
         });
-        setAllTrips(null);
-        setActiveTrip(null);
+        // setAllTrips(null);
+        // setActiveTrip(null);
+        reloadData();
         setDeleteTrip(false);
       } catch (err) {
         console.log(err);
@@ -108,11 +115,12 @@ const OngoingTrip = () => {
     <>
       {/* Loading and error handling */}
       {isLoading && <LoadingSpinner asOverlay />}
-      {error && <ErrorModal error={error} onClose={clearError} />}
+      <ErrorModal show={!!error} error={error} onClose={clearError} />
+
       {/* Modals control */}
       <StartTripModal
         show={!!startTripModal}
-        tripName={startTripModal.name}
+        tripName={startTripModal?.name}
         notify={notifyWatchers}
         onNotifyChange={toggleNotify}
         onClose={startTripHandler(null)}
@@ -120,7 +128,7 @@ const OngoingTrip = () => {
       />
 
       <Modal
-        show={!!extendTimeModal}
+        show={extendTimeModal !== false}
         title="Удължаване на времето"
         onClose={extendTimeHandler(false)}
       >
@@ -148,7 +156,8 @@ const OngoingTrip = () => {
           onTripControl={tripControlHandler}
           onDeleteTrip={deleteTripHandler}
           onExtendTime={extendTimeHandler}
-          onReload={setActiveTrip.bind(null, null)}
+          // onReload={setActiveTrip.bind(null, null)}
+          onReload={reloadData}
         />
       )}
 
