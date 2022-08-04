@@ -87,8 +87,7 @@ const ProfileNotificationSettings = (props) => {
           const uData = JSON.parse(localStorage.getItem("jwt"));
           return sendRequest(
             `/users/${uData.userId}/settings/notifications/subscriptions`,
-            { subscription: JSON.stringify(newSub) },
-            { auth: true }
+            { body: { subscription: JSON.stringify(newSub) } }
           );
         })
         .then(() => alert("Устройството ще получава нотификации!"))

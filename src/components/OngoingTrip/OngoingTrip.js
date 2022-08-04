@@ -40,11 +40,7 @@ const OngoingTrip = () => {
     if (!allTrips && !activeTrip) {
       const getData = async () => {
         try {
-          const { allTrips, activeTrip } = await sendRequest(
-            "/trips/active",
-            null,
-            { auth: true }
-          );
+          const { allTrips, activeTrip } = await sendRequest("/trips/active");
           setAllTrips(allTrips);
           setActiveTrip(activeTrip);
         } catch (err) {
@@ -64,9 +60,8 @@ const OngoingTrip = () => {
 
     const settings = { notifyWatchers };
     try {
-      await sendRequest(`/trips/${startTripModal._id}/start`, settings, {
-        method: "POST",
-        auth: true,
+      await sendRequest(`/trips/${startTripModal._id}/start`, {
+        body: settings,
       });
       setAllTrips(null);
       startTripHandler(null)();
@@ -80,10 +75,7 @@ const OngoingTrip = () => {
     async (event) => {
       event.preventDefault();
       try {
-        await sendRequest(`/trips/${activeTrip._id}/${command}`, body, {
-          method: "POST",
-          auth: true,
-        });
+        await sendRequest(`/trips/${activeTrip._id}/${command}`, { body });
         setAllTrips(null);
         setActiveTrip(null);
       } catch (err) {
@@ -98,9 +90,8 @@ const OngoingTrip = () => {
     event.preventDefault();
     if (del) {
       try {
-        await sendRequest(`/trips/${activeTrip._id}`, null, {
+        await sendRequest(`/trips/${activeTrip._id}`, {
           method: "DELETE",
-          auth: true,
         });
         setAllTrips(null);
         setActiveTrip(null);

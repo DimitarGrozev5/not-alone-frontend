@@ -51,7 +51,7 @@ const PickUserInput = (props) => {
       const search = async () => {
         const route = `/users?query=${encodeURIComponent(searchQuery)}`;
 
-        const res = await sendRequest(route, null, { auth: true });
+        const res = await sendRequest(route);
         if (active) {
           setShowFloater(true);
           if (props.searchInContacts) {

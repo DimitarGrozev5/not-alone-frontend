@@ -56,11 +56,9 @@ const OngoingActive = (props) => {
 
       // Send request
       try {
-        await sendRequest(
-          `/trips/${props.activeTrip._id}/add-details`,
-          reqBody,
-          { auth: true }
-        );
+        await sendRequest(`/trips/${props.activeTrip._id}/add-details`, {
+          body: reqBody,
+        });
       } catch (err) {
         console.log(err);
       }

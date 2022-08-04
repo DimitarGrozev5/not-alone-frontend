@@ -14,8 +14,7 @@ export const useHttpClient = () => {
   const sendRequest = useCallback(
     async (
       url,
-      body = null,
-      { method, headers, auth, notJSON, getCache } = {}
+      { body = null, method, headers, auth = true, notJSON, getCache } = {}
     ) => {
       setIsLoading(true);
 
@@ -46,7 +45,7 @@ export const useHttpClient = () => {
       }
 
       // Add Authorization token
-      if (auth) {
+      if (auth !== false) {
         headersObj["Authorization"] = "Bearer " + token;
       }
 

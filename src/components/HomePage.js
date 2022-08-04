@@ -16,7 +16,7 @@ const HomePage = (props) => {
     if (!randomTrip) {
       (async () => {
         try {
-          const trip = await sendRequest("/trips/random");
+          const trip = await sendRequest("/trips/random", { auth: false });
           setRandomTrip(trip);
           console.log(trip);
         } catch (err) {

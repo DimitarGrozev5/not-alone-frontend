@@ -27,9 +27,7 @@ const ProfilePage = (props) => {
       const fetchData = async () => {
         try {
           const uData = JSON.parse(localStorage.getItem("jwt"));
-          const userData = await sendRequest(`/users/${uData.userId}`, null, {
-            auth: true,
-          });
+          const userData = await sendRequest(`/users/${uData.userId}`);
           setUser({ ...userData, token: uData.token, id: uData.userId });
         } catch (err) {
           console.log(err);
@@ -43,7 +41,9 @@ const ProfilePage = (props) => {
   const logoutHandler = async () => {
     try {
       await sendRequest("/users/logout", {
-        token: user.token,
+        body: {
+          token: user.token,
+        },
       });
       localStorage.removeItem("jwt");
       dispatch(userActions.logout());
@@ -67,15 +67,13 @@ const ProfilePage = (props) => {
     setShowConfirmationHandler(false)();
 
     try {
-      await sendRequest(
-        "/requests",
-        {
+      await sendRequest("/requests", {
+        body: {
           from: user.id,
           to: newUser.id,
           type: "CONNECTION",
         },
-        { auth: true }
-      );
+      });
 
       setNewUser(null);
       setUser(null);
@@ -88,8 +86,7 @@ const ProfilePage = (props) => {
     event.preventDefault();
 
     try {
-      await sendRequest(`/requests/${id}/accept`, null, {
-        auth: true,
+      await sendRequest(`/requests/${id}/accept`, {
         method: "POST",
       });
       setNewUser(null);

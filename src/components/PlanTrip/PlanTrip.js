@@ -33,9 +33,7 @@ const PlanTrip = (props) => {
 
         // Get Trip data from API
         try {
-          const tripData = await sendRequest(`/trips/${tripId}`, null, {
-            auth: true,
-          });
+          const tripData = await sendRequest(`/trips/${tripId}`);
           actions.initTrip(tripData.trip);
         } catch (err) {
           console.log(err);
@@ -68,11 +66,11 @@ const PlanTrip = (props) => {
 
     try {
       if (props.mode === "create") {
-        await sendRequest("/trips", prepTrip, { auth: true });
+        await sendRequest("/trips", { body: prepTrip });
       } else if (props.mode === "edit") {
-        await sendRequest(`/trips/${params.tripId}`, prepTrip, {
+        await sendRequest(`/trips/${params.tripId}`, {
+          body: prepTrip,
           method: "PATCH",
-          auth: true,
         });
       }
       navigate("/planned-trips");
@@ -85,9 +83,8 @@ const PlanTrip = (props) => {
     event.preventDefault();
     if (del) {
       try {
-        await sendRequest(`/trips/${params.tripId}`, null, {
+        await sendRequest(`/trips/${params.tripId}`, {
           method: "DELETE",
-          auth: true,
         });
         navigate("/planned-trips");
       } catch (err) {

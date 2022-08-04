@@ -15,7 +15,7 @@ const PlannedTrips = () => {
   const [trips, setTrips] = useState(null);
 
   useEffect(() => {
-    sendRequest("/trips", null, { auth: true })
+    sendRequest("/trips")
       .then(({ trips }) => {
         setTrips(trips);
       })
