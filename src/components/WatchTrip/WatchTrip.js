@@ -15,8 +15,9 @@ import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const WatchTrip = () => {
   const tripId = useParams().tripId;
-  const { data, reloadData, isLoading, error, sendRequest, clearError } =
-    useLoadPageData(`/trips/watching/${tripId}`);
+  const { data, reloadData, isLoading, error, clearError } = useLoadPageData(
+    `/trips/watching/${tripId}`
+  );
   const trip = data?.trip;
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
@@ -33,7 +34,7 @@ const WatchTrip = () => {
       // setTrip(null);
       reloadData();
     }
-  }, [dt, trip?.tripStatus.status]);
+  }, [dt, trip?.tripStatus.status, reloadData]);
 
   const showMapHandler = () => {
     const loc = trip.tripStatus.data.locations;
