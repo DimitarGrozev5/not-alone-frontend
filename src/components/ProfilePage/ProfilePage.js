@@ -13,29 +13,16 @@ import { useHttpClient } from "../../hooks/useHttpClient";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../redux-store/userSlice";
 import ProfileNotificationSettings from "./ProfileNotificationSettings";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const ProfilePage = (props) => {
   const dispatch = useDispatch();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const uData = JSON.parse(localStorage.getItem("jwt"));
+  const { data, reloadData, isLoading, error, sendRequest, clearError } =
+    useLoadPageData(`/users/${uData.userId}`);
 
-  // Get data about the user on first load
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      const fetchData = async () => {
-        try {
-          const uData = JSON.parse(localStorage.getItem("jwt"));
-          const userData = await sendRequest(`/users/${uData.userId}`);
-          setUser({ ...userData, token: uData.token, id: uData.userId });
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchData();
-    }
-  }, [sendRequest, user]);
+  const user = data ? { ...data, token: uData.token, id: uData.userId } : null;
 
   // Logout user
   const logoutHandler = async () => {
@@ -76,7 +63,7 @@ const ProfilePage = (props) => {
       });
 
       setNewUser(null);
-      setUser(null);
+      reloadData();
     } catch (err) {
       console.log();
     }
@@ -90,7 +77,7 @@ const ProfilePage = (props) => {
         method: "POST",
       });
       setNewUser(null);
-      setUser(null);
+      reloadData();
     } catch (err) {
       console.log(err);
     }
