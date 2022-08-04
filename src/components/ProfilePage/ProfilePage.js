@@ -18,8 +18,15 @@ const ProfilePage = (props) => {
   const dispatch = useDispatch();
 
   const uData = JSON.parse(localStorage.getItem("jwt"));
-  const { data, reloadData, isLoading, error, sendRequest, clearError } =
-    useLoadPageData(`/users/${uData.userId}`);
+  const {
+    data,
+    dataSource,
+    reloadData,
+    isLoading,
+    error,
+    sendRequest,
+    clearError,
+  } = useLoadPageData(`/users/${uData.userId}`, { getCache: true });
 
   const user = data ? { ...data, token: uData.token, id: uData.userId } : null;
 
@@ -84,7 +91,12 @@ const ProfilePage = (props) => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <ConfirmModal
@@ -95,8 +107,17 @@ const ProfilePage = (props) => {
       />
 
       <DataCard fullWidth>
-        <h1>Профил</h1>
+        <h1>Профил {dataSource !== "network" && !isLoading && "(Офлайн)"}</h1>
       </DataCard>
+
+      {dataSource === "no-data" && (
+        <DataCard>
+          <h3>
+            Тази страница не е кеширана. Пробвайте отново, когато имате достъп
+            до интернет.
+          </h3>
+        </DataCard>
+      )}
 
       {user && (
         <>

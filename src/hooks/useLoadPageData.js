@@ -8,7 +8,7 @@ export const useLoadPageData = (
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
 
-  const [source, setSource] = useState("");
+  const [dataSource, setDataSource] = useState("");
 
   const [data, setData] = useState(null);
   useEffect(() => {
@@ -21,24 +21,27 @@ export const useLoadPageData = (
             caches
               .match(process.env.REACT_APP_BACKEND_API + loadUrl)
               .then((response) => {
-                if (response) {
+                if (response && response.ok) {
                   return response.json();
                 }
-                setSource("no-data");
+                setDataSource("no-data");
+                throw new Error();
               })
               .then((response) => {
+                console.log("anyway");
                 if (!networkLoaded) {
                   setData(response);
-                  setSource("cache");
+                  setDataSource("cache");
                 }
-              });
+              })
+              .catch();
           }
 
           // Get data from network
           const d = await sendRequest(loadUrl, { auth });
           networkLoaded = true;
           setData(d);
-          setSource("network");
+          setDataSource("network");
         } catch (err) {
           console.log(err);
         }
@@ -51,7 +54,7 @@ export const useLoadPageData = (
   return {
     data,
     reloadData,
-    source,
+    dataSource,
     isLoading,
     error,
     sendRequest,
