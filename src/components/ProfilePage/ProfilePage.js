@@ -1,7 +1,7 @@
 import ProfileOverview from "./ProfileOverview";
 import ProfileOutRequests from "./ProfileOutRequests";
 import ProfileInRequests from "./ProfileInRequests";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import PickUserInput from "../../common-components/PickUserInput/PickUserInput";
@@ -9,7 +9,6 @@ import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import ConfirmModal from "../../common-components/UIComponents/ConfirmModal/ConfirmModal";
 import { useHState } from "../../hooks/useHState";
 import Button from "../../common-components/FormElements/Button/Button";
-import { useHttpClient } from "../../hooks/useHttpClient";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../redux-store/userSlice";
 import ProfileNotificationSettings from "./ProfileNotificationSettings";

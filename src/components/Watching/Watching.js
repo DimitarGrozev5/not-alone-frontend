@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-
-import { useHttpClient } from "../../hooks/useHttpClient";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 
@@ -11,31 +8,15 @@ import RequestItem from "./RequestItem/RequestItem";
 import WatchedTripOverview from "./WatchedTripOverview/WatchedTripOverview";
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import Button from "../../common-components/FormElements/Button/Button";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const Watching = () => {
-  const [watching, setWatching] = useState(null);
-  const [requests, setRequests] = useState(null);
-
   const [requestsModal, toggleRequestsModal] = useTState(false);
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const { watchingRes, requestsRes } = await sendRequest(
-          "/trips/watching"
-        );
-        setWatching(watchingRes);
-        setRequests(requestsRes);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    if (!watching || !requests) {
-      getData();
-    }
-  }, [sendRequest, watching, requests]);
+  const { data, reloadData, isLoading, error, sendRequest, clearError } =
+    useLoadPageData("/trips/watching");
+  const watching = data?.watchingRes;
+  const requests = data?.requestsRes;
 
   const answerRequest = (answer, reqId) => async (event) => {
     event.preventDefault();
@@ -45,7 +26,7 @@ const Watching = () => {
       });
 
       // Force reload
-      setRequests(null);
+      reloadData();
     } catch (err) {
       console.log(err);
     }
