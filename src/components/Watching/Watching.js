@@ -64,18 +64,22 @@ const Watching = () => {
         title="Заявки"
         onClose={toggleRequestsModal}
       >
-        {!requests.length && "Няма нови молби"}
-        {!!requests.length && (
-          <ul>
-            {requests.map((req) => (
-              <RequestItem
-                key={req._id}
-                request={req}
-                onAccept={answerRequest("accept", req._id)}
-                onReject={answerRequest("reject", req._id)}
-              />
-            ))}
-          </ul>
+        {requests && (
+          <>
+            {!requests.length && "Няма нови молби"}
+            {!!requests.length && (
+              <ul>
+                {requests.map((req) => (
+                  <RequestItem
+                    key={req._id}
+                    request={req}
+                    onAccept={answerRequest("accept", req._id)}
+                    onReject={answerRequest("reject", req._id)}
+                  />
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </Modal>
 
