@@ -14,7 +14,7 @@ export const useHttpClient = () => {
   const sendRequest = useCallback(
     async (
       url,
-      { body = null, method, headers, auth = true, notJSON, getCache } = {}
+      { body = null, method, headers, auth = true, notJSON } = {}
     ) => {
       setIsLoading(true);
 
@@ -56,20 +56,6 @@ export const useHttpClient = () => {
       config.signal = httpAbortCtrl.signal;
 
       try {
-        // Get data from cache
-        if ("caches" in window && getCache) {
-          caches
-            .match(process.env.REACT_APP_BACKEND_API + url)
-            .then((response) => {
-              if (response) {
-                return response.json();
-              }
-            })
-            .then((response) => {
-              setCached(response);
-            });
-        }
-
         // Fetch data
         const response = await fetch(
           process.env.REACT_APP_BACKEND_API + url,
