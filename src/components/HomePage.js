@@ -1,30 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Button from "../common-components/FormElements/Button/Button";
 import DataCard from "../common-components/UIComponents/DataCard/DataCard";
-import { useHttpClient } from "../hooks/useHttpClient";
 import ErrorModal from "../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
 import StopsMonitor from "../common-components/StopsMonitor/StopsMonitor";
 import { useTimeLeft } from "../hooks/useTimeLeft";
+import { useLoadPageData } from "../hooks/useLoadPageData";
 
 const HomePage = (props) => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
-  const [randomTrip, setRandomTrip] = useState(null);
-
-  useEffect(() => {
-    if (!randomTrip) {
-      (async () => {
-        try {
-          const trip = await sendRequest("/trips/random", { auth: false });
-          setRandomTrip(trip);
-          console.log(trip);
-        } catch (err) {
-          console.log(err);
-        }
-      })();
-    }
-  }, [randomTrip, sendRequest]);
+  const {
+    data: randomTrip,
+    reloadData,
+    isLoading,
+    error,
+    clearError,
+  } = useLoadPageData("/trips/random", { auth: false });
 
   const [dt, timeLeft] = useTimeLeft(randomTrip?.tripStatus.dueBy);
   useEffect(() => {
@@ -33,9 +23,10 @@ const HomePage = (props) => {
       (dt < -1 * 60 * 60 * 1000 + 5000 &&
         randomTrip?.tripStatus.status === "LATE")
     ) {
-      setRandomTrip(null);
+      // setRandomTrip(null);
+      reloadData();
     }
-  }, [dt, randomTrip?.tripStatus.status]);
+  }, [dt, randomTrip?.tripStatus.status, reloadData]);
 
   return (
     <>
