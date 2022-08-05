@@ -13,8 +13,16 @@ import { useLoadPageData } from "../../hooks/useLoadPageData";
 const Watching = () => {
   const [requestsModal, toggleRequestsModal] = useTState(false);
 
-  const { data, reloadData, isLoading, error, sendRequest, clearError } =
-    useLoadPageData("/trips/watching");
+  const {
+    data,
+    dataSource,
+    offline,
+    reloadData,
+    isLoading,
+    error,
+    sendRequest,
+    clearError,
+  } = useLoadPageData("/trips/watching", { getCache: true });
   const watching = data?.watchingRes;
   const requests = data?.requestsRes;
 
@@ -34,7 +42,12 @@ const Watching = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <Modal
@@ -62,7 +75,10 @@ const Watching = () => {
       </Modal>
 
       <DataCard fullWidth>
-        <h1>Наблюдавани пътувания</h1>
+        <h1>
+          Наблюдавани пътувания{" "}
+          {dataSource === "cache" && !isLoading && "(Офлайн)"}
+        </h1>
       </DataCard>
 
       {watching && (
@@ -76,7 +92,11 @@ const Watching = () => {
       )}
 
       {!!requests && !!requests.length && (
-        <Button onClick={toggleRequestsModal} className={styles.requests}>
+        <Button
+          onClick={toggleRequestsModal}
+          className={styles.requests}
+          disabled={offline}
+        >
           Имате {requests.length} заявки
         </Button>
       )}

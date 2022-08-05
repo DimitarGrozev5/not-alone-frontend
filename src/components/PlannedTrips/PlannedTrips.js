@@ -24,7 +24,10 @@ const PlannedTrips = () => {
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard fullWidth>
-        <h1>Планувани пътувания {offline && !isLoading && "(Офлайн)"}</h1>
+        <h1>
+          Планувани пътувания{" "}
+          {dataSource === "cache" && !isLoading && "(Офлайн)"}
+        </h1>
       </DataCard>
 
       {trips && !trips.length && (

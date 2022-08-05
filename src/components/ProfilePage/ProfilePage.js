@@ -108,7 +108,7 @@ const ProfilePage = (props) => {
       />
 
       <DataCard fullWidth>
-        <h1>Профил {offline && !isLoading && "(Офлайн)"}</h1>
+        <h1>Профил {dataSource === "cache" && !isLoading && "(Офлайн)"}</h1>
       </DataCard>
 
       {dataSource === "no-data" && (
