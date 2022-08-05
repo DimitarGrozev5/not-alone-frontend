@@ -29,6 +29,7 @@ const ProfilePage = (props) => {
   } = useLoadPageData(`/users/${uData.userId}`, { getCache: true });
 
   const user = data ? { ...data, token: uData.token, id: uData.userId } : null;
+  const offline = dataSource !== "network";
 
   // Logout user
   const logoutHandler = async () => {
@@ -107,14 +108,14 @@ const ProfilePage = (props) => {
       />
 
       <DataCard fullWidth>
-        <h1>Профил {dataSource !== "network" && !isLoading && "(Офлайн)"}</h1>
+        <h1>Профил {offline && !isLoading && "(Офлайн)"}</h1>
       </DataCard>
 
       {dataSource === "no-data" && (
         <DataCard>
           <h4>
-            Нямате интернет връзка и страницата не е кеширана. Пробвайте отново, когато имате достъп
-            до интернет.
+            Нямате интернет връзка и страницата не е кеширана. Пробвайте отново,
+            когато имате достъп до интернет.
           </h4>
         </DataCard>
       )}
@@ -126,7 +127,11 @@ const ProfilePage = (props) => {
               userData={user.userData}
               connections={user.connections}
             />
-            <PickUserInput value={newUser} onChange={setNewUser} />
+            <PickUserInput
+              disabled={offline}
+              value={newUser}
+              onChange={setNewUser}
+            />
             {!!newUser && (
               <Button onClick={requestConnectionHandler(false)}>
                 Свържете се
@@ -152,7 +157,9 @@ const ProfilePage = (props) => {
           </DataCard>
 
           <DataCard fullWidth>
-            <Button onClick={logoutHandler}>Излизане от профила</Button>
+            <Button onClick={logoutHandler} disabled={offline}>
+              Излизане от профила
+            </Button>
           </DataCard>
         </>
       )}

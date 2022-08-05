@@ -120,6 +120,7 @@ const PickUserInput = (props) => {
             type="text"
             name="add-contact"
             placeholder="Номер: 088 123 1234"
+            disabled={props.disabled}
             value={searchText}
             onChange={changeSearchText}
             autoComplete="off"
