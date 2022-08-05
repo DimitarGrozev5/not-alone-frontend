@@ -15,9 +15,15 @@ import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const WatchTrip = () => {
   const tripId = useParams().tripId;
-  const { data, reloadData, isLoading, error, clearError } = useLoadPageData(
-    `/trips/watching/${tripId}`
-  );
+  const {
+    data,
+    dataSource,
+    offline,
+    reloadData,
+    isLoading,
+    error,
+    clearError,
+  } = useLoadPageData(`/trips/watching/${tripId}`, { getCache: true });
   const trip = data?.trip;
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
@@ -47,7 +53,12 @@ const WatchTrip = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <Modal show={!!mapRoute} onClose={setMapRouteTo(null)}>
@@ -56,7 +67,10 @@ const WatchTrip = () => {
       {trip && (
         <>
           <DataCard fullWidth>
-            <h2>Информация за пътуването</h2>
+            <h2>
+              Информация за пътуването{" "}
+              {dataSource === "cache" && !isLoading && "(Офлайн)"}
+            </h2>
           </DataCard>
           <DataCard>
             <StopsMonitor
