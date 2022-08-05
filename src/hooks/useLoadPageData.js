@@ -54,6 +54,7 @@ export const useLoadPageData = (
     data,
     reloadData,
     dataSource,
+    offline: dataSource !== "network",
     isLoading,
     error,
     sendRequest,
