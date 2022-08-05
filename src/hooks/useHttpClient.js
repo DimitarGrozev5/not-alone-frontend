@@ -84,7 +84,7 @@ export const useHttpClient = () => {
         setCached(false);
         return responseData;
       } catch (err) {
-        setError(err.message);
+        err.name !== "TypeError" && setError(err.message);
         setIsLoading(false);
         throw err;
       }

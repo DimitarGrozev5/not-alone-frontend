@@ -28,7 +28,6 @@ export const useLoadPageData = (
                 throw new Error();
               })
               .then((response) => {
-                console.log("anyway");
                 if (!networkLoaded) {
                   setData(response);
                   setDataSource("cache");
