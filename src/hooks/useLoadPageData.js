@@ -8,7 +8,7 @@ export const useLoadPageData = (
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
 
-  const [dataSource, setDataSource] = useState("");
+  const [dataSource, setDataSource] = useState("network");
 
   const [data, setData] = useState(null);
   useEffect(() => {
@@ -33,7 +33,7 @@ export const useLoadPageData = (
                   setDataSource("cache");
                 }
               })
-              .catch();
+              .catch(() => {});
           }
 
           // Get data from network
