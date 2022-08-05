@@ -21,6 +21,7 @@ const ProfilePage = (props) => {
   const {
     data,
     dataSource,
+    offline,
     reloadData,
     isLoading,
     error,
@@ -29,7 +30,6 @@ const ProfilePage = (props) => {
   } = useLoadPageData(`/users/${uData.userId}`, { getCache: true });
 
   const user = data ? { ...data, token: uData.token, id: uData.userId } : null;
-  const offline = dataSource !== "network";
 
   // Logout user
   const logoutHandler = async () => {

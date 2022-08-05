@@ -9,16 +9,22 @@ import Button from "../../common-components/FormElements/Button/Button";
 import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const PlannedTrips = () => {
-  const { data, isLoading, error, clearError } = useLoadPageData("/trips");
+  const { data, dataSource, offline, isLoading, error, clearError } =
+    useLoadPageData("/trips", { getCache: true });
   const trips = data?.trips;
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard fullWidth>
-        <h1>Планувани пътувания</h1>
+        <h1>Планувани пътувания {offline && !isLoading && "(Офлайн)"}</h1>
       </DataCard>
 
       {trips && !trips.length && (
@@ -27,17 +33,19 @@ const PlannedTrips = () => {
       {trips &&
         !!trips.length &&
         trips.map((trip) => <TripOverview key={trip._id} tripData={trip} />)}
-      <div className={styles.add}>
-        {window.innerWidth >= 600 ? (
-          <Button to="/plan-trip" className={styles.add}>
-            Добави ново пътуване
-          </Button>
-        ) : (
-          <Link className={styles.add} to="/plan-trip">
-            +
-          </Link>
-        )}
-      </div>
+      {!offline && (
+        <div className={styles.add}>
+          {window.innerWidth >= 600 ? (
+            <Button to="/plan-trip" className={styles.add}>
+              Добави ново пътуване
+            </Button>
+          ) : (
+            <Link className={styles.add} to="/plan-trip">
+              +
+            </Link>
+          )}
+        </div>
+      )}
     </>
   );
 };
