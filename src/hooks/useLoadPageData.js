@@ -3,7 +3,7 @@ import { useHttpClient } from "./useHttpClient";
 
 export const useLoadPageData = (
   loadUrl,
-  { auth = true, getCache = false } = {}
+  { auth = true, getCache = false, loadIfTrue = true } = {}
 ) => {
   const { isLoading, error, sendRequest, clearError, setError } =
     useHttpClient();
@@ -12,7 +12,7 @@ export const useLoadPageData = (
 
   const [data, setData] = useState(null);
   useEffect(() => {
-    if (!data) {
+    if (!data && loadIfTrue) {
       (async () => {
         try {
           let networkLoaded = false;
@@ -46,7 +46,7 @@ export const useLoadPageData = (
         }
       })();
     }
-  }, [data, loadUrl, auth, getCache, sendRequest]);
+  }, [data, loadUrl, auth, getCache, loadIfTrue, sendRequest]);
 
   const reloadData = useCallback(() => setData(null), []);
 

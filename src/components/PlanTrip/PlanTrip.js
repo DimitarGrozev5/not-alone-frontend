@@ -5,7 +5,7 @@ import ConfirmModal from "../../common-components/UIComponents/ConfirmModal/Conf
 import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import ErrorModal from "../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
-import { useHttpClient } from "../../hooks/useHttpClient";
+import { useLoadPageData } from "../../hooks/useLoadPageData";
 import { useManageTrip } from "./hooks/useManageTrip";
 import styles from "./PlanTrip.module.css";
 import { validateTrip } from "./planTripHelpers";
@@ -19,30 +19,28 @@ const PlanTrip = (props) => {
 
   const { trip, actions } = useManageTrip();
 
-  const { isLoading, error, sendRequest, clearError, setError } =
-    useHttpClient();
-
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const tripId = params.tripId;
+  const {
+    data,
+    dataSource,
+    offline,
+    isLoading,
+    sendRequest,
+    error,
+    clearError,
+    setError,
+  } = useLoadPageData(`/trips/${tripId}`, {
+    loadIfTrue: props.mode !== "create",
+    getCache: true,
+  });
 
   useEffect(() => {
-    // Load data from server if the component is not in create mode
-    if (props.mode !== "create") {
-      const getTripData = async () => {
-        // Get Trip Id
-        const tripId = params.tripId;
-
-        // Get Trip data from API
-        try {
-          const tripData = await sendRequest(`/trips/${tripId}`);
-          actions.initTrip(tripData.trip);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      getTripData();
+    if (data) {
+      actions.initTrip(data.trip);
     }
-  }, [props.mode, params.tripId, sendRequest, actions]);
+  }, [data, actions]);
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const saveData = async (event) => {
     event.preventDefault();
@@ -97,7 +95,12 @@ const PlanTrip = (props) => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <ConfirmModal
@@ -113,9 +116,12 @@ const PlanTrip = (props) => {
             <h1>Планувай пътуване</h1>
           </DataCard>
         )}
-        {props.mode === "edit" && (
+        {props.mode !== "create" && (
           <DataCard fullWidth>
-            <h1>Прегледай пътуване</h1>
+            <h1>
+              Прегледай пътуване{" "}
+              {dataSource === "cache" && !isLoading && "(Офлайн)"}
+            </h1>
           </DataCard>
         )}
         <DataCard>
@@ -144,6 +150,7 @@ const PlanTrip = (props) => {
         </DataCard>
 
         <Button
+          disabled={offline && props.mode !== "view"}
           stretch
           type="submit"
           to={props.mode === "view" ? "/ongoing-trip" : undefined}
@@ -153,7 +160,7 @@ const PlanTrip = (props) => {
           {props.mode === "view" && "Назад"}
         </Button>
         {props.mode === "edit" && (
-          <Button stretch onClick={deleteHandler(false)}>
+          <Button disabled={offline} stretch onClick={deleteHandler(false)}>
             Изтрий пътуването
           </Button>
         )}

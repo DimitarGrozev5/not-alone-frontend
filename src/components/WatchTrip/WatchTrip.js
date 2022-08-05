@@ -15,15 +15,8 @@ import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const WatchTrip = () => {
   const tripId = useParams().tripId;
-  const {
-    data,
-    dataSource,
-    offline,
-    reloadData,
-    isLoading,
-    error,
-    clearError,
-  } = useLoadPageData(`/trips/watching/${tripId}`, { getCache: true });
+  const { data, dataSource, reloadData, isLoading, error, clearError } =
+    useLoadPageData(`/trips/watching/${tripId}`, { getCache: true });
   const trip = data?.trip;
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
