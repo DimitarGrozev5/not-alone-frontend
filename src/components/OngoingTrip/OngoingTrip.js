@@ -13,8 +13,16 @@ import DataCard from "../../common-components/UIComponents/DataCard/DataCard";
 import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const OngoingTrip = () => {
-  const { data, reloadData, isLoading, error, sendRequest, clearError } =
-    useLoadPageData("/trips/active");
+  const {
+    data,
+    dataSource,
+    offline,
+    reloadData,
+    isLoading,
+    error,
+    sendRequest,
+    clearError,
+  } = useLoadPageData("/trips/active", { getCache: true });
 
   // Data about trips
   const allTrips = data?.allTrips;
@@ -33,23 +41,6 @@ const OngoingTrip = () => {
     { passValueHandler: closeDeleteHandler },
   ] = useSState(false);
 
-  // Load Data
-  // useEffect(() => {
-  //   if (!allTrips && !activeTrip) {
-  //     const getData = async () => {
-  //       try {
-  //         const { allTrips, activeTrip } = await sendRequest("/trips/active");
-  //         setAllTrips(allTrips);
-  //         setActiveTrip(activeTrip);
-  //       } catch (err) {
-  //         console.log(err);
-  //       }
-  //     };
-
-  //     getData();
-  //   }
-  // }, [allTrips, activeTrip, sendRequest]);
-
   // Trip controllers
   const [notifyWatchers, , { toggleHandler: toggleNotify }] = useSState(false);
 
@@ -61,7 +52,6 @@ const OngoingTrip = () => {
       await sendRequest(`/trips/${startTripModal._id}/start`, {
         body: settings,
       });
-      // setAllTrips(null);
       reloadData();
       startTripHandler(null)();
     } catch (err) {
@@ -78,8 +68,6 @@ const OngoingTrip = () => {
           body,
           method: "POST",
         });
-        // setAllTrips(null);
-        // setActiveTrip(null);
         reloadData();
       } catch (err) {
         console.log(err);
@@ -96,8 +84,6 @@ const OngoingTrip = () => {
         await sendRequest(`/trips/${activeTrip._id}`, {
           method: "DELETE",
         });
-        // setAllTrips(null);
-        // setActiveTrip(null);
         reloadData();
         setDeleteTrip(false);
       } catch (err) {
@@ -111,7 +97,12 @@ const OngoingTrip = () => {
   return (
     <>
       {/* Loading and error handling */}
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && (
+        <LoadingSpinner
+          asOverlay={dataSource !== "cache"}
+          centerPage={dataSource === "cache"}
+        />
+      )}
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       {/* Modals control */}
@@ -155,6 +146,9 @@ const OngoingTrip = () => {
           onExtendTime={extendTimeHandler}
           // onReload={setActiveTrip.bind(null, null)}
           onReload={reloadData}
+          offline={offline}
+          dataSource={dataSource}
+          isLoading={isLoading}
         />
       )}
 
@@ -163,7 +157,13 @@ const OngoingTrip = () => {
         <DataCard fullWidth>Все още нямате пътувания</DataCard>
       )}
       {allTrips && !!allTrips.length && (
-        <OngoingAllTrips trips={allTrips} onStartTrip={startTripHandler} />
+        <OngoingAllTrips
+          offline={offline}
+          dataSource={dataSource}
+          isLoading={isLoading}
+          trips={allTrips}
+          onStartTrip={startTripHandler}
+        />
       )}
     </>
   );

@@ -83,7 +83,10 @@ const OngoingActive = (props) => {
       <ErrorModal show={!!error} error={error} onClose={clearError} />
 
       <DataCard fullWidth>
-        <h2>Активно пътуване</h2>
+        <h2>
+          Активно пътуване{" "}
+          {props.dataSource === "cache" && !props.isLoading && "(Офлайн)"}
+        </h2>
       </DataCard>
       <DataCard>
         <h3>Прогрес</h3>
@@ -95,8 +98,18 @@ const OngoingActive = (props) => {
             <>
               <div>Очаква се да пристигнете до {timeLeft}</div>
               <div>
-                <Button onClick={props.onTripControl("pause")}>Пауза</Button>
-                <Button onClick={props.onExtendTime(0)}>Ще закъснея</Button>
+                <Button
+                  disabled={props.offline}
+                  onClick={props.onTripControl("pause")}
+                >
+                  Пауза
+                </Button>
+                <Button
+                  disabled={props.offline}
+                  onClick={props.onExtendTime(0)}
+                >
+                  Ще закъснея
+                </Button>
               </div>
             </>
           )}
@@ -104,7 +117,10 @@ const OngoingActive = (props) => {
             <>
               <div>Пътуването е в почивка</div>
               <div>
-                <Button onClick={props.onTripControl("resume")}>
+                <Button
+                  disabled={props.offline}
+                  onClick={props.onTripControl("resume")}
+                >
                   Продължи
                 </Button>
               </div>
@@ -117,8 +133,10 @@ const OngoingActive = (props) => {
               {activeTrip.tripStatus.status === "VERY_LATE" &&
                 " Тъй като закъснението е голямо, всички ваши данни са достъпни за наблюдателите Ви."}{" "}
               Може да{" "}
-              <Button onClick={props.onExtendTime(0)}>удължите времето</Button>,
-              ако всичко е наред.
+              <Button disabled={props.offline} onClick={props.onExtendTime(0)}>
+                удължите времето
+              </Button>
+              , ако всичко е наред.
             </>
           )}
           {activeTrip.tripStatus.status === "FINISHED" && (
@@ -129,18 +147,30 @@ const OngoingActive = (props) => {
 
       {activeTrip.tripStatus.status !== "FINISHED" && (
         <DataCard>
-          <Button stretch onClick={props.onTripControl("next-stop")}>
+          <Button
+            disabled={props.offline}
+            stretch
+            onClick={props.onTripControl("next-stop")}
+          >
             Стигнах до следващата спирка
           </Button>
           <div>Можете да запазите локация и данни за батерията</div>
-          <Button disabled={isLoading} stretch onClick={snapshotHandler}>
+          <Button
+            disabled={isLoading || props.offline}
+            stretch
+            onClick={snapshotHandler}
+          >
             Запазване на локация {isLoading && <LoadingSpinner minimize />}
           </Button>
         </DataCard>
       )}
       {activeTrip.tripStatus.status === "FINISHED" && (
         <DataCard>
-          <Button stretch onClick={props.onDeleteTrip(false)}>
+          <Button
+            disabled={props.offline}
+            stretch
+            onClick={props.onDeleteTrip(false)}
+          >
             Приключване и изтриване на пътуването
           </Button>
         </DataCard>

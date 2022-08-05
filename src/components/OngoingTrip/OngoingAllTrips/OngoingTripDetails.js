@@ -21,7 +21,12 @@ const OngoingTripDetails = (props) => {
           <div>
             <Button to={`/ongoing-trip/${trip._id}`}>Преглед</Button>
             {!!trip.watchers.length && (
-              <Button onClick={props.onStartTrip(trip)}>Старт</Button>
+              <Button
+                disabled={props.offline}
+                onClick={props.onStartTrip(trip)}
+              >
+                Старт
+              </Button>
             )}
           </div>
         </>
