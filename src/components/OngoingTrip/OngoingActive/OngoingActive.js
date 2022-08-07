@@ -71,13 +71,14 @@ const OngoingActive = (props) => {
   const onReload = props.onReload;
   useEffect(() => {
     if (
-      (dt < -65 * 1000 && activeTrip.tripStatus.status === "ONGOING") ||
-      (dt < -1 * 60 * 60 * 1000 + 5000 &&
-        activeTrip.tripStatus.status === "LATE")
+      !props.offline &&
+      ((dt < -65 * 1000 && activeTrip.tripStatus.status === "ONGOING") ||
+        (dt < -1 * 60 * 60 * 1000 + 5000 &&
+          activeTrip.tripStatus.status === "LATE"))
     ) {
       onReload();
     }
-  }, [dt, activeTrip.tripStatus.status, onReload]);
+  }, [dt, activeTrip.tripStatus.status, onReload, props.offline]);
   return (
     <>
       <ErrorModal show={!!error} error={error} onClose={clearError} />

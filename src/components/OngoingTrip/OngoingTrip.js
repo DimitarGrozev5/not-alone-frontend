@@ -144,7 +144,6 @@ const OngoingTrip = () => {
           onTripControl={tripControlHandler}
           onDeleteTrip={deleteTripHandler}
           onExtendTime={extendTimeHandler}
-          // onReload={setActiveTrip.bind(null, null)}
           onReload={reloadData}
           offline={offline}
           dataSource={dataSource}

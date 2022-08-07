@@ -15,8 +15,15 @@ import { useLoadPageData } from "../../hooks/useLoadPageData";
 
 const WatchTrip = () => {
   const tripId = useParams().tripId;
-  const { data, dataSource, reloadData, isLoading, error, clearError } =
-    useLoadPageData(`/trips/watching/${tripId}`, { getCache: true });
+  const {
+    data,
+    offline,
+    dataSource,
+    reloadData,
+    isLoading,
+    error,
+    clearError,
+  } = useLoadPageData(`/trips/watching/${tripId}`, { getCache: true });
   const trip = data?.trip;
 
   const [showDesc, , { toggleHandler: toggleShowDesc }] = useSState(false);
@@ -27,13 +34,14 @@ const WatchTrip = () => {
   const [dt, timeLeft] = useTimeLeft(trip?.tripStatus.dueBy);
   useEffect(() => {
     if (
-      (dt < -65 * 1000 && trip?.tripStatus.status === "ONGOING") ||
-      (dt < -1 * 60 * 60 * 1000 + 5000 && trip?.tripStatus.status === "LATE")
+      !offline &&
+      ((dt < -65 * 1000 && trip?.tripStatus.status === "ONGOING") ||
+        (dt < -1 * 60 * 60 * 1000 + 5000 && trip?.tripStatus.status === "LATE"))
     ) {
       // setTrip(null);
       reloadData();
     }
-  }, [dt, trip?.tripStatus.status, reloadData]);
+  }, [dt, trip?.tripStatus.status, reloadData, offline]);
 
   const showMapHandler = () => {
     const loc = trip.tripStatus.data.locations;
