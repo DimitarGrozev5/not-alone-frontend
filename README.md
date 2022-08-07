@@ -48,10 +48,10 @@ A Service Worker is implemented for a couple of reasons.
 - Handling Push Notification
 - Allowing the Web App to be installed like a normal application
 - Caching static assets for a faster load time and limited offline capability
+- Caching dynamic data, for a faster load time and offline capabilities
 
 A Service Worker allows additional functionality to be added later on:
 
-- Caching dynamic assets for an improved offline capability
 - Implementing the Sync API for background synchronization of POST requests, when the internet access is limited
 
 7. Other
@@ -145,17 +145,24 @@ Two custom hooks are created to solve specific routing issues:
 
 ### Page structure
 
-When a user navigates to a Route, a Component is rendered. When the Component renders, it loads it's data from the backend and displays it. This happens every time the Route changes. A custom useHttpClient was created, to handle this data load. The hook exposes a couple of states and functions:
+When a user navigates to a Route, a Component is rendered. When the Component renders, it loads it's data from the backend and displays it. This happens every time the Route changes. A custom **useLoadPageData** was created, to handle this data load. The hook accepts an API endpoint, from which to request data, an optional configuration object and returns a couple of states and functions:
 
+- `data` - a _State_ that stores the loaded data
+- `reloadData` - a _function_ that trigers a page reload
 - `isLoading` - _true_ if the page is fetching data
 - `error` - _false_ if there is no error or _error message_ if there was an http error or server error
 - `clearError` - function that clears the error message
-- `sendRequest` - function that accepts configuration data and sends requests to the backend. The function handles the state of `isLoading` and `error`
+- `sendRequest` - function that accepts configuration data and can be used to send requests to the backend. The function handles the state of `isLoading` and `error`
+
+Additionaly the **useLoadPageData** hook can be set to pull data from the cache. If the _getCache_ flag is set to true, the hook tries to pull the requested API endpoint from the cache, if available. Only then it makes the network request to the backend to update the page and cache. This means that if the target page is cached, the user will see it load almost immediately. The hook returns these additional properties:
+
+- `dataSource` - changes between _cache_, _network_ and _no-data_
+- `offline` - helper value, that indicates if the page is offline
 
 In order to provide a consistent user experience all **Pages** contain the following code:
 
-`{isLoading && <LoadingSpinner asOverlay />}`
-`{error && <ErrorModal error={error} onClose={clearError} />}`
+`{isLoading && ( <LoadingSpinner asOverlay={dataSource !== "cache"} centerPage={dataSource === "cache"} /> )}`
+`<ErrorModal show={!!error} error={error} onClose={clearError} />`
 
 Using this code all pages display a **Loading Spinner** while the data is being fetched and display an **Error Modal** if there is an error.
 
@@ -212,6 +219,7 @@ A single trip is a relativly complex data structure. It contains multiple stops,
 ### Service Worker
 
 The **Service Worker** is being registered in the **index.html** file. When it's installed, it downloads and caches all of the static assets. This includes the _index.html_ page, all of the _js bundles_ and _css bundles_ and other files in the build directory. After that, every fetch request is intercepted by the service worker and if the request is to a statically cached file, the service worker returns it form the cache. It then creates a fetch request to update the cached file.
+The Service Worker also intercepts all GET requests and stores the response object in the cache, before returning it to the page.
 The Service Worker also handles **Push Notifications**. It parses the incoming Push Notification and shows it to the user.
 
 ### GPS and Battery Information gathering
