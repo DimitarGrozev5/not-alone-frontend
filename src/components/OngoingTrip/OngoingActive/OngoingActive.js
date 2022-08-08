@@ -58,6 +58,9 @@ const OngoingActive = (props) => {
       try {
         await sendRequest(`/trips/${props.activeTrip._id}/add-details`, {
           body: reqBody,
+          trySync: {
+            tag: "gps-share",
+          },
         });
       } catch (err) {
         console.log(err);
