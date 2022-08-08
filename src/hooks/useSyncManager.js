@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useLocation } from "react-router-dom";
+import localForage from "localforage";
 
 const id_ = (loc) => (tag) => `${loc}.${tag}`;
 
@@ -24,10 +25,8 @@ export const useSyncManager = () => {
     async (fetchTag, fetchConfig, replace = false) => {
       if ("serviceWorker" in navigator && "SyncManager" in window) {
         // Open data store
-        let dataStore = localStorage.getItem("sync-store");
-        if (dataStore) {
-          dataStore = JSON.parse(dataStore);
-        } else {
+        let dataStore = await localForage.getItem("sync-store");
+        if (!dataStore) {
           dataStore = {};
         }
 
@@ -47,10 +46,10 @@ export const useSyncManager = () => {
         dataStore[id(fetchTag)] = data;
 
         // Save data store to localeStorage
-        localStorage.setItem("sync-store", JSON.stringify(dataStore));
+        await localForage.setItem("sync-store", dataStore);
 
         // Register Sync Task
-        sw.sync.register("sync-outgoing-request");
+        await sw.sync.register("sync-outgoing-request");
 
         return true;
       }

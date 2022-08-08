@@ -21,7 +21,7 @@ export const useHttpClient = () => {
         headers,
         auth = true,
         notJSON,
-        syncWithTag = false,
+        trySync = false,
       } = {}
     ) => {
       setIsLoading(true);
@@ -64,12 +64,19 @@ export const useHttpClient = () => {
       config.signal = httpAbortCtrl.signal;
 
       try {
-        if (syncWithTag) {
+        if (trySync) {
           // Try to use the Sync API
           const syncResult = await registerSyncTask(
-            syncWithTag.tag,
-            [process.env.REACT_APP_BACKEND_API + url, config],
-            syncWithTag.replace
+            trySync.tag,
+            [
+              process.env.REACT_APP_BACKEND_API + url,
+              {
+                method: config.method,
+                body: config.body,
+                headers: config.headers,
+              },
+            ],
+            trySync.replace
           );
 
           // If the API is available and the sync task is registered, exit the function
@@ -81,7 +88,7 @@ export const useHttpClient = () => {
             return true;
           }
         }
-        
+
         // Fetch data
         const response = await fetch(
           process.env.REACT_APP_BACKEND_API + url,
