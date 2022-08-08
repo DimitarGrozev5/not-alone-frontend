@@ -1,20 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../redux-store/userSlice";
+import { useSyncManager } from "./useSyncManager";
 
 export const useHttpClient = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.isLoggedIn);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [cached, setCached] = useState(false);
+  const { registerSyncTask } = useSyncManager();
 
   const activeHttpRequests = useRef([]);
 
   const sendRequest = useCallback(
     async (
       url,
-      { body = null, method, headers, auth = true, notJSON } = {}
+      {
+        body = null,
+        method,
+        headers,
+        auth = true,
+        notJSON,
+        syncWithTag = false,
+      } = {}
     ) => {
       setIsLoading(true);
 
@@ -56,6 +64,24 @@ export const useHttpClient = () => {
       config.signal = httpAbortCtrl.signal;
 
       try {
+        if (syncWithTag) {
+          // Try to use the Sync API
+          const syncResult = await registerSyncTask(
+            syncWithTag.tag,
+            [process.env.REACT_APP_BACKEND_API + url, config],
+            syncWithTag.replace
+          );
+
+          // If the API is available and the sync task is registered, exit the function
+          if (syncResult) {
+            // Add a timeout so the loading spinner shows for a bit longer
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 500);
+            return true;
+          }
+        }
+        
         // Fetch data
         const response = await fetch(
           process.env.REACT_APP_BACKEND_API + url,
@@ -81,7 +107,6 @@ export const useHttpClient = () => {
         }
 
         setIsLoading(false);
-        setCached(false);
         return responseData;
       } catch (err) {
         err.name !== "TypeError" && setError(err.message);
@@ -89,7 +114,7 @@ export const useHttpClient = () => {
         throw err;
       }
     },
-    [token, dispatch]
+    [token, dispatch, registerSyncTask]
   );
 
   useEffect(
@@ -101,5 +126,5 @@ export const useHttpClient = () => {
 
   const clearError = () => setError(null);
 
-  return { isLoading, cached, error, sendRequest, clearError, setError };
+  return { isLoading, error, sendRequest, clearError, setError };
 };
