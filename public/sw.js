@@ -1,3 +1,5 @@
+importScripts("./localforage.js");
+
 const staticCacheVersion = "static-v17";
 const dynamicCacheVersion = "dynamic-v17";
 
@@ -145,6 +147,31 @@ self.addEventListener("notificationclick", (event) => {
       notification.close();
     })
   );
+});
+
+// Handle Sync Tasks
+self.addEventListener("sync", (event) => {
+  console.log("sync");
+  if (event.tag === "sync-outgoing-request") {
+    event.waitUntil(
+      (async () => {
+        // Open data store
+        const dataStore = await self.localforage.getItem("sync-store");
+        if (!dataStore) {
+          return;
+        }
+
+        // Get all sync tasks
+        const allTasks = Object.values(dataStore).flatMap((val) => val);
+
+        // Make fetch requests
+        await Promise.allSettled(allTasks.map((task) => fetch(...task)));
+
+        // Remove tasks from store
+        await self.localforage.removeItem("sync-store");
+      })()
+    );
+  }
 });
 
 ////////// Caching strategies
