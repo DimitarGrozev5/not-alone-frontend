@@ -6,7 +6,10 @@ const id_ = (loc) => (tag) => `${loc}.${tag}`;
 
 export const useSyncManager = () => {
   const location = useLocation();
-  const id = id_(location.pathname);
+  const id = useCallback(
+    (tag) => id_(location.pathname)(tag),
+    [location.pathname]
+  );
 
   const getSyncReg = useCallback(
     async (fetchTag) => {
@@ -58,5 +61,8 @@ export const useSyncManager = () => {
     [id]
   );
 
-  return { getSyncReg, registerSyncTask };
+  return {
+    getSyncReg,
+    registerSyncTask,
+  };
 };
