@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 // import styles from "./OngoingActive.module.css";
 import DataCard from "../../../common-components/UIComponents/DataCard/DataCard";
 import Button from "../../../common-components/FormElements/Button/Button";
@@ -8,7 +9,6 @@ import { getLocation } from "../../../utils/getLocation";
 import { getBattery } from "../../../utils/getBattery";
 import ErrorModal from "../../../common-components/UIComponents/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../../common-components/UIComponents/LoadingSpinner/LoadingSpinner";
-import { useEffect } from "react";
 
 const OngoingActive = (props) => {
   const activeTrip = props.activeTrip;
@@ -159,11 +159,7 @@ const OngoingActive = (props) => {
             Стигнах до следващата спирка
           </Button>
           <div>Можете да запазите локация и данни за батерията</div>
-          <Button
-            disabled={isLoading || props.offline}
-            stretch
-            onClick={snapshotHandler}
-          >
+          <Button disabled={isLoading} stretch onClick={snapshotHandler}>
             Запазване на локация {isLoading && <LoadingSpinner minimize />}
           </Button>
         </DataCard>
