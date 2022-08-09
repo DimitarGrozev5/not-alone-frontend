@@ -49,10 +49,7 @@ A Service Worker is implemented for a couple of reasons.
 - Allowing the Web App to be installed like a normal application
 - Caching static assets for a faster load time and limited offline capability
 - Caching dynamic data, for a faster load time and offline capabilities
-
-A Service Worker allows additional functionality to be added later on:
-
-- Implementing the Sync API for background synchronization of POST requests, when the internet access is limited
+- Using the Background Synchronization API to offer even more offline capabilities
 
 7. Other
 
@@ -60,6 +57,7 @@ Additional libraries where used to solve specific tasks:
 
 - **jwt-decode** - for decoding JSON Web Tokens
 - **nanoid** - for generating IDs
+- **localforage** - for storing data in _indexedDB_ for the purpose of background syncronization
 
 # Project structure
 
@@ -209,6 +207,7 @@ A single trip is a relativly complex data structure. It contains multiple stops,
 - **auth** - Adds the `Authorization` header and attaches the current user JWT
 - **notJSON** - `sendRequest` authomaticaly passes the provided body through `JSON.stringify`. **notJSON** overwrites this behaviour.
 - **getCache** - This option pulls data from the cache for the specific url. This is useful when a _cache first, then network data_ fetching strategy is being implemented.
+- **trySync** - the `sendRequest`function will atempt to create a **Background Synchronization Task** instead of making a fetch request. The Service Worker will carry on the fetch request when an internet connection is available.
 
 ### useLongPress Hook
 
@@ -218,9 +217,12 @@ A single trip is a relativly complex data structure. It contains multiple stops,
 
 ### Service Worker
 
-The **Service Worker** is being registered in the **index.html** file. When it's installed, it downloads and caches all of the static assets. This includes the _index.html_ page, all of the _js bundles_ and _css bundles_ and other files in the build directory. After that, every fetch request is intercepted by the service worker and if the request is to a statically cached file, the service worker returns it form the cache. It then creates a fetch request to update the cached file.
-The Service Worker also intercepts all GET requests and stores the response object in the cache, before returning it to the page.
-The Service Worker also handles **Push Notifications**. It parses the incoming Push Notification and shows it to the user.
+The **Service Worker** is being registered in the **index.html** file. When it's installed, it downloads and caches all of the static assets. This includes the _index.html_ page, all of the _js bundles_ and _css bundles_ and other files in the build directory. After that, every fetch request is intercepted by the service worker and if the request is to a statically cached file, the service worker returns it form the cache. It then creates a fetch request to update the cached file. Additionaly the Service Worker performes the following tasks:
+
+
+- Intercepting all GET requests and storing the response object in the cache, before returning it to the page. This allows the caching of dynamic data for use when the user is offline
+- Handling tasks, created by the **Background Synchronization API**
+- Handling **Push Notifications**, send through the backend
 
 ### GPS and Battery Information gathering
 
