@@ -21,7 +21,7 @@ const LoadingSpinner = (props) => {
     </div>
   );
 
-  if (props.asOverlay) {
+  if (props.asOverlay || props.centerPage) {
     return ReactDOM.createPortal(
       content,
       document.getElementById("modal-root")
