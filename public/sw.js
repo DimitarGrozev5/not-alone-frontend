@@ -1,7 +1,7 @@
 importScripts("./localforage.js");
 
-const staticCacheVersion = "static-v19";
-const dynamicCacheVersion = "dynamic-v19";
+const staticCacheVersion = "static-v21";
+const dynamicCacheVersion = "dynamic-v21";
 
 const staticRoutes = [
   "/",
