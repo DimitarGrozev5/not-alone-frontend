@@ -1,3 +1,6 @@
+# Link to site
+https://notalone123.web.app/
+
 # General idea and required functionality
 
 ## Usecase
